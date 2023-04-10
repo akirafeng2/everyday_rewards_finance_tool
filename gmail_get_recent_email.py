@@ -37,9 +37,18 @@ def main():
     try:
         # Call the Gmail API
         service = build('gmail', 'v1', credentials=creds)
-        result = service.users().messages().list(userId='me', maxResults=10).execute()
+        query = 'from:contacts@email.woolworthsrewards.com.au'
+        result = service.users().messages().list(userId='me', q=query, maxResults=1).execute()
         messages = result.get('messages', [])
-        print(messages)
+
+        # get email and print subject line
+        for message in messages:
+            msg = service.users().messages().get(userId='me', id=message['id']).execute()
+            headers = msg['payload']['headers']
+            subject = [header['value'] for header in headers if header['name'] == 'Subject'][0]
+            verification_code = subject[-6:]
+            return verification_code
+
         # can get message id, now need the message or subject line
 
     except HttpError as error:
