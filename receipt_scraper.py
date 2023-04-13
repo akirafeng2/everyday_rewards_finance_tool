@@ -36,6 +36,11 @@ my_account.click()
 my_activity = WebDriverWait(driver, 20).until(ec.presence_of_element_located((By.XPATH, '/html/body/div[4]/div[1]/header[1]/nav[2]/div/div/div/ul/li[1]/a')))
 my_activity.click()
 
+# Downloading receipts
+"""
+The way I see this happening is a conditional statement based on the html that check that the month in the html is
+the current month. if it is it'll go through the selenium motions to download and collect the pdfs
+"""
 time.sleep(20)  # add a 5-second delay
 driver.quit()
 
