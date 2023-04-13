@@ -1,12 +1,11 @@
-from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
-from bs4 import BeautifulSoup
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as ec
-import login_details
-import undetected_chromedriver as webdriver
 import time
-from gmail_get_recent_email import main
+
+import undetected_chromedriver as webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as ec
+from selenium.webdriver.support.ui import WebDriverWait
+
+import login_details
 
 driver = webdriver.Chrome()
 
@@ -22,25 +21,20 @@ driver.find_element(By.XPATH, '//*[@id="emailCardNumber"]').send_keys(login_deta
 driver.find_element(By.XPATH, '/html/body/erl-root/div/erl-validate-user/div/div/erl-user-email-card-number/form/div['
                               '3]/button[1]').click()
 
-# find enter password and click
-# password_check_box = WebDriverWait(driver, 10).until(ec.presence_of_element_located((By.XPATH, '//*[@id="mat-radio-2"]')))
-# password_check_box.click()
+# click sms verification button
+verify_check_confirm = WebDriverWait(driver, 10).until(ec.presence_of_element_located((By.XPATH, '/html/body/erl-root/div/erl-validate-user/div/div/erl-choose-login/form/div[3]/button[1]')))
+verify_check_confirm.click()
 
-password_check_confirm = WebDriverWait(driver, 10).until(ec.presence_of_element_located((By.XPATH, '/html/body/erl-root/div/erl-validate-user/div/div/erl-choose-login/form/div[3]/button[1]')))
-password_check_confirm.click()
-
-# input password
-# password_input = WebDriverWait(driver, 10).until(ec.presence_of_element_located((By.XPATH, '//*[@id="password"]')))
-# password_input.send_keys(login_details.password)
-# driver.find_element(By.XPATH, '/html/body/erl-root/div/erl-validate-user/div/div/erl-password/form/div[4]/button[1]').click()
-
-# time.sleep(5)
-# driver.find_element(By.XPATH, '/html/body/erl-root/div/erl-validate-user/div/div/erl-password-secure-verification/form/div[3]/form/button').click()
-# time.sleep(15)
+# input otp
 otp = input('Enter SMS OTP:')
-# email_verification_otp = main()
 driver.find_element(By.XPATH, '//*[@id="otp"]').send_keys(otp)
 driver.find_element(By.XPATH, '/html/body/erl-root/div/erl-validate-user/div/div/erl-one-time-pass/form/div[5]/button[1]').click()
+
+# get to receipt page
+my_account = WebDriverWait(driver, 20).until(ec.presence_of_element_located((By.XPATH, '/html/body/div[4]/div[1]/header[1]/nav[1]/div/div/div[1]/ul/li[5]/a')))
+my_account.click()
+my_activity = WebDriverWait(driver, 20).until(ec.presence_of_element_located((By.XPATH, '/html/body/div[4]/div[1]/header[1]/nav[2]/div/div/div/ul/li[1]/a')))
+my_activity.click()
 
 time.sleep(20)  # add a 5-second delay
 driver.quit()
