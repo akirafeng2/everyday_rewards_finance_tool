@@ -41,7 +41,7 @@ my_activity = WebDriverWait(driver, 20).until(ec.presence_of_element_located((By
 my_activity.click()
 
 # Downloading receipts
-max_counter = 3
+max_counter = 10
 current_month = datetime.now().month
 previous_month_dict_key = current_month-1
 current_month_str = month_dict[current_month]
@@ -54,9 +54,16 @@ for receipt_num in range(2, max_counter):
     receipt_date_month = receipt_date[-3:]
 
     if receipt_date_month == current_month_str:
-    # click on xpayh and download
+        receipt_banner = WebDriverWait(driver, 20).until(ec.presence_of_element_located((By.XPATH, receipt_xpath)))
+        receipt_banner.click()
+        receipt_download = WebDriverWait(driver, 20)\
+            .until(ec.presence_of_element_located((By.XPATH, '//*[@id="ereceiptSidesheet"]/div/div/div[1]/a/img')))
+        receipt_download.click()
+        x_click_out = WebDriverWait(driver, 20)\
+            .until(ec.presence_of_element_located((By.XPATH, '//*[@id="ereceiptSidesheet"]/div/a/img')))
+        x_click_out.click()
 
-    if receipt_date_month == previous_month_str:
+    elif receipt_date_month == previous_month_str:
         break
 
 
