@@ -4,8 +4,12 @@ import undetected_chromedriver as webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.ui import WebDriverWait
+from datetime import datetime
 
 import login_details
+
+month_dict = dict([(1, 'Jan'), (2, 'Feb'), (3, 'Mar'), (4, 'Apr'), (5, 'May'), (6, 'Jun'),
+                   (7, 'Jul'), (8, 'Aug'), (9, 'Sep'), (10, 'Oct'), (11, 'Nov'), (0, 'Dec')])
 
 driver = webdriver.Chrome()
 
@@ -37,6 +41,33 @@ my_activity = WebDriverWait(driver, 20).until(ec.presence_of_element_located((By
 my_activity.click()
 
 # Downloading receipts
+max_counter = 3
+current_month = datetime.now().month
+previous_month_dict_key = current_month-1
+current_month_str = month_dict[current_month]
+previous_month_str = month_dict[previous_month_dict_key]
+
+for receipt_num in range(2, max_counter):
+    receipt_xpath = '//*[@id="angular-view-div"]/div/div[6]/wr-my-activity-new-element/div/div/div[3]/div[' + str(receipt_num) + ']'
+    receipt_date_xpath = receipt_xpath + '/div[1]/div/div/div[1]'
+    receipt_date = WebDriverWait(driver, 20).until(ec.presence_of_element_located((By.XPATH, receipt_date_xpath))).text
+    receipt_date_month = receipt_date[-3:]
+
+    if receipt_date_month == current_month_str:
+    # click on xpayh and download
+
+    if receipt_date_month == previous_month_str:
+        break
+
+
+
+# //*[@id="angular-view-div"]/div/div[6]/wr-my-activity-new-element/div/div/div[3]/div[2]
+# //*[@id="angular-view-div"]/div/div[6]/wr-my-activity-new-element/div/div/div[3]/div[3]
+# //*[@id="angular-view-div"]/div/div[6]/wr-my-activity-new-element/div/div/div[3]/div[6]
+
+# //*[@id="angular-view-div"]/div/div[6]/wr-my-activity-new-element/div/div/div[3]/div[2]/div[1]/div/div/div[1]
+
+# //*[@id="angular-view-div"]/div/div[6]/wr-my-activity-new-element/div/div/div[3]/div[3]/div[1]/div/div/div[1]
 """
 The way I see this happening is a conditional statement based on the html that check that the month in the html is
 the current month. if it is it'll go through the selenium motions to download and collect the pdfs
