@@ -6,7 +6,7 @@ import datetime
 Moving receipts from downloads to specified folder
 """
 # Set path of downloads folder
-downloads_directory = r'C:\Users\Alex Feng\Downloads'
+downloads_directory = r'C:\Users\Alex\Downloads'
 
 # Getting current year and month
 now = datetime.datetime.now()
@@ -14,7 +14,7 @@ year = str(now.year)
 month = str(now.month).zfill(2)
 
 # Setting destination directory
-destination_folder = fr'C:\Users\Alex Feng\Documents\Bitches_Finance\{year}\{month}\receipts'
+destination_folder = fr'C:\Users\Alex\Documents\Bitches_Finance\{year}\{month}\receipts'
 
 # Creating the destination directory if it does not exist
 if not os.path.exists(destination_folder):

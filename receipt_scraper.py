@@ -16,12 +16,15 @@ driver = webdriver.Chrome()
 url = 'https://www.woolworthsrewards.com.au/#login'
 driver.get(url)
 
+
+
 # Switch to the iframe (assuming the iframe has a name or ID attribute)
 iframe = WebDriverWait(driver, 10).until(ec.presence_of_element_located((By.XPATH, '//*[@id="WXLoginIFrameObject"]')))
 driver.switch_to.frame(iframe)
 
 # input login email
-driver.find_element(By.XPATH, '//*[@id="emailCardNumber"]').send_keys(login_details.email)
+email_input = WebDriverWait(driver, 30).until(ec.presence_of_element_located((By.XPATH, '//*[@id="emailCardNumber"]')))
+email_input.send_keys(login_details.email)
 driver.find_element(By.XPATH, '/html/body/erl-root/div/erl-validate-user/div/div/erl-user-email-card-number/form/div['
                               '3]/button[1]').click()
 
@@ -48,7 +51,7 @@ current_month_str = month_dict[current_month]
 previous_month_str = month_dict[previous_month_dict_key]
 
 for receipt_num in range(2, max_counter):
-    receipt_xpath = '//*[@id="angular-view-div"]/div/div[6]/wr-my-activity-new-element/div/div/div[3]/div[' + str(receipt_num) + ']'
+    receipt_xpath = '//*[@id="angular-view-div"]/div/div[5]/wr-my-activity-new-element/div/div/div[3]/div[' + str(receipt_num) + ']'
     receipt_date_xpath = receipt_xpath + '/div[1]/div/div/div[1]'
     receipt_date = WebDriverWait(driver, 20).until(ec.presence_of_element_located((By.XPATH, receipt_date_xpath))).text
     receipt_date_month = receipt_date[-3:]
