@@ -59,7 +59,7 @@ def receipt_scraper(date_up_to: datetime):
             receipt_num) + ']'
         receipt_date_xpath = receipt_xpath + '/div[1]/div/div/div[1]'
 
-        # need a try except here
+        #TODO: need a try except here that skips blank lines
         receipt_date_string = WebDriverWait(driver, 5).until(
             ec.presence_of_element_located((By.XPATH, receipt_date_xpath))).text
         receipt_date_month = receipt_date_string[-3:]
@@ -77,7 +77,7 @@ def receipt_scraper(date_up_to: datetime):
         receipt_date = datetime.strptime(date_string, date_format)
         # if the current year is not the same as the inputted year and something about january
         if receipt_date > date_up_to:
-            print(receipt_xpath)
+            print(receipt_xpath) #TODO: check if error on line 85 where presence of element not detected is resolved
             receipt_banner = WebDriverWait(driver, 20).until(ec.presence_of_element_located((By.XPATH, receipt_xpath)))
             receipt_banner.click()
             receipt_download = WebDriverWait(driver, 30).until(ec.presence_of_element_located((By.XPATH, '//*[@id="ereceiptSidesheet"]/div/div/div[1]/a/img')))
