@@ -7,6 +7,7 @@ if __name__ == "__main__":
     date_format = "%d%b%Y"
     date_datetime = datetime.strptime(date, date_format)
     receipt_scraper(date_datetime)
+
     # Log in
 
     # Scrape receipts

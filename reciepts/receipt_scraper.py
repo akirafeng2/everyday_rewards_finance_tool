@@ -60,11 +60,11 @@ def receipt_scraper(date_up_to: datetime):
             receipt_num) + ']'
         receipt_date_xpath = receipt_xpath + '/div[1]/div/div/div[1]'
 
-        # TODO: need to check if this works
         try:
-            receipt_date_string = WebDriverWait(driver, 5).until(
+            receipt_date_string = WebDriverWait(driver, 3).until(
                 ec.presence_of_element_located((By.XPATH, receipt_date_xpath))).text
         except selenium.common.exceptions.TimeoutException as e:
+            print(receipt_xpath)
             print(e)
             continue
         receipt_date_month = receipt_date_string[-3:]
@@ -84,7 +84,7 @@ def receipt_scraper(date_up_to: datetime):
         if receipt_date > date_up_to:
             receipt_banner = WebDriverWait(driver, 20).until(ec.presence_of_element_located((By.XPATH, receipt_xpath)))
             receipt_banner.click()
-            time.sleep(2)
+            time.sleep(1)
             receipt_download = WebDriverWait(driver, 30).until(
                 ec.presence_of_element_located((By.XPATH, '//*[@id="ereceiptSidesheet"]/div/div/div[1]/a/img')))
             receipt_download.click()
