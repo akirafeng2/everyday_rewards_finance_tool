@@ -60,7 +60,7 @@ def receipt_scraper(date_up_to: datetime):
             receipt_num) + ']'
         receipt_date_xpath = receipt_xpath + '/div[1]/div/div/div[1]'
 
-        #TODO: need a try except here that skips blank lines
+        # TODO: need to check if this works
         try:
             receipt_date_string = WebDriverWait(driver, 5).until(
                 ec.presence_of_element_located((By.XPATH, receipt_date_xpath))).text
@@ -78,16 +78,18 @@ def receipt_scraper(date_up_to: datetime):
             receipt_date_year = datetime.now().year
 
         date_format = "%d%b%Y"
-        date_string = receipt_date_day+receipt_date_month+str(receipt_date_year)
+        date_string = receipt_date_day + receipt_date_month + str(receipt_date_year)
         receipt_date = datetime.strptime(date_string, date_format)
         # if the current year is not the same as the inputted year and something about january
         if receipt_date > date_up_to:
             receipt_banner = WebDriverWait(driver, 20).until(ec.presence_of_element_located((By.XPATH, receipt_xpath)))
             receipt_banner.click()
             time.sleep(2)
-            receipt_download = WebDriverWait(driver, 30).until(ec.presence_of_element_located((By.XPATH, '//*[@id="ereceiptSidesheet"]/div/div/div[1]/a/img')))
+            receipt_download = WebDriverWait(driver, 30).until(
+                ec.presence_of_element_located((By.XPATH, '//*[@id="ereceiptSidesheet"]/div/div/div[1]/a/img')))
             receipt_download.click()
-            x_click_out = WebDriverWait(driver, 20).until(ec.presence_of_element_located((By.XPATH, '//*[@id="ereceiptSidesheet"]/div/a/img')))
+            x_click_out = WebDriverWait(driver, 20).until(
+                ec.presence_of_element_located((By.XPATH, '//*[@id="ereceiptSidesheet"]/div/a/img')))
             x_click_out.click()
 
         else:
