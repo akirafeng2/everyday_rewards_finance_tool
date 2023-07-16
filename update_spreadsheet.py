@@ -10,7 +10,7 @@ if __name__ == "__main__":
 
     # Log in
 
-    # Scrape receipts
+    # Scrape receipts checking most recent date of local file system
 
     # Move receipts
 

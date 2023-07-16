@@ -84,7 +84,7 @@ def receipt_scraper(date_up_to: datetime):
         if receipt_date > date_up_to:
             receipt_banner = WebDriverWait(driver, 20).until(ec.presence_of_element_located((By.XPATH, receipt_xpath)))
             receipt_banner.click()
-            time.sleep(1)
+            time.sleep(2)
             receipt_download = WebDriverWait(driver, 30).until(
                 ec.presence_of_element_located((By.XPATH, '//*[@id="ereceiptSidesheet"]/div/div/div[1]/a/img')))
             receipt_download.click()
