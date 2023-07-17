@@ -14,7 +14,7 @@ year = str(now.year)
 month = str(now.month).zfill(2)
 
 # Setting destination directory
-destination_folder = fr'C:\Users\Alex\Documents\Bitches_Finance\{year}\{month}\receipts'
+destination_folder = fr'C:\Users\Alex\Documents\Bitches_Finance\receipts\{year}\{month}'
 
 # Creating the destination directory if it does not exist
 if not os.path.exists(destination_folder):
