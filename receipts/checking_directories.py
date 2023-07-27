@@ -26,7 +26,6 @@ def largest_numeric_dir_name(directory_path):
 
     # Iterate over the directories in the specified path
     for dir_name in os.listdir(directory_path):
-        dir_path = os.path.join(directory_path, dir_name)
 
         try:
             dir_name = int(dir_name)
@@ -37,6 +36,3 @@ def largest_numeric_dir_name(directory_path):
             max_dir_name = dir_name
 
     return str(max_dir_name)
-
-
-print(get_recent_receipt_date(r"C:\Users\Alex\Documents\Bitches_Finance\receipts\2023\07"))

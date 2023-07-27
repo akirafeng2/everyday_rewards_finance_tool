@@ -11,10 +11,10 @@ downloads_directory = r'C:\Users\Alex\Downloads'
 # Getting current year and month
 now = datetime.datetime.now()
 year = str(now.year)
-month = str(now.month).zfill(2)
+month = str(now.month)
 
 # Setting destination directory
-destination_folder = fr'C:\Users\Alex\Documents\Bitches_Finance\receipts\{year}\{month}'
+destination_folder = fr'C:\Users\Alex\Documents\Finances\receipts\{year}\{month}'
 
 # Creating the destination directory if it does not exist
 if not os.path.exists(destination_folder):

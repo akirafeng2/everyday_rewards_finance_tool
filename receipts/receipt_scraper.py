@@ -11,6 +11,11 @@ import login_details
 
 
 def receipt_scraper(date_up_to: datetime):
+    """
+    Function that initiates receipt scraping process from everyday rewards website up to the date specified by the user
+    :param date_up_to: datetime
+    :return: None
+    """
     if not isinstance(date_up_to, datetime):
         raise TypeError("Expected argument 'date_up_to' to be a datetime object.")
 
@@ -28,20 +33,17 @@ def receipt_scraper(date_up_to: datetime):
     email_input = WebDriverWait(driver, 31).until(
         ec.presence_of_element_located((By.XPATH, '//*[@id="emailCardNumber"]')))
     email_input.send_keys(login_details.email)
-    driver.find_element(By.XPATH,
-                        '/html/body/erl-root/div/erl-validate-user/div/div/erl-user-email-card-number/form/div['
-                        '3]/button[1]').click()
 
-    # click sms verification button
-    verify_check_confirm = WebDriverWait(driver, 10).until(ec.presence_of_element_located(
-        (By.XPATH, '/html/body/erl-root/div/erl-validate-user/div/div/erl-choose-login/form/div[3]/button[1]')))
-    verify_check_confirm.click()
+    password_input = WebDriverWait(driver, 31).until(
+        ec.presence_of_element_located((By.XPATH, '//*[@id="password"]')))
+    password_input.send_keys(login_details.password)
+    driver.find_element(By.XPATH, '//*[@id="login-submit"]').click()
 
     # input otp
     otp = input('Enter SMS OTP:')
     driver.find_element(By.XPATH, '//*[@id="otp"]').send_keys(otp)
     driver.find_element(By.XPATH,
-                        '/html/body/erl-root/div/erl-validate-user/div/div/erl-one-time-pass/form/div[5]/button[1]').click()
+                        '/html/body/erl-root/div/erl-validate-user/div/div/erl-one-time-pass/form/div[4]/button[1]').click()
 
     # get to receipt page
     my_account = WebDriverWait(driver, 20).until(ec.presence_of_element_located(

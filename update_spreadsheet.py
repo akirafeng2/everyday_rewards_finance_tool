@@ -1,12 +1,21 @@
 from receipts.receipt_scraper import receipt_scraper
 from datetime import datetime
 from receipts.checking_directories import get_recent_receipt_date, largest_numeric_dir_name
+import os
 
 if __name__ == "__main__":
-    date = "30Jun2023"  # TODO: incorporate the checking directories functions
-    date_format = "%d%b%Y"
-    date_datetime = datetime.strptime(date, date_format)
-    receipt_scraper(date_datetime)
+
+    receipts_directory_path = r"C:\Users\Alex\Documents\Finances\receipts"
+    latest_year = largest_numeric_dir_name(receipts_directory_path)
+    latest_year_directory_path = os.path.join(receipts_directory_path, latest_year)
+    latest_month = largest_numeric_dir_name(latest_year_directory_path)
+    latest_month_directory_path = os.path.join(latest_year_directory_path, latest_month)
+
+    recent_receipt_date = get_recent_receipt_date(latest_month_directory_path)
+
+    receipt_scraper(recent_receipt_date)
+
+
 
     # Log in
 
