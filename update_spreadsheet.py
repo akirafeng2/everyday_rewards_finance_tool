@@ -5,9 +5,14 @@ import os
 
 if __name__ == "__main__":
 
+    # all this was to get the date of the most recent receipt so why dont we make it a function
+
+    
     receipts_directory_path = r"C:\Users\Alex\Documents\Finances\receipts"
+
     latest_year = largest_numeric_dir_name(receipts_directory_path)
     latest_year_directory_path = os.path.join(receipts_directory_path, latest_year)
+
     latest_month = largest_numeric_dir_name(latest_year_directory_path)
     latest_month_directory_path = os.path.join(latest_year_directory_path, latest_month)
 
@@ -21,10 +26,12 @@ if __name__ == "__main__":
 
     # Scrape receipts checking most recent date of local file system
 
+
     # Move receipts (delete receipts of processes below were to fail)
     # (maybe receipts should be moved to a temp location first for processing and at the very end, moved to archive)
 
     # Read receipts into dataframe
+
 
     # Add weightings from existing weighting file from drive
 
@@ -35,3 +42,5 @@ if __name__ == "__main__":
     # move dataframe to drive
 
     pass
+
+
