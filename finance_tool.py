@@ -1,13 +1,20 @@
 from datetime import datetime
 import os
+import time
+import undetected_chromedriver as webdriver
+import selenium.common.exceptions
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as ec
+from selenium.webdriver.support.ui import WebDriverWait
+from datetime import datetime
 
+import login_details
 
 
 class file_system:
     
     def __init__(self, local_finance_file_path: str) -> None:
         self.local_receipts_file_path = local_finance_file_path + r"\Finances\receipts"
-        pass
 
     def iterate_largest_numeric_dir_name(self, directory_path: str, iterate_number: int) -> str:
         """
@@ -52,14 +59,104 @@ class file_system:
 
 class user:
 
-    def __init__(self, name: str, email: str, local_finance_file_path) -> None:
+    def __init__(self, name: str, email: str, password: str, local_finance_file_path: str) -> None:
         self.name = name
         self.email = email
+        self.password = password
         self.file_root = file_system(local_finance_file_path)
-        pass
+
+    def scraper(self, date_up_to: datetime):
+        """
+        Function that initiates receipt scraping process from everyday rewards website up to the date specified by the user
+        :param date_up_to: datetime
+        :return: None
+        """
+        if not isinstance(date_up_to, datetime):
+            raise TypeError("Expected argument 'date_up_to' to be a datetime object.")
+
+        driver = webdriver.Chrome()
+
+        url = 'https://www.woolworthsrewards.com.au/#login'
+        driver.get(url)
+
+        # Switch to the iframe (assuming the iframe has a name or ID attribute)
+        iframe = WebDriverWait(driver, 10).until(
+            ec.presence_of_element_located((By.XPATH, '//*[@id="WXLoginIFrameObject"]')))
+        driver.switch_to.frame(iframe)
+
+        # input login email
+        email_input = WebDriverWait(driver, 31).until(
+            ec.presence_of_element_located((By.XPATH, '//*[@id="emailCardNumber"]')))
+        email_input.send_keys(self.email)
+
+        password_input = WebDriverWait(driver, 31).until(
+            ec.presence_of_element_located((By.XPATH, '//*[@id="password"]')))
+        password_input.send_keys(self.password)
+        driver.find_element(By.XPATH, '//*[@id="login-submit"]').click()
+
+        # input otp
+        otp = input('Enter SMS OTP:')
+        driver.find_element(By.XPATH, '//*[@id="otp"]').send_keys(otp)
+        driver.find_element(By.XPATH,
+                            '/html/body/erl-root/div/erl-validate-user/div/div/erl-one-time-pass/form/div[4]/button[1]').click()
+
+        # get to receipt page
+        my_account = WebDriverWait(driver, 20).until(ec.presence_of_element_located(
+            (By.XPATH, '/html/body/div[4]/div[1]/header[1]/nav[1]/div/div/div[1]/ul/li[5]/a')))
+        my_account.click()
+        my_activity = WebDriverWait(driver, 20).until(
+            ec.presence_of_element_located((By.XPATH, '/html/body/div[4]/div[1]/header[1]/nav[2]/div/div/div/ul/li[1]/a')))
+        my_activity.click()
+
+        # Downloading receipts
+
+        max_counter = 10
+
+        for receipt_num in range(2, max_counter):
+            receipt_xpath = '//*[@id="angular-view-div"]/div/div[5]/wr-my-activity-new-element/div/div/div[3]/div[' + str(
+                receipt_num) + ']'
+            receipt_date_xpath = receipt_xpath + '/div[1]/div/div/div[1]'
+
+            try:
+                receipt_date_string = WebDriverWait(driver, 3).until(
+                    ec.presence_of_element_located((By.XPATH, receipt_date_xpath))).text
+            except selenium.common.exceptions.TimeoutException as e:
+                print(receipt_xpath)
+                print(e)
+                continue
+            receipt_date_month = receipt_date_string[-3:]
+            receipt_date_day = receipt_date_string[4:6]
+            if receipt_date_month == "Dec":
+                if datetime.now().year != date_up_to.year:
+                    receipt_date_year = date_up_to.year
+                else:
+                    receipt_date_year = datetime.now().year
+            else:
+                receipt_date_year = datetime.now().year
+
+            date_format = "%d%b%Y"
+            date_string = receipt_date_day + receipt_date_month + str(receipt_date_year)
+            receipt_date = datetime.strptime(date_string, date_format)
+            # if the current year is not the same as the inputted year and something about january
+            if receipt_date > date_up_to:
+                receipt_banner = WebDriverWait(driver, 20).until(ec.presence_of_element_located((By.XPATH, receipt_xpath)))
+                receipt_banner.click()
+                time.sleep(2)
+                receipt_download = WebDriverWait(driver, 30).until(
+                    ec.presence_of_element_located((By.XPATH, '//*[@id="ereceiptSidesheet"]/div/div/div[1]/a/img')))
+                receipt_download.click()
+                x_click_out = WebDriverWait(driver, 20).until(
+                    ec.presence_of_element_located((By.XPATH, '//*[@id="ereceiptSidesheet"]/div/a/img')))
+                x_click_out.click()
+
+            else:
+                break
+
+        time.sleep(20)  # add a 5-second delay
+        driver.quit()
 
     def update_spreadsheet(self) -> None:
-        # Log in
+        self.scraper(self.file_root.get_recent_receipt_date())
 
         # Scrape receipts checking most recent date of local file system
 
@@ -78,27 +175,39 @@ class user:
         pass
 
 
-class admin(user):
+class household:
+    def __init__(self, household_name, admin: user):
+        self.household_name = household_name
+        self.members = [admin]
+        self.admin = admin 
 
-    def settle_up(self):
+    def add_user(self, user: user):
+        if user not in self.members:
+            self.members.append(user)
+
+    def appoint_admin(self, user: user):
+        if user in self.members:
+            self.admin = user
+        else:
+            raise Exception("User not in household")
+    
+    def admin_check(self, user: user):
+        if user is not self.admin:
+            raise Exception("User does not have permission")
+        else:
+            pass
+    
+    def settle_up(self, user: user):
+        self.admin_check(user)
         pass
 
     def reset_spreadsheets(self):
+        self.admin_check(user)
         pass
-
-
-class household:
-    def __init__(self, household_name, admin):
-        self.household_name = household_name
-        self.members = []
-        self.admin = admin #Question 1: Do i need this? or should i just put the admin methods into household
-
-    def add_user(self, user):
-        self.members.append(user)
 
 
 # test to retrive the date of most recent receipt
 if __name__=="__main__":
 
-    user1 = user("alex", "alexander.feng2@gmail.com", r"C:\Users\Alex\Documents")
-    print(user1.file_root.get_recent_receipt_date())
+    user1 = user("alex", login_details.email, login_details.password, r"C:\Users\Alex\Documents")
+    user1.update_spreadsheet()
