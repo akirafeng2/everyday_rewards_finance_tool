@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   build:
-
+    name: pytest_workflow
     runs-on: ubuntu-latest
 
     steps:
