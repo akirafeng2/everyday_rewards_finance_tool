@@ -8,9 +8,6 @@ from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.ui import WebDriverWait
 from datetime import datetime
 
-import login_details
-
-
 class file_system:
     
     def __init__(self, local_finance_file_path: str) -> None:
@@ -204,10 +201,4 @@ class household:
     def reset_spreadsheets(self):
         self.admin_check(user)
         pass
-
-
-# test to retrive the date of most recent receipt
-if __name__=="__main__":
-
-    user1 = user("alex", login_details.email, login_details.password, r"C:\Users\Alex\Documents")
-    user1.update_spreadsheet()
+    
