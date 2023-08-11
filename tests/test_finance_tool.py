@@ -8,4 +8,4 @@ def test_iterate_largest_numeric_dir_name__one_level(tmp_path):
         dir_file = first_dir / str(i)
         dir_file.mkdir()
     
-    assert test_file_system.iterate_largest_numeric_dir_name(first_dir,1) == str(first_dir / "4")
+    assert test_file_system.iterate_largest_numeric_dir_name(first_dir,1) == str(first_dir) + r"\4"
