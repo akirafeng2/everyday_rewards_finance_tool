@@ -1,0 +1,40 @@
+# This workflow will install Python dependencies, run Black and lint with a single version of Python
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
+
+name: Checks
+
+on: [push]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: formatting_lint_checks
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v3
+      with:
+        python-version: "3.11"
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pylint black
+
+    - name: Find Python files
+      id: find-files
+      run: |
+        echo "::set-output name=files::$(find . -name '*.py')"
+      
+    - name: Run Pylint and Black
+      run: |
+        for file in ${{ steps.find-files.outputs.files }}; do
+          echo "Running Pylint on $file"
+          pylint $file
+            
+          echo "Running Black on $file"
+          black $file
+        done
