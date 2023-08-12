@@ -25,5 +25,5 @@ jobs:
 
       - name: Run tests and coverage
         run: |
-          coverage run -m pytest
+          coverage run --source=everyday_rewards_finance_tool/src -m pytest
           coverage report -m
