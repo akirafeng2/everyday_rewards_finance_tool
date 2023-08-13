@@ -73,6 +73,12 @@ class user:
 
         driver = webdriver.Chrome()
 
+        params = {
+            "behavior": "allow",
+            "downloadPath": r'C:\Users\Alex\Documents\Finances\receipts\tmp'
+            }
+        driver.execute_cdp_cmd("Page.setDownloadBehavior", params)
+
         url = 'https://www.woolworthsrewards.com.au/#login'
         driver.get(url)
 
