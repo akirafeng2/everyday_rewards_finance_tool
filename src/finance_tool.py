@@ -3,6 +3,8 @@ import os
 import time
 import undetected_chromedriver as webdriver
 import selenium.common.exceptions
+import re
+from pathlib import Path
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.ui import WebDriverWait
@@ -10,45 +12,41 @@ from datetime import datetime
 
 class file_system:
     
-    def __init__(self, local_finance_file_path: str) -> None:
-        self.local_receipts_file_path = local_finance_file_path + r"\Finances\receipts"
+    def __init__(self, local_finance_file_path: Path) -> None:
+        self.local_receipts_file_path = local_finance_file_path / Path("Finances") / Path("receipts")
 
-    def iterate_largest_numeric_dir_name(self, directory_path: str, iterate_number: int) -> str:
+    def iterate_largest_numeric_dir_name(self, directory_path: Path, iterate_number: int) -> str:
         """
         Returns the file or directory in a given directory that has the largest numeric value for its name
+        :param directory_path: Path
         :param iterate_number: int
-        :return: str
+        :return: Path
         """
         
         for x in range(iterate_number):
-            
-            max_dir_name = None
 
-            # Iterate over the directories in the specified path
-            for dir_name in os.listdir(directory_path):
+            pattern = re.compile(r'^\d+$')  # This regular expression matches strings that contain only digits
 
-                try:
-                    dir_name = int(dir_name)
-                except ValueError:
-                    continue
+            numeric_files = [file for file in directory_path.glob("*/") if pattern.match(file.name)]
 
-                if max_dir_name is None or dir_name > max_dir_name:
-                    max_dir_name = dir_name
-
-            directory_path = rf"{directory_path}\{str(max_dir_name)}"
+            directory_path = max(numeric_files)
 
         return directory_path
 
     def get_recent_receipt_date(self) -> datetime:
         """
         Returns the date of the most recent Everyday Rewards downloaded receipt in a given directory
-        :param directory_path: str
         :return: datetime "%d%b%Y"
         """
-        directory_path = self.iterate_largest_numeric_dir_name(self.local_receipts_file_path,2)
-        receipt_name_list = os.listdir(directory_path)
-        receipt_date_list = [receipt_name.split("_")[3] for receipt_name in receipt_name_list]
-        recent_date_str = max(receipt_date_list)
+        try:
+            directory_path = self.iterate_largest_numeric_dir_name(self.local_receipts_file_path,2)
+        except ValueError as e:
+            print("No existing receipts found: downloading all previous receipts")
+            recent_date_str = "01Jan2000" 
+        else:
+            receipt_name_list = os.listdir(directory_path)
+            receipt_date_list = [receipt_name.split("_")[3] for receipt_name in receipt_name_list]
+            recent_date_str = max(receipt_date_list)
         date_format = "%d%b%Y"
         recent_date = datetime.strptime(recent_date_str, date_format)
         return recent_date        
@@ -60,7 +58,9 @@ class user:
         self.name = name
         self.email = email
         self.password = password
+        self.local_finance_file_path = Path(local_finance_file_path)
         self.file_root = file_system(local_finance_file_path)
+        self.temp_receipt_folder = self.file_root.local_receipts_file_path / Path("tmp")
 
     def scraper(self, date_up_to: datetime):
         """
@@ -75,7 +75,7 @@ class user:
 
         params = {
             "behavior": "allow",
-            "downloadPath": r'C:\Users\Alex\Documents\Finances\receipts\tmp'
+            "downloadPath": str(self.temp_receipt_folder)
             }
         driver.execute_cdp_cmd("Page.setDownloadBehavior", params)
 
@@ -113,7 +113,8 @@ class user:
 
         # Downloading receipts
 
-        max_counter = 10
+        max_counter = 40
+        error_counter = 0
 
         for receipt_num in range(2, max_counter):
             receipt_xpath = '//*[@id="angular-view-div"]/div/div[5]/wr-my-activity-new-element/div/div/div[3]/div[' + str(
@@ -124,9 +125,14 @@ class user:
                 receipt_date_string = WebDriverWait(driver, 3).until(
                     ec.presence_of_element_located((By.XPATH, receipt_date_xpath))).text
             except selenium.common.exceptions.TimeoutException as e:
+                if error_counter < 3:
+                    error_counter += 1
+                else:
+                    break
                 print(receipt_xpath)
                 print(e)
                 continue
+            error_counter = 0
             receipt_date_month = receipt_date_string[-3:]
             receipt_date_day = receipt_date_string[4:6]
             if receipt_date_month == "Dec":
