@@ -17,7 +17,7 @@ class file_system:
 
     def iterate_largest_numeric_dir_name(self, directory_path: Path, iterate_number: int) -> str:
         """
-        Returns the file or directory in a given directory that has the largest numeric value for its name
+        Returns the Path of the directory that has largest numeric value for its name in the given directory
         :param directory_path: Path
         :param iterate_number: int
         :return: Path
