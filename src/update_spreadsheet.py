@@ -1,4 +1,4 @@
-from finance_tool import file_system, user
+from finance_tool import FileSystem, User
 import login_details
 
 if __name__ == "__main__":
@@ -6,7 +6,7 @@ if __name__ == "__main__":
     # Log in
 
     # Scrape receipts checking most recent date of local file system
-    user_1 = user(*login_details.alex_user_info)
+    user_1 = User(*login_details.alex_user_info)
     recent_receipt_date = user_1.file_root.get_recent_receipt_date()
     user_1.scraper(recent_receipt_date)
     
