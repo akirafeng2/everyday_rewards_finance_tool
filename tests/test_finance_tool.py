@@ -4,7 +4,7 @@ class TestFileSystem:
 
     def test_iterate_largest_numeric_dir_name_one_level(self, tmp_path):
         test_file_system = FileSystem(tmp_path)
-        first_dir = self.temp_dir / "first_level" 
+        first_dir = tmp_path / "first_level" 
         first_dir.mkdir()
         for i in range(5):
             dir_file = first_dir / str(i)
