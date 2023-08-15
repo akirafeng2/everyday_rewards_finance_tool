@@ -13,11 +13,13 @@ class TestFileSystem:
             dir_file = dir / str(i)
             dir_file.mkdir(parents=True)
 
+
     def test_iterate_largest_numeric_dir_name_one_level(self, file_system):
         first_dir = file_system.local_receipts_file_path
         self.create_numbered_dir_in_path(first_dir, 5)
 
         assert file_system.iterate_largest_numeric_dir_name(first_dir,1) == first_dir / "4"
+
 
     def test_iterate_largest_numeric_dir_name_two_levels(self, file_system):
         first_dir = file_system.local_receipts_file_path
@@ -26,6 +28,7 @@ class TestFileSystem:
         self.create_numbered_dir_in_path(second_dir, 6)
 
         assert file_system.iterate_largest_numeric_dir_name(first_dir, 2) == second_dir / "5"
+
 
     def test_iterate_largest_numeric_dir_name_non_numeric_files_and_dir(self, file_system):
         first_dir = file_system.local_receipts_file_path
@@ -38,6 +41,7 @@ class TestFileSystem:
             pass
 
         assert file_system.iterate_largest_numeric_dir_name(first_dir,1) == first_dir / "7"
+
 
     def test_get_recent_receipt_date_simple(self, file_system):
         directory = file_system.local_receipts_file_path / "1" / "1"
@@ -52,6 +56,9 @@ class TestFileSystem:
             file_path.mkdir(parents=True)
         assert file_system.get_recent_receipt_date() == datetime.strptime("10Jun2023", "%d%b%Y")
 
+
+    def test_get_recent_receipt_date_no_existing_receipts(self,file_system):
+        assert file_system.get_recent_receipt_date() == datetime.strptime("01Jan2000", "%d%b%Y")
     
 
 
