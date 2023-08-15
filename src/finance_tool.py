@@ -10,12 +10,12 @@ from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.ui import WebDriverWait
 from datetime import datetime
 
-class file_system:
+class FileSystem:
     
     def __init__(self, local_finance_file_path: Path) -> None:
         self.local_receipts_file_path = local_finance_file_path / Path("Finances") / Path("receipts")
 
-    def iterate_largest_numeric_dir_name(self, directory_path: Path, iterate_number: int) -> str:
+    def iterate_largest_numeric_dir_name(self, directory_path: Path, iterate_number: int) -> Path:
         """
         Returns the Path of the directory that has largest numeric value for its name in the given directory
         :param directory_path: Path
@@ -52,14 +52,14 @@ class file_system:
         return recent_date        
 
 
-class user:
+class User:
 
     def __init__(self, name: str, email: str, password: str, local_finance_file_path: str) -> None:
         self.name = name
         self.email = email
         self.password = password
         self.local_finance_file_path = Path(local_finance_file_path)
-        self.file_root = file_system(local_finance_file_path)
+        self.file_root = FileSystem(local_finance_file_path)
         self.temp_receipt_folder = self.file_root.local_receipts_file_path / Path("tmp")
 
     def scraper(self, date_up_to: datetime):
@@ -184,34 +184,34 @@ class user:
         pass
 
 
-class household:
-    def __init__(self, household_name, admin: user):
+class Household:
+    def __init__(self, household_name, admin: User):
         self.household_name = household_name
         self.members = [admin]
         self.admin = admin 
 
-    def add_user(self, user: user):
+    def add_user(self, user: User):
         if user not in self.members:
             self.members.append(user)
 
-    def appoint_admin(self, user: user):
+    def appoint_admin(self, user: User):
         if user in self.members:
             self.admin = user
         else:
             raise Exception("User not in household")
     
-    def admin_check(self, user: user):
+    def admin_check(self, user: User):
         if user is not self.admin:
             raise Exception("User does not have permission")
         else:
             pass
     
-    def settle_up(self, user: user):
+    def settle_up(self, user: User):
         self.admin_check(user)
         pass
 
     def reset_spreadsheets(self):
-        self.admin_check(user)
+        self.admin_check(User)
         pass
 
 
