@@ -15,6 +15,7 @@ class FileSystem:
     def __init__(self, local_finance_file_path: Path) -> None:
         self.local_receipts_file_path = local_finance_file_path / Path("Finances") / Path("receipts")
 
+
     def iterate_largest_numeric_dir_name(self, directory_path: Path, iterate_number: int) -> Path:
         """
         Returns the Path of the directory that has largest numeric value for its name in the given directory
@@ -32,6 +33,7 @@ class FileSystem:
             directory_path = max(numeric_files)
 
         return directory_path
+
 
     def get_recent_receipt_date(self) -> datetime:
         """
@@ -61,6 +63,7 @@ class User:
         self.local_finance_file_path = Path(local_finance_file_path)
         self.file_root = FileSystem(local_finance_file_path)
         self.temp_receipt_folder = self.file_root.local_receipts_file_path / Path("tmp")
+
 
     def scraper(self, date_up_to: datetime):
         """
@@ -164,6 +167,7 @@ class User:
         time.sleep(20)  # add a 5-second delay
         driver.quit()
 
+
     def update_spreadsheet(self) -> None:
         self.scraper(self.file_root.get_recent_receipt_date())
 
@@ -190,9 +194,11 @@ class Household:
         self.members = [admin]
         self.admin = admin 
 
+
     def add_user(self, user: User):
         if user not in self.members:
             self.members.append(user)
+
 
     def appoint_admin(self, user: User):
         if user in self.members:
@@ -200,15 +206,18 @@ class Household:
         else:
             raise Exception("User not in household")
     
+
     def admin_check(self, user: User):
         if user is not self.admin:
             raise Exception("User does not have permission")
         else:
             pass
     
+
     def settle_up(self, user: User):
         self.admin_check(user)
         pass
+
 
     def reset_spreadsheets(self):
         self.admin_check(User)
