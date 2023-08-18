@@ -4,11 +4,14 @@ import time
 import undetected_chromedriver as webdriver
 import selenium.common.exceptions
 import re
+import psycopg2
+import pandas as pd
 from pathlib import Path
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.ui import WebDriverWait
 from datetime import datetime
+
 
 class FileSystem:
     
@@ -188,40 +191,99 @@ class User:
         pass
 
 
-class Household:
-    def __init__(self, household_name, admin: User):
-        self.household_name = household_name
-        self.members = [admin]
-        self.admin = admin 
+class DatabaseConnection:
+    def __init__(self, connection_details):
+        self.connection_details = connection_details
+        self.conn = None
+        self.cursor = None
 
 
-    def add_user(self, user: User):
-        if user not in self.members:
-            self.members.append(user)
+    def __enter__(self):
+        self.conn = psycopg2.connect(**self.connection_details)
+        self.cursor = self.conn.cursor()
 
 
-    def appoint_admin(self, user: User):
-        if user in self.members:
-            self.admin = user
-        else:
-            raise Exception("User not in household")
+    def __exit__(self, exc_type, exc_value, traceback):
+        self.conn.close()
+        if exc_type is not None:
+            print(f"An exception of type {exc_type} occurred")
+
+
+    def test_connection(self):
+        self.cursor.execute("select version()")
+        # Fetch a single row using fetchone() method.
+        data = self.cursor.fetchone()
+        print("Connection established to: ",data)
+
+    def create_schema(self, schema_name):
+        create_schema_statement = f"""CREATE SCHEMA IF NOT EXISTS {schema_name}"""
+        self.cursor.execute(create_schema_statement)
+
+    
+    def drop_schema(self, schema_name):
+        drop_schema_statement = f"""DROP SCHEMA IF EXISTS {schema_name}"""
+        self.cursor.execute(drop_schema_statement)
     
 
-    def admin_check(self, user: User):
-        if user is not self.admin:
-            raise Exception("User does not have permission")
-        else:
-            pass
+    def create_items_table(self, schema, table_name):
+        create_items_table_statement = f"""
+        CREATE TABLE {schema}.{table_name}(
+        item_name VARCHAR(50),
+        price NUMERIC(7,2),
+        payer VARCHAR(10),
+        persist BOOLEAN DEFAULT FALSE
+        )
+        """
+        self.cursor.execute(create_items_table_statement)
+
+
+    def drop_table(self, table_name):
+        drop_table_statement = f"""DROP TABLE IF EXISTS {table_name}"""
+        self.cursor.execute(drop_table_statement)
+
+
+    def insert_df_items_into_table(self, df, table):
+        data_values = [tuple(row) for row in df.to_numpy()]
+        insert_statement = f"""INSERT INTO {table} (item_name, price, payer, persist) VALUES (%s, %s, %s, False)"""
+        self.cursor.executemany(insert_statement,data_values)
+
+
+# when initialising household, need to create weighting table and accounting table for household and 
+
+# class Household:
+#     def __init__(self, household_name, admin: User):
+#         self.household_name = household_name
+#         self.members = [admin]
+#         self.admin = admin 
+
+
+#     def add_user(self, user: User):
+#         if user not in self.members:
+#             self.members.append(user)
+
+
+#     def appoint_admin(self, user: User):
+#         if user in self.members:
+#             self.admin = user
+#         else:
+#             raise Exception("User not in household")
     
 
-    def settle_up(self, user: User):
-        self.admin_check(user)
-        pass
+#     def admin_check(self, user: User):
+#         if user is not self.admin:
+#             raise Exception("User does not have permission")
+#         else:
+#             pass
+    
+
+#     def settle_up(self, user: User):
+#         self.admin_check(user)
+#         pass
 
 
-    def reset_spreadsheets(self):
-        self.admin_check(User)
-        pass
+#     def reset_spreadsheets(self):
+#         self.admin_check(User)
+#         pass
 
 
 #modification test
