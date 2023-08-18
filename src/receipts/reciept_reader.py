@@ -40,6 +40,8 @@ for file in os.scandir(directory):
             item_price_list.append(price)
             multiple_item_indicator = False
 data = pd.DataFrame({"item": item_name_list, 'price': item_price_list})
+data['payer'] = 'alex'
+# change data price to float
 print(tabulate(data, headers='keys', tablefmt='psql'))
 
 
