@@ -1,4 +1,4 @@
-FROM python:3.11.4-bookworm
+FROM ultrafunk/undetected-chromedriver:latest
 
 COPY requirements.txt /app/
 
@@ -6,6 +6,4 @@ WORKDIR /app
 
 RUN pip install -r requirements.txt
 
-COPY src .
-
-CMD ["python", "test_scratch.py"]
+COPY src /app/src/

@@ -1,0 +1,21 @@
+services:
+  pythontest:
+    build: ./
+    shm_size: 1gb
+    volumes:
+      -receipts:/app/Finances/receipts/
+    command: python /app/src/test_scratch.py
+    
+
+
+
+
+#     volumes:
+#       -postgres-data:/var/lib/postgresql/data/
+
+
+# volumes:
+#   receipts:
+#     driver: local
+#   postgres-data:
+#     driver: local
