@@ -89,16 +89,16 @@ class User:
         driver.get(url)
 
         # Switch to the iframe (assuming the iframe has a name or ID attribute)
-        iframe = WebDriverWait(driver, 10).until(
+        iframe = WebDriverWait(driver, 20).until(
             ec.presence_of_element_located((By.XPATH, '//*[@id="WXLoginIFrameObject"]')))
         driver.switch_to.frame(iframe)
 
         # input login email
-        email_input = WebDriverWait(driver, 31).until(
+        email_input = WebDriverWait(driver, 60).until(
             ec.presence_of_element_located((By.XPATH, '//*[@id="emailCardNumber"]')))
         email_input.send_keys(self.email)
 
-        password_input = WebDriverWait(driver, 31).until(
+        password_input = WebDriverWait(driver, 60).until(
             ec.presence_of_element_located((By.XPATH, '//*[@id="password"]')))
         password_input.send_keys(self.password)
         driver.find_element(By.XPATH, '//*[@id="login-submit"]').click()
@@ -110,16 +110,16 @@ class User:
                             '/html/body/erl-root/div/erl-validate-user/div/div/erl-one-time-pass/form/div[4]/button[1]').click()
 
         # get to receipt page
-        my_account = WebDriverWait(driver, 20).until(ec.presence_of_element_located(
+        my_account = WebDriverWait(driver, 60).until(ec.presence_of_element_located(
             (By.XPATH, '/html/body/div[4]/div[1]/header[1]/nav[1]/div/div/div[1]/ul/li[5]/a')))
         my_account.click()
-        my_activity = WebDriverWait(driver, 20).until(
+        my_activity = WebDriverWait(driver, 60).until(
             ec.presence_of_element_located((By.XPATH, '/html/body/div[4]/div[1]/header[1]/nav[2]/div/div/div/ul/li[1]/a')))
         my_activity.click()
 
         # Downloading receipts
 
-        max_counter = 40
+        max_counter = 5
         error_counter = 0
 
         for receipt_num in range(2, max_counter):
@@ -128,7 +128,7 @@ class User:
             receipt_date_xpath = receipt_xpath + '/div[1]/div/div/div[1]'
 
             try:
-                receipt_date_string = WebDriverWait(driver, 3).until(
+                receipt_date_string = WebDriverWait(driver, 60).until(
                     ec.presence_of_element_located((By.XPATH, receipt_date_xpath))).text
             except selenium.common.exceptions.TimeoutException as e:
                 if error_counter < 3:
@@ -154,13 +154,13 @@ class User:
             receipt_date = datetime.strptime(date_string, date_format)
             # if the current year is not the same as the inputted year and something about january
             if receipt_date > date_up_to:
-                receipt_banner = WebDriverWait(driver, 20).until(ec.presence_of_element_located((By.XPATH, receipt_xpath)))
+                receipt_banner = WebDriverWait(driver, 60).until(ec.presence_of_element_located((By.XPATH, receipt_xpath)))
                 receipt_banner.click()
                 time.sleep(2)
-                receipt_download = WebDriverWait(driver, 30).until(
+                receipt_download = WebDriverWait(driver, 60).until(
                     ec.presence_of_element_located((By.XPATH, '//*[@id="ereceiptSidesheet"]/div/div/div[1]/a/img')))
                 receipt_download.click()
-                x_click_out = WebDriverWait(driver, 20).until(
+                x_click_out = WebDriverWait(driver, 60).until(
                     ec.presence_of_element_located((By.XPATH, '//*[@id="ereceiptSidesheet"]/div/a/img')))
                 x_click_out.click()
 
