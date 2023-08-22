@@ -9,7 +9,7 @@ services:
     shm_size: 1gb
     volumes:
       - receipts:/app/Finances/receipts/
-    command: python /app/src/update_spreadsheet.py
+    command: python /app/src/postgres_scratch.py
     depends_on:
       - db
 
