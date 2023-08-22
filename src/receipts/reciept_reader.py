@@ -12,7 +12,7 @@ item_name_list = []
 item_price_list = []
 multiple_item_indicator = False
 
-directory = rf'c:\Users\Alex Feng\Documents\Finances\receipts\tmp'
+directory = "/app/Finances/receipts/tmp/"
 
 for file in os.scandir(directory):
     reader = PdfReader(file.path)

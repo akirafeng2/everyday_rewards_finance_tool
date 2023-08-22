@@ -1,21 +1,42 @@
+version: '3.8'
+
 services:
-  pythontest:
+
+  finance_tool:
     build: ./
+    stdin_open: true
+    tty: true
     shm_size: 1gb
     volumes:
-      -receipts:/app/Finances/receipts/
-    command: python /app/src/test_scratch.py
-    
+      - receipts:/app/Finances/receipts/
+    command: python /app/src/update_spreadsheet.py
+    depends_on:
+      - db
 
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: finance_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
 
+  pg-admin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_LISTEN_PORT: 5050
 
+    ports:
+    - "5050:5050"
 
-#     volumes:
-#       -postgres-data:/var/lib/postgresql/data/
-
-
-# volumes:
-#   receipts:
-#     driver: local
-#   postgres-data:
-#     driver: local
+volumes:
+  receipts:
+    driver: local   
+  postgres_data:
+    driver: local
