@@ -18,16 +18,15 @@ import time
 
 from finance_tool import DatabaseConnection
 
-time.sleep(30)
-
 data_connect = DatabaseConnection(database_connection_details)
 
 with data_connect:
     data_connect.test_connection()
-    data_connect.drop_schema("test")
-    data_connect.create_schema("test")
-    data_connect.create_items_table("test", "test_table")
-    data_connect.insert_df_items_into_table(data, "test.test_table")
+    # data_connect.drop_schema("test")
+    # data_connect.create_schema("test")
+    # data_connect.create_items_table("test", "test_table")
+    # data_connect.insert_df_items_into_table(data, "test.test_table")
+    # data_connect.conn.commit()
 
     test_statement = """SELECT * FROM test.test_table"""
     data_connect.cursor.execute(test_statement)

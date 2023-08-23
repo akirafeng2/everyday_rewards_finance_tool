@@ -2,7 +2,17 @@ version: '3.8'
 
 services:
 
-  finance_tool:
+  scraper:
+    build: ./src/scraper
+    stdin_open: true
+    tty: true
+    volumes:
+      - receipts:/app/Finances/receipts/
+    command: python /app/scraper/scraper.py
+    profiles:
+      - add_items
+
+  item_updater:
     build: ./
     stdin_open: true
     tty: true
@@ -12,6 +22,20 @@ services:
     command: python /app/src/postgres_scratch.py
     depends_on:
       - db
+      - scraper
+    profiles:
+      - add_items
+
+  test:
+    build: ./
+    stdin_open: true
+    tty: true
+    shm_size: 1gb
+    volumes:
+      - receipts:/app/Finances/receipts/
+    command: python /app/src/test_2_scratch.py
+    profiles:
+      - test
 
   db:
     image: postgres
@@ -24,16 +48,6 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-
-  pg-admin:
-    image: dpage/pgadmin4
-    environment:
-      PGADMIN_DEFAULT_EMAIL: admin@admin.com
-      PGADMIN_DEFAULT_PASSWORD: admin
-      PGADMIN_LISTEN_PORT: 5050
-
-    ports:
-    - "5050:5050"
 
 volumes:
   receipts:
