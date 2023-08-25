@@ -2,7 +2,7 @@ from flask import Flask, request, render_template, abort, session, redirect, url
 
 from scraper import EverydayRewardsScraper
 
-import datetime
+from datetime import datetime
 
 app = Flask(__name__)
 
