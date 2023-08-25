@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+
+  scraper:
+    build: ./src/scraper
+    stdin_open: true
+    tty: true
+    shm_size: 1gb
+    volumes:
+      - C:\Users\Alex Feng\Documents\Finances\receipts:/app/Finances/receipts/
+    ports:
+      - 5000:5000
+    command: flask run --host=0.0.0.0
+
+
+  # item_updater:
+  #   build: ./
+  #   stdin_open: true
+  #   tty: true
+  #   shm_size: 1gb
+  #   volumes:
+  #     - receipts:/app/Finances/receipts/
+  #   command: python /app/src/scratch/scraper_class_scratch.py
+
+  # db:
+  #   image: postgres
+  #   restart: always
+  #   environment:
+  #     POSTGRES_USER: root
+  #     POSTGRES_PASSWORD: root
+  #     POSTGRES_DB: finance_db
+  #   ports:
+  #     - "5432:5432"
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+
+# volumes:
+  # receipts:
+    # driver: local   
+  # postgres_data:
+  #   driver: local

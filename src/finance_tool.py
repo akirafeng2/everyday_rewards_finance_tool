@@ -4,11 +4,14 @@ import time
 import undetected_chromedriver as webdriver
 import selenium.common.exceptions
 import re
+import psycopg2
+import pandas as pd
 from pathlib import Path
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.ui import WebDriverWait
 from datetime import datetime
+
 
 class FileSystem:
     
@@ -86,16 +89,16 @@ class User:
         driver.get(url)
 
         # Switch to the iframe (assuming the iframe has a name or ID attribute)
-        iframe = WebDriverWait(driver, 10).until(
+        iframe = WebDriverWait(driver, 20).until(
             ec.presence_of_element_located((By.XPATH, '//*[@id="WXLoginIFrameObject"]')))
         driver.switch_to.frame(iframe)
 
         # input login email
-        email_input = WebDriverWait(driver, 31).until(
+        email_input = WebDriverWait(driver, 60).until(
             ec.presence_of_element_located((By.XPATH, '//*[@id="emailCardNumber"]')))
         email_input.send_keys(self.email)
 
-        password_input = WebDriverWait(driver, 31).until(
+        password_input = WebDriverWait(driver, 60).until(
             ec.presence_of_element_located((By.XPATH, '//*[@id="password"]')))
         password_input.send_keys(self.password)
         driver.find_element(By.XPATH, '//*[@id="login-submit"]').click()
@@ -107,16 +110,16 @@ class User:
                             '/html/body/erl-root/div/erl-validate-user/div/div/erl-one-time-pass/form/div[4]/button[1]').click()
 
         # get to receipt page
-        my_account = WebDriverWait(driver, 20).until(ec.presence_of_element_located(
+        my_account = WebDriverWait(driver, 60).until(ec.presence_of_element_located(
             (By.XPATH, '/html/body/div[4]/div[1]/header[1]/nav[1]/div/div/div[1]/ul/li[5]/a')))
         my_account.click()
-        my_activity = WebDriverWait(driver, 20).until(
+        my_activity = WebDriverWait(driver, 60).until(
             ec.presence_of_element_located((By.XPATH, '/html/body/div[4]/div[1]/header[1]/nav[2]/div/div/div/ul/li[1]/a')))
         my_activity.click()
 
         # Downloading receipts
 
-        max_counter = 40
+        max_counter = 5
         error_counter = 0
 
         for receipt_num in range(2, max_counter):
@@ -125,7 +128,7 @@ class User:
             receipt_date_xpath = receipt_xpath + '/div[1]/div/div/div[1]'
 
             try:
-                receipt_date_string = WebDriverWait(driver, 3).until(
+                receipt_date_string = WebDriverWait(driver, 60).until(
                     ec.presence_of_element_located((By.XPATH, receipt_date_xpath))).text
             except selenium.common.exceptions.TimeoutException as e:
                 if error_counter < 3:
@@ -151,13 +154,13 @@ class User:
             receipt_date = datetime.strptime(date_string, date_format)
             # if the current year is not the same as the inputted year and something about january
             if receipt_date > date_up_to:
-                receipt_banner = WebDriverWait(driver, 20).until(ec.presence_of_element_located((By.XPATH, receipt_xpath)))
+                receipt_banner = WebDriverWait(driver, 60).until(ec.presence_of_element_located((By.XPATH, receipt_xpath)))
                 receipt_banner.click()
                 time.sleep(2)
-                receipt_download = WebDriverWait(driver, 30).until(
+                receipt_download = WebDriverWait(driver, 60).until(
                     ec.presence_of_element_located((By.XPATH, '//*[@id="ereceiptSidesheet"]/div/div/div[1]/a/img')))
                 receipt_download.click()
-                x_click_out = WebDriverWait(driver, 20).until(
+                x_click_out = WebDriverWait(driver, 60).until(
                     ec.presence_of_element_located((By.XPATH, '//*[@id="ereceiptSidesheet"]/div/a/img')))
                 x_click_out.click()
 
@@ -188,40 +191,99 @@ class User:
         pass
 
 
-class Household:
-    def __init__(self, household_name, admin: User):
-        self.household_name = household_name
-        self.members = [admin]
-        self.admin = admin 
+class DatabaseConnection:
+    def __init__(self, connection_details):
+        self.connection_details = connection_details
+        self.conn = None
+        self.cursor = None
 
 
-    def add_user(self, user: User):
-        if user not in self.members:
-            self.members.append(user)
+    def __enter__(self):
+        self.conn = psycopg2.connect(**self.connection_details)
+        self.cursor = self.conn.cursor()
 
 
-    def appoint_admin(self, user: User):
-        if user in self.members:
-            self.admin = user
-        else:
-            raise Exception("User not in household")
+    def __exit__(self, exc_type, exc_value, traceback):
+        self.conn.close()
+        if exc_type is not None:
+            print(f"An exception of type {exc_type} occurred")
+
+
+    def test_connection(self):
+        self.cursor.execute("select version()")
+        # Fetch a single row using fetchone() method.
+        data = self.cursor.fetchone()
+        print("Connection established to: ",data)
+
+    def create_schema(self, schema_name):
+        create_schema_statement = f"""CREATE SCHEMA IF NOT EXISTS {schema_name}"""
+        self.cursor.execute(create_schema_statement)
+
+    
+    def drop_schema(self, schema_name):
+        drop_schema_statement = f"""DROP SCHEMA IF EXISTS {schema_name}"""
+        self.cursor.execute(drop_schema_statement)
     
 
-    def admin_check(self, user: User):
-        if user is not self.admin:
-            raise Exception("User does not have permission")
-        else:
-            pass
+    def create_items_table(self, schema, table_name):
+        create_items_table_statement = f"""
+        CREATE TABLE {schema}.{table_name}(
+        item_name VARCHAR(50),
+        price NUMERIC(7,2),
+        payer VARCHAR(10),
+        persist BOOLEAN DEFAULT FALSE
+        )
+        """
+        self.cursor.execute(create_items_table_statement)
+
+
+    def drop_table(self, table_name):
+        drop_table_statement = f"""DROP TABLE IF EXISTS {table_name}"""
+        self.cursor.execute(drop_table_statement)
+
+
+    def insert_df_items_into_table(self, df, table):
+        data_values = [tuple(row) for row in df.to_numpy()]
+        insert_statement = f"""INSERT INTO {table} (item_name, price, payer, persist) VALUES (%s, %s, %s, False)"""
+        self.cursor.executemany(insert_statement,data_values)
+
+
+# when initialising household, need to create weighting table and accounting table for household and 
+
+# class Household:
+#     def __init__(self, household_name, admin: User):
+#         self.household_name = household_name
+#         self.members = [admin]
+#         self.admin = admin 
+
+
+#     def add_user(self, user: User):
+#         if user not in self.members:
+#             self.members.append(user)
+
+
+#     def appoint_admin(self, user: User):
+#         if user in self.members:
+#             self.admin = user
+#         else:
+#             raise Exception("User not in household")
     
 
-    def settle_up(self, user: User):
-        self.admin_check(user)
-        pass
+#     def admin_check(self, user: User):
+#         if user is not self.admin:
+#             raise Exception("User does not have permission")
+#         else:
+#             pass
+    
+
+#     def settle_up(self, user: User):
+#         self.admin_check(user)
+#         pass
 
 
-    def reset_spreadsheets(self):
-        self.admin_check(User)
-        pass
+#     def reset_spreadsheets(self):
+#         self.admin_check(User)
+#         pass
 
 
 #modification test
