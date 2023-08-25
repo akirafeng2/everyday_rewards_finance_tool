@@ -7,50 +7,35 @@ services:
     stdin_open: true
     tty: true
     volumes:
-      - receipts:/app/Finances/receipts/
-    command: python /app/scraper/scraper.py
-    profiles:
-      - add_items
-
-  item_updater:
-    build: ./
-    stdin_open: true
-    tty: true
-    shm_size: 1gb
-    volumes:
-      - receipts:/app/Finances/receipts/
-    command: python /app/src/postgres_scratch.py
-    depends_on:
-      - db
-      - scraper
-    profiles:
-      - add_items
-
-  test:
-    build: ./
-    stdin_open: true
-    tty: true
-    shm_size: 1gb
-    volumes:
-      - receipts:/app/Finances/receipts/
-    command: python /app/src/test_2_scratch.py
-    profiles:
-      - test
-
-  db:
-    image: postgres
-    restart: always
-    environment:
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: root
-      POSTGRES_DB: finance_db
+      - C:\Users\Alex Feng\Documents\Finances\receipts:/app/Finances/receipts/
     ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - 5000:5000
+    command: flask run --host=0.0.0.0
 
-volumes:
-  receipts:
-    driver: local   
-  postgres_data:
-    driver: local
+
+  # item_updater:
+  #   build: ./
+  #   stdin_open: true
+  #   tty: true
+  #   shm_size: 1gb
+  #   volumes:
+  #     - receipts:/app/Finances/receipts/
+  #   command: python /app/src/scratch/scraper_class_scratch.py
+
+  # db:
+  #   image: postgres
+  #   restart: always
+  #   environment:
+  #     POSTGRES_USER: root
+  #     POSTGRES_PASSWORD: root
+  #     POSTGRES_DB: finance_db
+  #   ports:
+  #     - "5432:5432"
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+
+# volumes:
+  # receipts:
+    # driver: local   
+  # postgres_data:
+  #   driver: local
