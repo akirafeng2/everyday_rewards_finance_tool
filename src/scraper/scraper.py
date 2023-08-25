@@ -21,7 +21,7 @@ class EverydayRewardsScraper():
     def set_downloads(self, name: str):
         params = {
             "behavior": "allow",
-            "downloadPath": "/app/Finances/receipts/{name}/tmp"
+            "downloadPath": f"/app/Finances/receipts/{name}/tmp"
             }
         self.driver.execute_cdp_cmd("Page.setDownloadBehavior", params) 
 
@@ -35,6 +35,7 @@ class EverydayRewardsScraper():
         iframe = WebDriverWait(self.driver, 20).until(
             ec.presence_of_element_located((By.XPATH, '//*[@id="WXLoginIFrameObject"]')))
         self.driver.switch_to.frame(iframe)
+        print("3")
 
 
     def input_login_details(self, email: str, password):
@@ -50,6 +51,8 @@ class EverydayRewardsScraper():
 
         # press enter
         self.driver.find_element(By.XPATH, '//*[@id="login-submit"]').click()
+        time.sleep(10)
+        print("4")
 
     
     # Post MFA methods
@@ -70,7 +73,7 @@ class EverydayRewardsScraper():
         my_activity.click()
 
 
-    def download_receipts(self, date_up_to: str, max_iterations: int):
+    def download_receipts(self, date_up_to: datetime, max_iterations: int):
         
         # error counter to find end of receipt log
         error_counter = 0
@@ -111,7 +114,6 @@ class EverydayRewardsScraper():
             date_format = "%d%b%Y"
             date_string = receipt_date_day + receipt_date_month + str(receipt_date_year)
             receipt_date = datetime.strptime(date_string, date_format)
-            date_up_to = datetime.strptime(date_up_to, date_format)
 
             # download receipt if the date is after specified date_up_to parameter
             if receipt_date > date_up_to:

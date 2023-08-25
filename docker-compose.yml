@@ -6,6 +6,7 @@ services:
     build: ./src/scraper
     stdin_open: true
     tty: true
+    shm_size: 1gb
     volumes:
       - C:\Users\Alex Feng\Documents\Finances\receipts:/app/Finances/receipts/
     ports:
