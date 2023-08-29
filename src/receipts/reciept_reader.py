@@ -12,7 +12,7 @@ item_name_list = []
 item_price_list = []
 multiple_item_indicator = False
 
-directory = "/app/Finances/receipts/tmp/"
+directory = r"c:\Users\Alex Feng\Documents\Finances\receipts\alex\tmp"
 
 for file in os.scandir(directory):
     reader = PdfReader(file.path)
@@ -43,6 +43,8 @@ data = pd.DataFrame({"item": item_name_list, 'price': item_price_list})
 data['payer'] = 'alex'
 # change data price to float
 print(tabulate(data, headers='keys', tablefmt='psql'))
+print(item_name_list)
+print(item_price_list)
 
 
 """
