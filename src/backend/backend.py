@@ -10,7 +10,7 @@ class FileSystem:
         self.finance_dir_path = finance_dir_path
         self.receipts_dir_path = finance_dir_path / Path("receipts") / Path(username)
         self.receipts_tmp_path = self.receipts_dir_path / Path("tmp")
-
+        self.receipts_tmp_path.mkdir(parents=True, exist_ok=True)
 
     
     def receipts_to_dataframe(self) -> pd.DataFrame:
@@ -18,7 +18,7 @@ class FileSystem:
         item_name_list = []
         item_price_list = []
         multiple_item_indicator = False
-
+        
         for receipt in self.receipts_tmp_path.iterdir():
             string_path = str(receipt)
             reader = PdfReader(string_path)
@@ -29,7 +29,7 @@ class FileSystem:
 
             for line in item_list:
                 line_split = line.split("   ", 1)
-                item_name = line_split[0].strip('^#')
+                item_name = line_split[0].strip(' ^#')
                 price = line_split[1].strip()
                 if price.startswith("-"):
                     item_price_list[-1] = str(round(float(item_price_list[-1])+float(price), 2))
@@ -41,9 +41,9 @@ class FileSystem:
                     if price == "":
                         multiple_item_indicator = True
                     else:
-                        item_price_list.append(price)
+                        item_price_list.append(float(price))
                 elif multiple_item_indicator:
-                    item_price_list.append(price)
+                    item_price_list.append(float(price))
                     multiple_item_indicator = False
         
         data = pd.DataFrame({"item": item_name_list, 'price': item_price_list})

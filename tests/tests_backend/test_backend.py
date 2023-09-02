@@ -46,6 +46,21 @@ class TestFileSystem:
         df = file_system.receipts_to_dataframe()
         assert df.empty
 
+
+    def test_receipts_to_dataframe_receipt_column_types(self, file_system, datadir, tmp_path, username):
+        # Given        
+        ## Setup the folder with the receipt
+        test_file = "eReceipt_1638_Green Square Town Centre_14Apr2023__ljkod.pdf"
+        self.copy_file_into_temp_path_location(test_file, datadir, tmp_path, username)
+
+        # When
+        df = file_system.receipts_to_dataframe()
+
+        # Then
+        assert df['item'].dtype == "object"
+        assert df['price'].dtype == "float64"
+
+
     def test_receipts_to_dataframe_receipt_test(self, file_system, datadir, tmp_path, username):
         # Given
         ## Setup data to test against
@@ -56,7 +71,7 @@ class TestFileSystem:
             ['Spring Onions', 2.9]
             ]
         
-        test_df = pd.DataFrame(test_data, columns = ['item_name', 'price'])
+        test_df = pd.DataFrame(test_data, columns = ['item', 'price'])
 
         test_df = self.add_col_to_df(test_df, username)
 
@@ -73,22 +88,6 @@ class TestFileSystem:
         assert diff.empty
 
 
-    def test_receipts_to_dataframe_receipt_column_types(self, file_system, datadir, tmp_path, username):
-        # Given        
-        ## Setup the folder with the receipt
-        test_file = "eReceipt_1638_Green Square Town Centre_14Apr2023__ljkod.pdf"
-        self.copy_file_into_temp_path_location(test_file, datadir, tmp_path, username)
-
-        # When
-        df = file_system.receipts_to_dataframe()
-
-        # Then
-        assert df['item_name'].dtype == "object"
-        assert df['price'].dtype == "float64"
-
-
-
-
     def test_receipts_to_dataframe_prefixed_item(self, file_system, datadir, tmp_path, username):
         # Given
         ## Setup data to test against
@@ -97,7 +96,7 @@ class TestFileSystem:
             ["Rexona Men Roll On Invisible Dry 50ml", 5.5]
         ]
 
-        test_df = pd.DataFrame(test_data, columns = ['item_name', 'price'])
+        test_df = pd.DataFrame(test_data, columns = ['item', 'price'])
 
         test_df = self.add_col_to_df(test_df, username)
 
@@ -122,7 +121,7 @@ class TestFileSystem:
             ["Danone YoPRO Plain 700g", 14.1]
         ]
 
-        test_df = pd.DataFrame(test_data, columns = ['item_name', 'price'])
+        test_df = pd.DataFrame(test_data, columns = ['item', 'price'])
 
         test_df = self.add_col_to_df(test_df, username)
 
