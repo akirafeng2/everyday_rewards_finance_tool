@@ -1,7 +1,7 @@
 from ...src.backend.backend import FileSystem
 import pytest
 import pandas as pd
-from PyPDF2 import PdfReader
+from pypdf import PdfReader
 import shutil
 from pathlib import Path
 import os
@@ -139,8 +139,18 @@ class TestFileSystem:
         assert diff.empty
 
 
-    def test_receipts_to_dataframe_offer_discount(self, file_system):
-        pass
+    def test_receipts_to_dataframe_offer_discount(self, file_system, datadir, tmp_path, username):
+        # eReceipt_1638_Green%20Square_05Jul2023__nrbqp.pdf
+        # Given
+        ## Setup data to test against
+        test_data = np.array(['Primo Double Smoked Leg Ham 100G', 6.3, username, 'no'])
 
+        ## Setup the folder with the receipt
+        test_file = "eReceipt_1638_Green Square_05Jul2023__nrbqp.pdf"
+        self.copy_file_into_temp_path_location(test_file, datadir, tmp_path, username)
 
-    # the function to read receipts to text and to read text to dataframe should be separate
+        # When
+        df = file_system.receipts_to_dataframe()
+
+        # Then
+        assert (df==test_data).all(1).any()
