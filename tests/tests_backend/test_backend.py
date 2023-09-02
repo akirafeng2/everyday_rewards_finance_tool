@@ -30,7 +30,6 @@ class TestFileSystem:
     def add_col_to_df(self, df: pd.DataFrame, username: str) -> pd.DataFrame:
         """Adds processing columns to dataframe"""
         df['payer'] = username
-        df['persist'] = 'no'
         return df
     
     def copy_file_into_temp_path_location(self, file_name: str, data_directory: Path, tmp_path_instance: Path, username: str) -> None:
