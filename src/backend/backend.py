@@ -34,7 +34,7 @@ class FileSystem:
                 if price.startswith("-"):
                     item_price_list[-1] = str(round(float(item_price_list[-1])+float(price), 2))
                     continue
-                if item_name.startswith(" PRICE REDUCED BY"):
+                if item_name.startswith("PRICE REDUCED BY"):
                     continue
                 if not multiple_item_indicator:
                     item_name_list.append(item_name)

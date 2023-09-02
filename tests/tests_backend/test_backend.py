@@ -153,3 +153,31 @@ class TestFileSystem:
 
         # Then
         assert (df==test_data).all(1).any()
+
+
+    def test_receipts_to_dataframe_markdown_price_reduction(self, file_system, datadir, tmp_path, username):
+        # Given
+        ## Setup data to test against
+        test_data = [
+            ["Ansell Handy Clean Gloves 24Pk", 6.85],
+            ["Arnotts Tiny Teddy Variety 15pk 375g", 5.5],
+            ["Quilton Tuffy P/Twl Triple Length 2pk", 6.00],
+            ["Woolworths Mini Dbl Choc Muffin 8pk 320g", 3.31]
+        ]
+
+        test_df = pd.DataFrame(test_data, columns = ['item', 'price'])
+
+        test_df = self.add_col_to_df(test_df, username)
+
+        ## Setup the folder with the receipt
+        test_file = "eReceipt_1638_Green Square Town Centre_28Sep2022__enirr.pdf"
+        self.copy_file_into_temp_path_location(test_file, datadir, tmp_path, username)
+
+        # When
+        df = file_system.receipts_to_dataframe()
+
+        diff = self.get_different_rows(df, test_df)        
+
+        # Then
+        assert diff.empty
+        pass
