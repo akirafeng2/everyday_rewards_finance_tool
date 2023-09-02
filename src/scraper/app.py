@@ -1,6 +1,6 @@
 from flask import Flask, request, render_template, abort, session, redirect, url_for
 
-from scraper import EverydayRewardsScraper
+from .scraper import EverydayRewardsScraper
 
 from datetime import datetime
 

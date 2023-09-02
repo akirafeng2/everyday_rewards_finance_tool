@@ -8,7 +8,7 @@ services:
     tty: true
     shm_size: 1gb
     volumes:
-      - C:\Users\Alex Feng\Documents\Finances\receipts:/app/Finances/receipts/
+      - C:\Users\Alex Feng\Documents\Finances:/app/Finances/
     ports:
       - 5000:5000
     command: flask run --host=0.0.0.0
