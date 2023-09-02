@@ -1,6 +1,6 @@
-use finance_db;
+\c finance_db;
 
-CREATE SCHEMA household
+CREATE SCHEMA household;
 
 CREATE TABLE household.weightings(
     item VARCHAR(50) PRIMARY KEY,
@@ -14,4 +14,4 @@ CREATE TABLE household.items_bought(
     item VARCHAR(50),
     price NUMERIC(7,2),
     payer VARCHAR(10)
-)
+);
