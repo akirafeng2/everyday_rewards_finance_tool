@@ -1,4 +1,4 @@
-from ...src.backend.backend import FileSystem
+from ...src.backend import backend
 import pytest
 import pandas as pd
 from pypdf import PdfReader
@@ -6,6 +6,16 @@ import shutil
 from pathlib import Path
 import os
 import numpy as np
+from unittest.mock import patch, Mock
+
+
+CONNECTION_DETAILS = {
+    "dbname":"finance_db",
+    "user":"root",
+    "password":"root",
+    "host":"localhost",
+    "port":"5432"
+}
 
 @pytest.fixture
 def username():
@@ -15,7 +25,27 @@ def username():
 @pytest.fixture
 def file_system(tmp_path, username):
     """establishes an instance of FileSystem object"""
-    return FileSystem(tmp_path, username)
+    return backend.FileSystem(tmp_path, username)
+
+
+@pytest.fixture
+def database_connection():
+    return backend.DatabaseConnection(CONNECTION_DETAILS)
+
+
+@pytest.fixture
+def receipt_dataframe(username):
+    test_data = [
+        ["Toblerone Milk Chocolate Bar 50g", 0.9],
+        ["Rexona Men Roll On Invisible Dry 50ml", 5.5]
+    ]
+
+    test_df = pd.DataFrame(test_data, columns = ['item', 'price'])
+
+    test_df['payer'] = username
+
+    return test_df
+
     
 
 
@@ -180,3 +210,29 @@ class TestFileSystem:
         # Then
         assert diff.empty
         pass
+
+
+class TestDatabaseConnection:
+
+    # tests
+    @patch('psycopg2.connect')
+    def test_insert_df_items_into_table_dataframe_to_list(self, mock_connect,database_connection, receipt_dataframe, username):
+        # Given
+        ## setting up test arguements
+        test_list_input = [
+            ("Toblerone Milk Chocolate Bar 50g", 0.9, username),
+            ("Rexona Men Roll On Invisible Dry 50ml", 5.5, username)
+            ]
+        test_query_input = f"""INSERT INTO test_table (item, price, payer) VALUES (%s, %s, %s)"""
+
+
+        ## setting up the mock
+        mock_exe = mock_connect.return_value.cursor.return_value.executemany
+        scratch = mock_exe.return_value
+        # When
+        with database_connection:
+            print("hi")
+            database_connection.insert_df_items_into_table(receipt_dataframe,'test_table')
+        
+        # Then
+        mock_exe.assert_called_once_with(test_query_input, test_list_input)

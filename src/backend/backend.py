@@ -70,7 +70,9 @@ class DatabaseConnection:
 
     
     def insert_df_items_into_table(self, df: pd.DataFrame, table_name: str) -> None:
-        pass
+        data_values = [tuple(row) for row in df.to_numpy()]
+        insert_statement = f"""INSERT INTO {table_name} (item, price, payer) VALUES (%s, %s, %s)"""
+        self.cursor.executemany(insert_statement,data_values)
 
 
 
