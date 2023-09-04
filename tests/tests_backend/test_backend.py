@@ -141,7 +141,7 @@ class TestFileSystem:
         # eReceipt_1638_Green%20Square_05Jul2023__nrbqp.pdf
         # Given
         ## Setup data to test against
-        test_data = np.array(['Primo Double Smoked Leg Ham 100G', 6.3, username, 'no'])
+        test_data = np.array(['Primo Double Smoked Leg Ham 100G', 6.3, username])
 
         ## Setup the folder with the receipt
         test_file = "eReceipt_1638_Green Square_05Jul2023__nrbqp.pdf"
