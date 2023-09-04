@@ -1,7 +1,7 @@
 from pathlib import Path
 import pandas as pd
 from pypdf import PdfReader
-import os
+import psycopg2
 
 class FileSystem:
     
@@ -48,9 +48,31 @@ class FileSystem:
         
         data = pd.DataFrame({"item": item_name_list, 'price': item_price_list})
         data['payer'] = self.username
-        data['persist'] = 'no'
 
         return data
+    
+class DatabaseConnection:
+    def __init__(self, connection_details: dict):
+        self.connection_details = connection_details
+        self.conn = None
+        self.cursor = None
+
+
+    def __enter__(self):
+        self.conn = psycopg2.connect(**self.connection_details)
+        self.cursor = self.conn.cursor()
+
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        self.conn.close()
+        if exc_type is not None:
+            print(f"An exception of type {exc_type} occurred")
+
+    
+    def insert_df_items_into_table(self, df: pd.DataFrame, table_name: str) -> None:
+        data_values = [tuple(row) for row in df.to_numpy()]
+        insert_statement = f"""INSERT INTO {table_name} (item, price, payer) VALUES (%s, %s, %s)"""
+        self.cursor.executemany(insert_statement,data_values)
 
 
 

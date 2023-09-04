@@ -8,10 +8,18 @@ services:
     tty: true
     shm_size: 1gb
     volumes:
-      - C:\Users\Alex Feng\Documents\Finances:/app/Finances/
+      - C:\Users\Alex\Documents\Finances:/app/Finances/
     ports:
       - 5000:5000
     command: flask run --host=0.0.0.0
+
+  db:
+    build: ./src/database
+    restart: always
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data    
 
 
   # item_updater:
@@ -23,20 +31,10 @@ services:
   #     - receipts:/app/Finances/receipts/
   #   command: python /app/src/scratch/scraper_class_scratch.py
 
-  # db:
-  #   image: postgres
-  #   restart: always
-  #   environment:
-  #     POSTGRES_USER: root
-  #     POSTGRES_PASSWORD: root
-  #     POSTGRES_DB: finance_db
-  #   ports:
-  #     - "5432:5432"
-  #   volumes:
-  #     - postgres_data:/var/lib/postgresql/data
 
-# volumes:
+
+volumes:
+  postgres_data:
+    driver: local
   # receipts:
-    # driver: local   
-  # postgres_data:
-  #   driver: local
+  #   driver: local    
