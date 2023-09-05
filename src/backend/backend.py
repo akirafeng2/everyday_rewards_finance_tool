@@ -74,6 +74,10 @@ class DatabaseConnection:
         insert_statement = f"""INSERT INTO {table_name} (item, price, payer) VALUES (%s, %s, %s)"""
         self.cursor.executemany(insert_statement,data_values)
 
+    
+    def commit_changes(self):
+        self.conn.commit()
+
 
 
 

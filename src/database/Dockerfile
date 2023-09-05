@@ -6,4 +6,4 @@ ENV POSTGRES_USER=root
 
 ENV POSTGRES_DB=finance_db
 
-COPY ./setup.sql /docker-entrypoint-initdb.d/
+COPY setup.sql /docker-entrypoint-initdb.d/

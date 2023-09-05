@@ -1,5 +1,3 @@
-\c finance_db;
-
 CREATE SCHEMA household;
 
 CREATE TABLE household.weightings(
