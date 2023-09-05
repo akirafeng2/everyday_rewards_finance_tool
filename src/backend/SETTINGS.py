@@ -6,6 +6,6 @@ CONNECTION_DETAILS = {
     "dbname":"finance_db",
     "user":"root",
     "password":"root",
-    "host":"localhost",
+    "host":"db",
     "port":"5432"
 }

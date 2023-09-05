@@ -21,20 +21,18 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data    
 
-
-  # item_updater:
-  #   build: ./
-  #   stdin_open: true
-  #   tty: true
-  #   shm_size: 1gb
-  #   volumes:
-  #     - receipts:/app/Finances/receipts/
-  #   command: python /app/src/scratch/scraper_class_scratch.py
+  backend:
+    build: ./src/backend
+    stdin_open: true
+    tty: true
+    volumes:
+      - C:\Users\Alex\Documents\Finances:/app/Finances/
+    ports:
+      - 5050:5000
+    command: flask run --host=0.0.0.0
 
 
 
 volumes:
   postgres_data:
-    driver: local
-  # receipts:
-  #   driver: local    
+    driver: local  
