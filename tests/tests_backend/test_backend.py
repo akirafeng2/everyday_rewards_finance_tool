@@ -209,7 +209,18 @@ class TestFileSystem:
 
         # Then
         assert diff.empty
-        pass
+
+        # Tests for move_receipts
+    def test_move_receipts_empty_tmp_folder(self, file_system, tmp_path, username):
+        # Given
+        temp_location = tmp_path / Path("receipts") / Path(username)
+        os.makedirs(os.path.dirname(temp_location), exist_ok=True)
+        # When
+        file_system.move_receipts()
+        objects_in_dir = len([x for x in temp_location.iterdir()])
+        # Then
+        assert objects_in_dir == 1
+
 
 
 class TestDatabaseConnection:

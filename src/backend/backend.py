@@ -51,6 +51,10 @@ class FileSystem:
 
         return data
     
+
+    def move_receipts(self):
+        pass
+    
 class DatabaseConnection:
     def __init__(self, connection_details: dict):
         self.connection_details = connection_details
