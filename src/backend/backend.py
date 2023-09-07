@@ -81,10 +81,3 @@ class DatabaseConnection:
     
     def commit_changes(self):
         self.conn.commit()
-
-
-
-
-
-
-    
