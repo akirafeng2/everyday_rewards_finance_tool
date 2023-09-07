@@ -2,6 +2,7 @@ from pathlib import Path
 import pandas as pd
 from pypdf import PdfReader
 import psycopg2
+import os
 
 class FileSystem:
     
@@ -53,6 +54,11 @@ class FileSystem:
     
 
     def move_receipts(self):
+        
+        for receipt in os.listdir(str(self.receipts_tmp_path)):
+            if not receipt.startswith("eReceipt"):
+                continue
+            receipt_date = receipt.split("_")[3] 
         pass
     
 class DatabaseConnection:
