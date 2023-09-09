@@ -214,7 +214,6 @@ class TestFileSystem:
     def test_move_receipts_empty_tmp_folder(self, file_system, tmp_path, username):
         # Given
         temp_location = tmp_path / Path("receipts") / Path(username)
-        os.makedirs(os.path.dirname(temp_location), exist_ok=True)
         # When
         file_system.move_receipts()
         objects_in_dir = len([x for x in temp_location.iterdir()])
@@ -247,6 +246,28 @@ class TestFileSystem:
         # Then
         for expected_path in expected_path_list:
             assert expected_path.exists()
+    
+
+    def test_move_receipts_skips_non_receipt(self, file_system, datadir, tmp_path, username):
+        # Given
+        not_a_receipt = "file-sample_150kB.pdf"
+        self.copy_file_into_temp_path_location(not_a_receipt, datadir, tmp_path, username)
+
+        # When
+        file_system.move_receipts()
+        objects_in_dir = len([x for x in file_system.receipts_dir_path.iterdir()])
+        # Then
+        assert objects_in_dir == 1
+
+
+    def test_delete_tmp(self, file_system):
+        # Given
+
+        # When
+        file_system.delete_tmp()
+
+        # Then
+        assert not file_system.receipts_tmp_path.exists()
 
 
 
