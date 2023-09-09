@@ -2,6 +2,9 @@ from pathlib import Path
 import pandas as pd
 from pypdf import PdfReader
 import psycopg2
+import os
+from datetime import datetime
+import shutil
 
 class FileSystem:
     
@@ -51,6 +54,26 @@ class FileSystem:
 
         return data
     
+
+    def move_receipts(self):
+        
+        for receipt in os.listdir(str(self.receipts_tmp_path)):
+            if not receipt.startswith("eReceipt"):
+                continue
+            
+            receipt_date = receipt.split("_")[3] 
+            date_format = "%d%b%Y"
+            receipt_datetime = datetime.strptime(receipt_date, date_format)
+            month = str(receipt_datetime.month)
+            year = str(receipt_datetime.year)
+
+            destination_path = self.receipts_dir_path / Path(f"{year}/{month}")
+            receipt_path = self.receipts_tmp_path / receipt
+
+            destination_path.mkdir(parents=True, exist_ok=True)
+            shutil.move(str(receipt_path), str(destination_path))
+                  
+    
 class DatabaseConnection:
     def __init__(self, connection_details: dict):
         self.connection_details = connection_details
@@ -77,10 +100,3 @@ class DatabaseConnection:
     
     def commit_changes(self):
         self.conn.commit()
-
-
-
-
-
-
-    

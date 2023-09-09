@@ -24,6 +24,7 @@ def update_new_receipts():
         DB_CONN.commit_changes()
     
     # move receipts to year/month folder
-
+    FS.move_receipts()
     # delete tmp folder
+    FS.delete_tmp()
     return "done"

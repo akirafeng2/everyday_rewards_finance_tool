@@ -209,14 +209,52 @@ class TestFileSystem:
 
         # Then
         assert diff.empty
-        pass
+
+        # Tests for move_receipts
+    def test_move_receipts_empty_tmp_folder(self, file_system, tmp_path, username):
+        # Given
+        temp_location = tmp_path / Path("receipts") / Path(username)
+        os.makedirs(os.path.dirname(temp_location), exist_ok=True)
+        # When
+        file_system.move_receipts()
+        objects_in_dir = len([x for x in temp_location.iterdir()])
+        # Then
+        assert objects_in_dir == 1
+
+    def test_move_receipts_normal_function(self, file_system, datadir, tmp_path, username):
+        # Given
+        receipt_list = [
+            "eReceipt_1248_Town Hall_10Jun2023__xbkgs.pdf",
+            "eReceipt_1638_Green Square Town Centre_08Apr2023__fckor.pdf",
+            "eReceipt_1638_Green Square Town Centre_14Apr2023__ljkod.pdf",
+            "eReceipt_1638_Green Square_05Jul2023__nrbqp.pdf",
+            "eReceipt_1638_Green Square Town Centre_08Apr2022__dfcxc.pdf"
+            ]
+        
+        expected_path_list = [
+            file_system.receipts_dir_path / Path("2023/6/eReceipt_1248_Town Hall_10Jun2023__xbkgs.pdf"),
+            file_system.receipts_dir_path / Path("2023/4/eReceipt_1638_Green Square Town Centre_08Apr2023__fckor.pdf"),
+            file_system.receipts_dir_path / Path("2023/4/eReceipt_1638_Green Square Town Centre_14Apr2023__ljkod.pdf"),
+            file_system.receipts_dir_path / Path("2023/7/eReceipt_1638_Green Square_05Jul2023__nrbqp.pdf"),
+            file_system.receipts_dir_path / Path("2022/4/eReceipt_1638_Green Square Town Centre_08Apr2022__dfcxc.pdf"),
+        ]
+        for receipt in receipt_list:
+            self.copy_file_into_temp_path_location(receipt, datadir, tmp_path, username)
+
+        # When
+        file_system.move_receipts()
+
+        # Then
+        for expected_path in expected_path_list:
+            assert expected_path.exists()
+
 
 
 class TestDatabaseConnection:
 
     # tests
     @patch('psycopg2.connect')
-    def test_insert_df_items_into_table_dataframe_to_list(self, mock_connect,database_connection, receipt_dataframe, username):
+    def test_insert_df_items_into_table_dataframe_to_list(self, mock_connect, database_connection, receipt_dataframe, username):
         # Given
         ## setting up test arguements
         test_list_input = [
