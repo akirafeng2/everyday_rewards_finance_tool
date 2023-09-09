@@ -72,6 +72,10 @@ class FileSystem:
 
             destination_path.mkdir(parents=True, exist_ok=True)
             shutil.move(str(receipt_path), str(destination_path))
+
+
+    def delete_tmp(self):
+        self.receipts_tmp_path.rmdir()
                   
     
 class DatabaseConnection:
