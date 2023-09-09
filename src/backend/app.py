@@ -26,4 +26,5 @@ def update_new_receipts():
     # move receipts to year/month folder
     FS.move_receipts()
     # delete tmp folder
+    FS.delete_tmp()
     return "done"
