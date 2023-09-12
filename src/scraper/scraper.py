@@ -41,7 +41,7 @@ class EverydayRewardsScraper():
     def input_login_details(self, email: str, password):
         # input login email
         email_input = WebDriverWait(self.driver, 60).until(
-            ec.presence_of_element_located((By.XPATH, '//*[@id="emailCardNumber"]')))
+            ec.presence_of_element_located((By.XPATH, '//*[@id="emailNumber"]')))
         email_input.send_keys(email)
 
         # input Password
@@ -67,7 +67,6 @@ class EverydayRewardsScraper():
         my_account = WebDriverWait(self.driver, 60).until(ec.presence_of_element_located(
             (By.XPATH, '/html/body/div[4]/div[1]/header[1]/nav[1]/div/div/div[1]/ul/li[5]/a')))
         my_account.click()
-
         my_activity = WebDriverWait(self. driver, 60).until(
             ec.presence_of_element_located((By.XPATH, '/html/body/div[4]/div[1]/header[1]/nav[2]/div/div/div/ul/li[1]/a')))
         my_activity.click()
@@ -122,10 +121,15 @@ class EverydayRewardsScraper():
                 time.sleep(2)
                 receipt_download = WebDriverWait(self.driver, 60).until(
                     ec.presence_of_element_located((By.XPATH, '//*[@id="ereceiptSidesheet"]/div/div/div[1]/a/img')))
-                receipt_download.click()
-                x_click_out = WebDriverWait(self.driver, 60).until(
-                    ec.presence_of_element_located((By.XPATH, '//*[@id="ereceiptSidesheet"]/div/a/img')))
-                x_click_out.click()
+                try:
+                    receipt_download.click()
+                except selenium.common.exceptions.ElementNotInteractableException as e:
+                    # if this exception occurs, it means the item has no receipt to download
+                    continue
+                else:
+                    x_click_out = WebDriverWait(self.driver, 60).until(
+                        ec.presence_of_element_located((By.XPATH, '//*[@id="ereceiptSidesheet"]/div/a/img')))
+                    x_click_out.click()
 
             else:
                 break        
