@@ -1,5 +1,7 @@
 from flask import Flask, request, render_template, abort, session, redirect, url_for
 
+from markupsafe import escape
+
 from scraper import EverydayRewardsScraper
 
 from datetime import datetime
@@ -8,12 +10,13 @@ app = Flask(__name__)
 
 app.secret_key = "my_secret_key"
 
-@app.route('/api/scrape_everyday_rewards/entry', methods = ['GET','POST'])
-def scrape_everyday_rewards_entry():
+@app.route('/api/scrape_everyday_rewards/<date_to>/entry', methods = ['GET','POST'])
+def scrape_everyday_rewards_entry(date_to):
     if request.method == 'POST':
         session['name'] = request.form.get('name')
         session['email'] = request.form.get('email')
         session['password'] = request.form.get('password')
+        session['date_to'] = escape(date_to)
         
         return redirect(url_for('scrape_everyday_rewards_pre_mfa'))
     
@@ -74,7 +77,8 @@ def scrape_everyday_rewards_post_mfa():
         
     sms_code = request.form.get('SMS Code')
 
-    date_string = "01Jan2000"
+    date_string = session.pop('date_to')
+
     date_format = "%d%b%Y"
     recent_date = datetime.strptime(date_string, date_format)
     
@@ -88,4 +92,4 @@ def scrape_everyday_rewards_post_mfa():
     scraper.download_receipts(recent_date, 50)
     scraper.stop()
 
-    return "Receipts downloaded successfully"
+    return redirect("http://localhost:5050/api/insert_receipts_to_db")
