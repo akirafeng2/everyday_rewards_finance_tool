@@ -5,6 +5,7 @@ import psycopg2
 import os
 from datetime import datetime
 import shutil
+import re
 
 class FileSystem:
     
@@ -76,6 +77,42 @@ class FileSystem:
 
     def delete_tmp(self):
         self.receipts_tmp_path.rmdir()
+
+
+    def iterate_largest_numeric_dir_name(self, directory_path: Path, iterate_number: int):
+        """
+        Returns the Path of the directory that has largest numeric value for its name in the given directory
+        :param directory_path: Path
+        :param iterate_number: int
+        :return: Path
+        """
+        
+        for x in range(iterate_number):
+
+            pattern = re.compile(r'^\d+$')  # This regular expression matches strings that contain only digits
+
+            numeric_files = [file for file in directory_path.glob("*/") if pattern.match(file.name)]
+
+            directory_path = max(numeric_files)
+
+        return directory_path
+
+
+    def get_recent_receipt_date(self):
+        """
+        Returns the date of the most recent Everyday Rewards downloaded receipt in a given directory
+        :return: datetime "%d%b%Y"
+        """
+        try:
+            directory_path = self.iterate_largest_numeric_dir_name(self.receipts_dir_path,2)
+        except ValueError as e:
+            print("No existing receipts found: downloading all previous receipts")
+            recent_date_str = "01Jan2000" 
+        else:
+            receipt_name_list = os.listdir(directory_path)
+            receipt_date_list = [receipt_name.split("_")[3] for receipt_name in receipt_name_list]
+            recent_date_str = max(receipt_date_list)
+        return recent_date_str  
                   
     
 class DatabaseConnection:
