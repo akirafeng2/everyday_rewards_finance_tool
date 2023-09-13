@@ -10,10 +10,10 @@ app = Flask(__name__)
 
 app.secret_key = "my_secret_key"
 
-@app.route('/api/scrape_everyday_rewards/<date_to>/entry', methods = ['GET','POST'])
-def scrape_everyday_rewards_entry(date_to):
+@app.route('/api/scrape_everyday_rewards/<name>/<date_to>/entry', methods = ['GET','POST'])
+def scrape_everyday_rewards_entry(name, date_to):
     if request.method == 'POST':
-        session['name'] = request.form.get('name')
+        session['name'] = escape(name)
         session['email'] = request.form.get('email')
         session['password'] = request.form.get('password')
         session['date_to'] = escape(date_to)
