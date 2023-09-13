@@ -4,7 +4,6 @@ from backend import FileSystem, DatabaseConnection
 import SETTINGS
 
 app = Flask(__name__)
-FS = FileSystem(SETTINGS.FINANCE_FILE_PATH, "adam")
 DB_CONN = DatabaseConnection(SETTINGS.CONNECTION_DETAILS)
 
 @app.route('/api/update_new_receipts/<name>', methods = ['GET'])
