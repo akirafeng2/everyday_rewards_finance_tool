@@ -138,6 +138,14 @@ class DatabaseConnection:
         insert_statement = f"""INSERT INTO {table_name} (item, price, payer) VALUES (%s, %s, %s)"""
         self.cursor.executemany(insert_statement,data_values)
 
+
+    def get_empty_weightings(self, household: str, view_name: str) -> list:
+        sql_query = f"""SELECT DISTINCT item FROM {household}.{view_name} WHERE persist IS NULL"""
+        self.cursor.execute(sql_query)
+        result = self.cursor.fetchall()
+        empty_weightings = [row[0] for row in result]
+        return empty_weightings
+
     
     def commit_changes(self):
         self.conn.commit()
