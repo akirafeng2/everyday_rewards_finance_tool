@@ -20,7 +20,9 @@ def update_new_receipts(name):
 @app.route('/api/insert_receipts_to_db', methods = ['GET', 'POST'])
 def insert_receipts_to_db():
     if request.method == 'POST':
-
+        weightings_dict = request.form
+        with DB_CONN:
+            DB_CONN.insert_weightings_into_table(weightings_dict)
         # move receipts to year/month folder
         FS.move_receipts()
         # delete tmp folder

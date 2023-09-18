@@ -6,6 +6,7 @@ import os
 from datetime import datetime
 import shutil
 import re
+from werkzeug.datastructures import MultiDict
 
 class FileSystem:
     
@@ -145,6 +146,17 @@ class DatabaseConnection:
         result = self.cursor.fetchall()
         empty_weightings = [row[0] for row in result]
         return empty_weightings
+
+
+    def weightings_dict_to_df(self, weightings_dict: MultiDict) -> pd.DataFrame:
+        keys = weightings_dict.keys()
+        for item in keys:
+            value = weightings_dict.get(item)
+        pass
+
+
+    def weightings_df_to_table(self, df: pd.DataFrame, table_name:str) -> None:
+        pass
 
     
     def commit_changes(self):

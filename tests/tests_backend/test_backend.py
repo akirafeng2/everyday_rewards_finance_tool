@@ -8,6 +8,7 @@ import os
 import numpy as np
 from datetime import datetime
 from unittest.mock import patch, Mock
+from werkzeug.datastructures import MultiDict
 
 
 CONNECTION_DETAILS = {
@@ -47,16 +48,14 @@ def receipt_dataframe(username):
 
     return test_df
 
-    
+def get_different_rows(source_df: pd.DataFrame, new_df: pd.DataFrame) -> pd.DataFrame:
+    """Returns just the rows from the new dataframe that differ from the source dataframe"""
+    merged_df = source_df.merge(new_df, indicator=True, how='outer')
+    changed_rows_df = merged_df[merged_df['_merge'] == 'right_only']
+    return changed_rows_df.drop('_merge', axis=1)    
 
 
 class TestFileSystem:
-
-    def get_different_rows(self, source_df: pd.DataFrame, new_df: pd.DataFrame) -> pd.DataFrame:
-        """Returns just the rows from the new dataframe that differ from the source dataframe"""
-        merged_df = source_df.merge(new_df, indicator=True, how='outer')
-        changed_rows_df = merged_df[merged_df['_merge'] == 'right_only']
-        return changed_rows_df.drop('_merge', axis=1)
     
     def add_col_to_df(self, df: pd.DataFrame, username: str) -> pd.DataFrame:
         """Adds processing columns to dataframe"""
@@ -118,7 +117,7 @@ class TestFileSystem:
         # When
         df = file_system.receipts_to_dataframe()
 
-        diff = self.get_different_rows(df, test_df)
+        diff = get_different_rows(df, test_df)
 
         # Then
         assert diff.empty
@@ -143,7 +142,7 @@ class TestFileSystem:
         # When
         df = file_system.receipts_to_dataframe()
 
-        diff = self.get_different_rows(df, test_df)        
+        diff = get_different_rows(df, test_df)        
 
         # Then
         assert diff.empty
@@ -168,7 +167,7 @@ class TestFileSystem:
         # When
         df = file_system.receipts_to_dataframe()
 
-        diff = self.get_different_rows(df, test_df)        
+        diff = get_different_rows(df, test_df)        
 
         # Then
         assert diff.empty
@@ -212,7 +211,7 @@ class TestFileSystem:
         # When
         df = file_system.receipts_to_dataframe()
 
-        diff = self.get_different_rows(df, test_df)        
+        diff = get_different_rows(df, test_df)        
 
         # Then
         assert diff.empty
@@ -371,3 +370,53 @@ class TestDatabaseConnection:
         
         # Then
         mock_exe.assert_called_once_with(test_query_input, test_list_input)
+
+
+    def test_weightings_tuples_to_df_persist_on(self, database_connection):
+        # Given
+        ## setting up examples weightings_tuples
+        test_weightings_dict = MultiDict([
+            ('eggs[adam]', '0.01'), 
+            ('eggs[alex]', '0.02'), 
+            ('eggs[tyler]', '0.03'),
+            ('eggs[persist]', 'on')
+        ])
+
+        test_weightings_data = [
+            ["eggs", 0.01, 0.02, 0.03, True]
+        ]
+
+        test_df = pd.DataFrame(test_weightings_data, columns = ['item', 'adam', 'alex', 'alex', 'persist'])
+
+        # When
+        df = database_connection.weightings_dict_to_df(test_weightings_dict)
+
+        diff = get_different_rows(df, test_df)        
+
+        # Then
+        assert diff.empty
+
+
+    def test_weightings_tuples_to_df_no_persist(self, database_connection):
+        # Given
+        ## setting up examples weightings_tuples
+        test_weightings_dict = MultiDict([
+            ('eggs[adam]', '0.01'), 
+            ('eggs[alex]', '0.02'), 
+            ('eggs[tyler]', '0.03')
+        ])
+
+        test_weightings_data = [
+            ["eggs", 0.01, 0.02, 0.03, False]
+        ]
+
+        test_df = pd.DataFrame(test_weightings_data, columns = ['item', 'adam', 'alex', 'alex', 'persist'])
+
+        # When
+        df = database_connection.weightings_dict_to_df(test_weightings_dict)
+
+        diff = get_different_rows(df, test_df)        
+
+        # Then
+        assert diff.empty
+    
