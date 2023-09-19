@@ -7,6 +7,8 @@ services:
     stdin_open: true
     tty: true
     shm_size: 1gb
+    env_file:
+      - .env
     volumes:
       - C:\Users\Alex\Documents\Finances:/app/Finances/
     networks:
@@ -29,6 +31,8 @@ services:
     build: ./src/backend
     stdin_open: true
     tty: true
+    env_file:
+      - .env
     volumes:
       - C:\Users\Alex\Documents\Finances:/app/Finances/
     networks:

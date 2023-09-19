@@ -1,11 +1,16 @@
 from pathlib import Path
+import os
+from dotenv import load_dotenv
 
-USERNAME = "alex"
-FINANCE_FILE_PATH = Path("/app/Finances/")
+load_dotenv()
+
+FINANCE_FILE_PATH = Path(os.getenv("FINANCE_FILE_PATH"))
 CONNECTION_DETAILS = {
-    "dbname":"finance_db",
-    "user":"root",
-    "password":"root",
-    "host":"db",
-    "port":"5432"
+    "dbname": os.getenv("DB_NAME"),
+    "user": os.getenv("USER"),
+    "password": os.getenv("PASSWORD"),
+    "host": os.getenv("HOST"),
+    "port": os.getenv("5432")
 }
+ENV = os.getenv("ENV")
+IP_ADDRESS = os.getenv("IP_ADDRESS")

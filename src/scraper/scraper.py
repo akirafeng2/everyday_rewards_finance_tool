@@ -21,7 +21,7 @@ class EverydayRewardsScraper():
     def set_downloads(self, name: str):
         params = {
             "behavior": "allow",
-            "downloadPath": f"/app/Finances/receipts/{name}/tmp"
+            "downloadPath": f"/app/Finances/dev/receipts/{name}/tmp"
             }
         self.driver.execute_cdp_cmd("Page.setDownloadBehavior", params) 
 

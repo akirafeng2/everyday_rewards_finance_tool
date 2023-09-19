@@ -6,6 +6,8 @@ from scraper import EverydayRewardsScraper
 
 from datetime import datetime
 
+import SETTINGS
+
 app = Flask(__name__)
 
 app.secret_key = "my_secret_key"
@@ -92,4 +94,4 @@ def scrape_everyday_rewards_post_mfa():
     scraper.download_receipts(recent_date, 50)
     scraper.stop()
 
-    return redirect("http://192.168.0.47:5050/api/insert_receipts_to_db")
+    return redirect(f"http://{SETTINGS.IP_ADDRESS}:5050/api/insert_receipts_to_db")

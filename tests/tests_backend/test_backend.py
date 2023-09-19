@@ -357,7 +357,7 @@ class TestDatabaseConnection:
             ("Toblerone Milk Chocolate Bar 50g", 0.9, username),
             ("Rexona Men Roll On Invisible Dry 50ml", 5.5, username)
             ]
-        test_query_input = f"""INSERT INTO test_table (item, price, payer) VALUES (%s, %s, %s)"""
+        test_query_input = f"""INSERT INTO test_schema.test_table (item, price, payer) VALUES (%s, %s, %s)"""
 
 
         ## setting up the mock
@@ -366,7 +366,7 @@ class TestDatabaseConnection:
         # When
         with database_connection:
             print("hi")
-            database_connection.insert_df_items_into_table(receipt_dataframe,'test_table')
+            database_connection.insert_df_items_into_table(receipt_dataframe, 'test_schema', 'test_table')
         
         # Then
         mock_exe.assert_called_once_with(test_query_input, test_list_input)
