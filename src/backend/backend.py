@@ -134,9 +134,9 @@ class DatabaseConnection:
             print(f"An exception of type {exc_type} occurred")
 
     
-    def insert_df_items_into_table(self, df: pd.DataFrame, table_name: str) -> None:
+    def insert_df_items_into_table(self, df: pd.DataFrame, schema: str, table_name: str) -> None:
         data_values = [tuple(row) for row in df.to_numpy()]
-        insert_statement = f"""INSERT INTO {table_name} (item, price, payer) VALUES (%s, %s, %s)"""
+        insert_statement = f"""INSERT INTO {schema}.{table_name} (item, price, payer) VALUES (%s, %s, %s)"""
         self.cursor.executemany(insert_statement,data_values)
 
 
