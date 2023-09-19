@@ -150,13 +150,38 @@ class DatabaseConnection:
 
     def weightings_dict_to_df(self, weightings_dict: MultiDict) -> pd.DataFrame:
         keys = weightings_dict.keys()
-        for item in keys:
-            value = weightings_dict.get(item)
-        pass
+        dataframe_dict = {}
+        for item_person in keys:
+
+            value = weightings_dict.get(item_person)
+            item_person_list = item_person.split('[')
+            item = item_person_list[0]
+            person = item_person_list[1]
+
+            if dataframe_dict.get(item) == None:
+                dataframe_dict[item] = list()
+                dataframe_dict[item].append(item)
+                    
+            try:
+                dataframe_dict[item].append(float(value))
+            except ValueError:
+                dataframe_dict[item].append(True)
+
+        for item in dataframe_dict:
+            if len(dataframe_dict[item]) == 4:
+                dataframe_dict[item].append(False)
+
+        list_for_df = dataframe_dict.values()
+
+        df = pd.DataFrame(list_for_df, columns = ['item', 'adam', 'alex', 'tyler', 'persist'])
+        return df
 
 
-    def weightings_df_to_table(self, df: pd.DataFrame, table_name:str) -> None:
-        pass
+    def insert_weightings_into_table(self, df: pd.DataFrame, household:str, table_name:str) -> None:
+        data_values = [tuple(row) for row in df.to_numpy()]
+        insert_statement = f"""INSERT INTO {household}.{table_name} (item, adam, alex, tyler, persist) VALUES (%s, %s, %s, %s, %s)"""
+        self.cursor.executemany(insert_statement,data_values)
+
 
     
     def commit_changes(self):

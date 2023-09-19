@@ -386,7 +386,7 @@ class TestDatabaseConnection:
             ["eggs", 0.01, 0.02, 0.03, True]
         ]
 
-        test_df = pd.DataFrame(test_weightings_data, columns = ['item', 'adam', 'alex', 'alex', 'persist'])
+        test_df = pd.DataFrame(test_weightings_data, columns = ['item', 'adam', 'alex', 'tyler', 'persist'])
 
         # When
         df = database_connection.weightings_dict_to_df(test_weightings_dict)
@@ -410,7 +410,7 @@ class TestDatabaseConnection:
             ["eggs", 0.01, 0.02, 0.03, False]
         ]
 
-        test_df = pd.DataFrame(test_weightings_data, columns = ['item', 'adam', 'alex', 'alex', 'persist'])
+        test_df = pd.DataFrame(test_weightings_data, columns = ['item', 'adam', 'alex', 'tyler', 'persist'])
 
         # When
         df = database_connection.weightings_dict_to_df(test_weightings_dict)
