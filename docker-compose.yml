@@ -9,6 +9,8 @@ services:
     shm_size: 1gb
     volumes:
       - C:\Users\Alex\Documents\Finances:/app/Finances/
+    networks:
+      - finance_app
     ports:
       - 5000:5000
     command: flask run --host=0.0.0.0
@@ -16,6 +18,8 @@ services:
   db:
     build: ./src/database
     restart: always
+    networks:
+      - finance_app
     ports:
       - "5432:5432"
     volumes:
@@ -27,11 +31,15 @@ services:
     tty: true
     volumes:
       - C:\Users\Alex\Documents\Finances:/app/Finances/
+    networks:
+      - finance_app
     ports:
       - 5050:5000
     command: flask run --host=0.0.0.0
 
-
+networks:
+  finance_app:
+    driver: bridge
 
 volumes:
   postgres_data:
