@@ -419,4 +419,49 @@ class TestDatabaseConnection:
 
         # Then
         assert diff.empty
+
+    @patch("psycopg2.connect")
+    def test_get_expenses_table(self, mock_connect, database_connection):
+        # Given
+        mock_connect.return_value.cursor.return_value.execute.return_value = "hi"
+        mock_connect.return_value.cursor.return_value.fetchall.return_value = [
+            (1, 'rent', 50, 'alex', 14.1, 13.02, 15), 
+            (2, 'gyg', 41, 'adam', 1, 1, 1), 
+            (3, 'ice cream', 13, 'tyler', 0, 1, 0), 
+            ]
+        
+        expected_list = [
+            {
+                'id': 1,
+                'item': 'rent',
+                'price': 50,
+                'payer': 'alex',
+                'adam': 14.1,
+                'alex': 13.02,
+                'tyler': 15
+            },
+            {
+                'id': 2,
+                'item': 'gyg',
+                'price': 41,
+                'payer': 'adam',
+                'adam': 1,
+                'alex': 1,
+                'tyler': 1
+            },
+            {
+                'id': 3,
+                'item': 'ice cream',
+                'price': 13,
+                'payer': 'tyler',
+                'adam': 0,
+                'alex': 1,
+                'tyler': 0
+            },
+        ]
+        # When
+        with database_connection:
+            data = database_connection.get_expenses_table('bob', 'bob')
+        # Then
+        assert data == expected_list
     
