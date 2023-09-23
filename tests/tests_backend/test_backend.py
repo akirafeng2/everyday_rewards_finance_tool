@@ -420,6 +420,7 @@ class TestDatabaseConnection:
         # Then
         assert diff.empty
 
+
     @patch("psycopg2.connect")
     def test_get_expenses_table(self, mock_connect, database_connection):
         # Given
@@ -465,3 +466,6 @@ class TestDatabaseConnection:
         # Then
         assert data == expected_list
     
+    
+    def test_delete_expenses_row():
+        pass

@@ -200,9 +200,19 @@ class DatabaseConnection:
             row_dict = dict(zip(keys, row))
             list_of_dict.append(row_dict)
         return list_of_dict
+
+    def delete_expenses_row(self, input:MultiDict, household:str, table_name:str) -> None:
+        """
+        Function to delete a row for expenses table after receive input id
+        """
+        sql_query = f"""DELETE FROM {household}.{table_name} where id = {input['id']}"""
+        self.cursor.execute(sql_query)
     
     def insert_expenses_into_table(self, input: MultiDict, household:str, table_name:str) -> None:
-        pass
+        list_values = list(input.values())
+        print(list_values)
+        insert_statement = f"""INSERT INTO {household}.{table_name} (item, price, payer, adam, alex, tyler) VALUES (%s, %s, %s, %s, %s, %s)"""
+        self.cursor.execute(insert_statement,list_values)
     
     def commit_changes(self):
         self.conn.commit()
