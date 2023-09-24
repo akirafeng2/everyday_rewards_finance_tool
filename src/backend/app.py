@@ -51,18 +51,28 @@ def insert_one_off_costs(occurence): # occruence either 'one_off' or 'recurring'
     if request.method == 'POST':
         expenses_dict = request.form
         if 'id' in expenses_dict:
-            print('1')
             with DB_CONN:
                 DB_CONN.delete_expenses_row(expenses_dict, household, f"{occurence}_expenses")
                 DB_CONN.commit_changes()
         else:
-            print('2')
             with DB_CONN:
                 DB_CONN.insert_expenses_into_table(expenses_dict, household, f"{occurence}_expenses")
                 DB_CONN.commit_changes()
-    print('3')
     with DB_CONN:
         data = DB_CONN.get_expenses_table(household, f"{occurence}_expenses")
 
     return render_template('expenses_form.html', data = data, occurence = occurence)
-    
+
+
+@app.route('/api/totals')
+def totals():
+    # combine the tables into one list - Maybe make it a view
+
+    # perform the calculations
+
+    # Output final payments
+
+    # Archive this month's spreadsheet
+
+    # Create a new spreadsheet
+    pass

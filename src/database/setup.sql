@@ -27,7 +27,7 @@ CREATE TABLE household.one_off_expenses(
     payer VARCHAR(10),
     adam FLOAT,
     alex FLOAT,
-    tyler FLOAT,
+    tyler FLOAT
 )
 
 CREATE TABLE household.recurring_expenses(
@@ -37,5 +37,5 @@ CREATE TABLE household.recurring_expenses(
     payer VARCHAR(10),
     adam FLOAT,
     alex FLOAT,
-    tyler FLOAT,
+    tyler FLOAT
 )
