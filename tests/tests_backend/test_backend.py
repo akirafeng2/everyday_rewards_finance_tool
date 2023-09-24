@@ -465,7 +465,3 @@ class TestDatabaseConnection:
             data = database_connection.get_expenses_table('bob', 'bob')
         # Then
         assert data == expected_list
-    
-    
-    def test_delete_expenses_row():
-        pass
