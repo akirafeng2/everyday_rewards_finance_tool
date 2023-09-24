@@ -10,7 +10,7 @@ CONNECTION_DETAILS = {
     "user": os.getenv("USER"),
     "password": os.getenv("PASSWORD"),
     "host": os.getenv("HOST"),
-    "port": os.getenv("5432")
+    "port": os.getenv("PORT")
 }
 ENV = os.getenv("ENV")
 IP_ADDRESS = os.getenv("IP_ADDRESS")

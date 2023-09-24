@@ -44,4 +44,35 @@ def insert_receipts_to_db():
         list_of_empty_weightings = DB_CONN.get_empty_weightings(household, "items_and_weightings")
     
     return render_template('weightings_form.html', item_list=list_of_empty_weightings)
-    
+
+
+@app.route('/api/input_expenses/<occurence>', methods = ['GET', 'POST'])
+def insert_one_off_costs(occurence): # occruence either 'one_off' or 'recurring'
+    if request.method == 'POST':
+        expenses_dict = request.form
+        if 'id' in expenses_dict:
+            with DB_CONN:
+                DB_CONN.delete_expenses_row(expenses_dict, household, f"{occurence}_expenses")
+                DB_CONN.commit_changes()
+        else:
+            with DB_CONN:
+                DB_CONN.insert_expenses_into_table(expenses_dict, household, f"{occurence}_expenses")
+                DB_CONN.commit_changes()
+    with DB_CONN:
+        data = DB_CONN.get_expenses_table(household, f"{occurence}_expenses")
+
+    return render_template('expenses_form.html', data = data, occurence = occurence)
+
+
+@app.route('/api/totals')
+def totals():
+    # combine the tables into one list - Maybe make it a view
+
+    # perform the calculations
+
+    # Output final payments
+
+    # Archive this month's spreadsheet
+
+    # Create a new spreadsheet
+    pass
