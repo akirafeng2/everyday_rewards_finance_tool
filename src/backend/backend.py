@@ -216,3 +216,39 @@ class DatabaseConnection:
     
     def commit_changes(self):
         self.conn.commit()
+
+
+class Calculations:
+    def __init__(self, finance_table: pd.DataFrame) -> None:
+        self.finance_table = finance_table
+        self.household_members = ['adam', 'alex', 'tyler']
+        pass
+
+
+    def get_spent_tally(self) -> dict:
+        """method to return a dictionary outlining the running total of each person's spending across items brought from everyone in household"""
+        spend_tally = {}
+        self.finance_table['weighting_total'] = self.finance_table[self.household_members].sum(axis=1)
+        for member in self.household_members:   
+            spend_tally[member] = self.finance_table[member]/self.finance_table['weighting_total'] @ self.finance_table['price']
+        return spend_tally
+    
+
+    def get_paid_tally(self) -> dict:
+        """method to return a dictionary outlining the running total of how much a person has paid in items for the household"""
+        paid_tally = {}
+        for member in self.household_members:
+            member_filter_table = self.finance_table[self.finance_table['payer'] == member]
+            paid_tally[member] = member_filter_table['price'].sum()
+        return paid_tally
+
+
+    def get_owes_tally(self) -> dict:
+        """method to return a dctionary outlining the owings tally. Positive number means people are owed that amount while negative means people need to fork up"""
+        spent_tally = self.get_spent_tally()
+        paid_tally = self.get_paid_tally()
+        owes_tally = {}
+        for member in self.household_members:
+            owes_tally[member] =  spent_tally[member] - paid_tally[member]
+        return owes_tally
+
