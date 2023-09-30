@@ -1,17 +1,16 @@
 from flask import Flask, request, render_template, abort, session, redirect, url_for
 
-from backend import FileSystem, DatabaseConnection
+from backend import FileSystem, DatabaseConnection, Calculations
 import SETTINGS
 
 app = Flask(__name__)
 DB_CONN = DatabaseConnection(SETTINGS.CONNECTION_DETAILS)
 household = SETTINGS.ENV
+FS = FileSystem(SETTINGS.FINANCE_FILE_PATH / household)
 
 @app.route('/api/update_new_receipts/<name>', methods = ['GET'])
 def update_new_receipts(name):
-    global FS
-    
-    FS = FileSystem(SETTINGS.FINANCE_FILE_PATH / household, name)
+    FS.setup(name)
     # check for most recent receipt date
     recent_date = FS.get_recent_receipt_date()
     # pass recent receipt date to scraper container to scrape
@@ -20,20 +19,8 @@ def update_new_receipts(name):
 
 
 
-@app.route('/api/insert_receipts_to_db', methods = ['GET', 'POST'])
+@app.route('/api/insert_receipts_to_db')
 def insert_receipts_to_db():
-    if request.method == 'POST':
-        weightings_dict = request.form
-        with DB_CONN:
-            weightings_df = DB_CONN.weightings_dict_to_df(weightings_dict)
-            DB_CONN.insert_weightings_into_table(weightings_df, household, "weightings")
-            DB_CONN.commit_changes()
-        # move receipts to year/month folder
-        FS.move_receipts()
-        # delete tmp folder
-        FS.delete_tmp()
-        return "done"    
-
     # process receipts to pandas df
     item_df = FS.receipts_to_dataframe()
 
@@ -41,6 +28,21 @@ def insert_receipts_to_db():
     with DB_CONN:
         DB_CONN.insert_df_items_into_table(item_df, household, "items_bought")
         DB_CONN.commit_changes()
+    FS.move_receipts()
+    # delete tmp folder
+    FS.delete_tmp()
+    return redirect(url_for('update_weightings'))
+
+@app.route('/api/update_weightings', methods = ['GET', 'POST'])
+def update_weightings():
+    if request.method == 'POST':
+        weightings_dict = request.form
+        with DB_CONN:
+            weightings_df = DB_CONN.weightings_dict_to_df(weightings_dict)
+            DB_CONN.insert_weightings_into_table(weightings_df, household, "weightings")
+            DB_CONN.commit_changes()
+        return "done"  
+    with DB_CONN:
         list_of_empty_weightings = DB_CONN.get_empty_weightings(household, "items_and_weightings")
     
     return render_template('weightings_form.html', item_list=list_of_empty_weightings)
@@ -64,15 +66,37 @@ def insert_one_off_costs(occurence): # occruence either 'one_off' or 'recurring'
     return render_template('expenses_form.html', data = data, occurence = occurence)
 
 
-@app.route('/api/totals')
+@app.route('/api/totals/dashboard')
 def totals():
-    # combine the tables into one list - Maybe make it a view
+    with DB_CONN:
+        expenses_table = DB_CONN.get_combined_expenses_as_df(household, "combined_expenses")
+    
+    calculations = Calculations(expenses_table)
 
-    # perform the calculations
+    spent_tally = calculations.get_spent_tally()
 
-    # Output final payments
+    owings  = calculations.get_owes_tally()
 
-    # Archive this month's spreadsheet
+    return render_template('totals.html', spent = spent_tally, owings=owings)
 
-    # Create a new spreadsheet
-    pass
+@app.route('/api/totals/confirm', methods = ['GET', 'POST'])
+def confirm():
+    return render_template('confirm.html')
+
+@app.route('/api/totals/month_reset', methods = ['POST'])
+def reset():
+    # Archive current month spreadsheet into CSV
+    with DB_CONN:
+        all_expenses_df = DB_CONN.get_combined_expenses_as_df(household, "combined_expenses")
+        
+
+    FS.save_to_csv(all_expenses_df)
+
+    # Delete all rows the current items_bought and one_off_costs tables
+    with DB_CONN:
+        DB_CONN.delete_from_table(household, "items_bought")
+        DB_CONN.delete_from_table(household, "one_off_expenses")
+        # Delete all weightings that are not persistent
+        DB_CONN.delete_from_table(household, "weightings", where_cond="WHERE persist = false")
+        DB_CONN.commit_changes()
+    return redirect(url_for('totals'))

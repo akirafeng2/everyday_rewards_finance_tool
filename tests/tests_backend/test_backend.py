@@ -6,7 +6,7 @@ import shutil
 from pathlib import Path
 import os
 import numpy as np
-from datetime import datetime
+from datetime import datetime, date
 from unittest.mock import patch, Mock
 from werkzeug.datastructures import MultiDict
 
@@ -27,7 +27,9 @@ def username():
 @pytest.fixture
 def file_system(tmp_path, username):
     """establishes an instance of FileSystem object"""
-    return backend.FileSystem(tmp_path, username)
+    FS = backend.FileSystem(tmp_path)
+    FS.setup(username)
+    return FS
 
 
 @pytest.fixture
@@ -47,6 +49,18 @@ def receipt_dataframe(username):
     test_df['payer'] = username
 
     return test_df
+
+
+@pytest.fixture
+def test_expenses_data():
+    test_data = {'item': ['eggs', 'bread', 'chicken'], 'price': [3, 7, 5], 'payer': ['tyler', 'alex', 'tyler'], 'adam': [1, 0.5, 2], 'alex': [1, 1, 3], 'tyler': [1, 2, 0]}
+    test_dataframe = pd.DataFrame(data=test_data)    
+    return test_dataframe
+
+
+@pytest.fixture
+def calculations(test_expenses_data):
+    return backend.Calculations(test_expenses_data)
 
 def get_different_rows(source_df: pd.DataFrame, new_df: pd.DataFrame) -> pd.DataFrame:
     """Returns just the rows from the new dataframe that differ from the source dataframe"""
@@ -217,6 +231,8 @@ class TestFileSystem:
         assert diff.empty
 
         # Tests for move_receipts
+    
+    
     def test_move_receipts_empty_tmp_folder(self, file_system, tmp_path, username):
         # Given
         temp_location = tmp_path / Path("receipts") / Path(username)
@@ -226,6 +242,7 @@ class TestFileSystem:
         # Then
         assert objects_in_dir == 1
 
+    
     def test_move_receipts_normal_function(self, file_system, datadir, tmp_path, username):
         # Given
         receipt_list = [
@@ -287,6 +304,7 @@ class TestFileSystem:
         # Then 
         assert greatest_file == first_dir / "4"
 
+
     def test_iterate_largest_numeric_dir_name_two_levels(self, file_system):
         # Given
         first_dir = file_system.receipts_dir_path
@@ -343,8 +361,13 @@ class TestFileSystem:
         # Then
         assert file_system.get_recent_receipt_date() == "01Jan2000"
 
-
-
+    def test_save_to_csv(self, file_system, test_expenses_data, tmp_path):
+        # Given
+        csv_file_path = tmp_path / Path("archive") / Path(f"{date.today()}.csv")
+        # When
+        file_system.save_to_csv(test_expenses_data)
+        # Then
+        assert csv_file_path.exists()
 
 class TestDatabaseConnection:
 
@@ -465,3 +488,32 @@ class TestDatabaseConnection:
             data = database_connection.get_expenses_table('bob', 'bob')
         # Then
         assert data == expected_list
+
+
+class TestCalculations:
+
+    def test_get_spent_tally(self, calculations):
+        # Given
+        expected_data = {'adam': 4, 'alex': 6, 'tyler': 5}
+        # When
+        spent_tally = calculations.get_spent_tally()
+        # Then
+        assert spent_tally == expected_data
+
+
+    def test_get_paid_tally(self, calculations):
+        # Given
+        expected_data = {'adam': 0, 'alex': 7, 'tyler': 8}
+        # When
+        paid_tally = calculations.get_paid_tally()
+        # Then
+        assert paid_tally == expected_data
+
+
+    def test_get_owes_tally(self, calculations):
+        # Given
+        expected_data = {'adam': 4, 'alex': -1, 'tyler': -3}
+        # When
+        owes_tally = calculations.get_owes_tally()
+        # Then
+        assert owes_tally == expected_data

@@ -28,7 +28,7 @@ CREATE TABLE household.one_off_expenses(
     adam FLOAT,
     alex FLOAT,
     tyler FLOAT
-)
+);
 
 CREATE TABLE household.recurring_expenses(
     id SERIAL PRIMARY KEY,
@@ -38,4 +38,11 @@ CREATE TABLE household.recurring_expenses(
     adam FLOAT,
     alex FLOAT,
     tyler FLOAT
-)
+);
+
+CREATE VIEW household.combined_expenses AS
+SELECT item, price, payer, adam, alex, tyler FROM household.items_and_weightings
+UNION ALL 
+SELECT item, price, payer, adam, alex, tyler FROM household.one_off_expenses
+UNION ALL 
+SELECT item, price, payer, adam, alex, tyler FROM household.recurring_expenses;
