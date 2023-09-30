@@ -41,8 +41,8 @@ CREATE TABLE household.recurring_expenses(
 );
 
 CREATE VIEW household.combined_expenses AS
-SELECT item, price, payer, adam, alex, tyler FROM dev.items_and_weightings
+SELECT item, price, payer, adam, alex, tyler FROM household.items_and_weightings
 UNION ALL 
-SELECT item, price, payer, adam, alex, tyler FROM dev.one_off_expenses
+SELECT item, price, payer, adam, alex, tyler FROM household.one_off_expenses
 UNION ALL 
-SELECT item, price, payer, adam, alex, tyler FROM dev.recurring_expenses;
+SELECT item, price, payer, adam, alex, tyler FROM household.recurring_expenses;

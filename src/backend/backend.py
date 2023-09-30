@@ -3,20 +3,23 @@ import pandas as pd
 from pypdf import PdfReader
 import psycopg2
 import os
-from datetime import datetime
+from datetime import datetime, date
 import shutil
 import re
 from werkzeug.datastructures import MultiDict
 
 class FileSystem:
     
-    def __init__(self, finance_dir_path: Path, username: str) -> None:
-        self.username = username
+    def __init__(self, finance_dir_path: Path) -> None:
         self.finance_dir_path = finance_dir_path
-        self.receipts_dir_path = finance_dir_path / Path("receipts") / Path(username)
+        self.expenses_archive = finance_dir_path / Path("archive")
+        self.expenses_archive.mkdir(parents=True, exist_ok=True)
+        
+    def setup(self, username:str):
+        self.username = username
+        self.receipts_dir_path = self.finance_dir_path / Path("receipts") / Path(username)
         self.receipts_tmp_path = self.receipts_dir_path / Path("tmp")
         self.receipts_tmp_path.mkdir(parents=True, exist_ok=True)
-
     
     def receipts_to_dataframe(self) -> pd.DataFrame:
 
@@ -114,6 +117,10 @@ class FileSystem:
             receipt_date_list = [receipt_name.split("_")[3] for receipt_name in receipt_name_list]
             recent_date_str = max(receipt_date_list)
         return recent_date_str  
+    
+    def save_to_csv(self, df: pd.DataFrame) -> None:
+        destination_path = self.expenses_archive / Path(f"{date.today()}.csv")
+        df.to_csv(destination_path, index=False)
                   
     
 class DatabaseConnection:
@@ -213,7 +220,24 @@ class DatabaseConnection:
         print(list_values)
         insert_statement = f"""INSERT INTO {household}.{table_name} (item, price, payer, adam, alex, tyler) VALUES (%s, %s, %s, %s, %s, %s)"""
         self.cursor.execute(insert_statement,list_values)
+
+    def get_combined_expenses_as_df(self, household:str, view_name:str) -> pd.DataFrame:
+        sql_query = f"""SELECT * FROM {household}.{view_name}"""
+        self.cursor.execute(sql_query)
+        result = self.cursor.fetchall()
+        column_names = [desc[0] for desc in self.cursor.description]
+        df  = pd.DataFrame(result, columns=column_names)
+        return df
     
+    def delete_from_table(self, household:str, table_name: str, where_cond = None) -> None:
+        """
+        Function to delete all rows from given table
+        """
+        sql_query = f"""DELETE FROM {household}.{table_name}"""
+        if where_cond:
+            sql_query = sql_query + f" {where_cond}"
+        self.cursor.execute(sql_query)
+
     def commit_changes(self):
         self.conn.commit()
 
@@ -230,7 +254,7 @@ class Calculations:
         spend_tally = {}
         self.finance_table['weighting_total'] = self.finance_table[self.household_members].sum(axis=1)
         for member in self.household_members:   
-            spend_tally[member] = self.finance_table[member]/self.finance_table['weighting_total'] @ self.finance_table['price']
+            spend_tally[member] = round(self.finance_table[member]/self.finance_table['weighting_total'] @ self.finance_table['price'].astype(float),2)
         return spend_tally
     
 
@@ -239,7 +263,7 @@ class Calculations:
         paid_tally = {}
         for member in self.household_members:
             member_filter_table = self.finance_table[self.finance_table['payer'] == member]
-            paid_tally[member] = member_filter_table['price'].sum()
+            paid_tally[member] = member_filter_table['price'].astype(float).sum()
         return paid_tally
 
 
@@ -249,6 +273,6 @@ class Calculations:
         paid_tally = self.get_paid_tally()
         owes_tally = {}
         for member in self.household_members:
-            owes_tally[member] =  spent_tally[member] - paid_tally[member]
+            owes_tally[member] =  round(spent_tally[member] - paid_tally[member],2)
         return owes_tally
 

@@ -6,7 +6,7 @@ import shutil
 from pathlib import Path
 import os
 import numpy as np
-from datetime import datetime
+from datetime import datetime, date
 from unittest.mock import patch, Mock
 from werkzeug.datastructures import MultiDict
 
@@ -27,7 +27,9 @@ def username():
 @pytest.fixture
 def file_system(tmp_path, username):
     """establishes an instance of FileSystem object"""
-    return backend.FileSystem(tmp_path, username)
+    FS = backend.FileSystem(tmp_path)
+    FS.setup(username)
+    return FS
 
 
 @pytest.fixture
@@ -302,6 +304,7 @@ class TestFileSystem:
         # Then 
         assert greatest_file == first_dir / "4"
 
+
     def test_iterate_largest_numeric_dir_name_two_levels(self, file_system):
         # Given
         first_dir = file_system.receipts_dir_path
@@ -358,6 +361,13 @@ class TestFileSystem:
         # Then
         assert file_system.get_recent_receipt_date() == "01Jan2000"
 
+    def test_save_to_csv(self, file_system, test_expenses_data, tmp_path):
+        # Given
+        csv_file_path = tmp_path / Path("archive") / Path(f"{date.today()}.csv")
+        # When
+        file_system.save_to_csv(test_expenses_data)
+        # Then
+        assert csv_file_path.exists()
 
 class TestDatabaseConnection:
 
