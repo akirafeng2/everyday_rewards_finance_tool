@@ -20,6 +20,8 @@ services:
   db:
     build: ./src/database
     restart: always
+    env_file:
+      - .env
     networks:
       - finance_app
     ports:
