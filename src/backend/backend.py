@@ -21,44 +21,47 @@ class FileSystem:
         self.receipts_tmp_path = self.receipts_dir_path / Path("tmp")
         self.receipts_tmp_path.mkdir(parents=True, exist_ok=True)
     
-    def receipts_to_dataframe(self) -> pd.DataFrame:
+    
+    def get_receipt_names(self) -> iter:
+        receipt_name_iterator = os.listdir(self.receipts_tmp_path)
+        return receipt_name_iterator
+
+    def receipt_to_dataframe(self, receipt:str) -> pd.DataFrame:
 
         item_name_list = []
         item_price_list = []
         multiple_item_indicator = False
         
-        for receipt in self.receipts_tmp_path.iterdir():
-            string_path = str(receipt)
-            reader = PdfReader(string_path)
-            page = reader.pages[0]
-            receipt_text = page.extract_text()
-            items_string = receipt_text.splitlines()[2]
-            item_list = [items_string[i:i + 56] for i in range(0, len(items_string), 56)]
+        path = self.receipts_tmp_path / Path(receipt)
+        string_path = str(path)
+        reader = PdfReader(string_path)
+        page = reader.pages[0]
+        receipt_text = page.extract_text()
+        items_string = receipt_text.splitlines()[2]
+        item_list = [items_string[i:i + 56] for i in range(0, len(items_string), 56)]
 
-            for line in item_list:
-                line_split = line.split("   ", 1)
-                item_name = line_split[0].strip(' ^#')
-                price = line_split[1].strip()
-                if price.startswith("-"):
-                    item_price_list[-1] = str(round(float(item_price_list[-1])+float(price), 2))
-                    continue
-                if item_name.startswith("PRICE REDUCED BY"):
-                    continue
-                if not multiple_item_indicator:
-                    item_name_list.append(item_name)
-                    if price == "":
-                        multiple_item_indicator = True
-                    else:
-                        item_price_list.append(float(price))
-                elif multiple_item_indicator:
+        for line in item_list:
+            line_split = line.split("   ", 1)
+            item_name = line_split[0].strip(' ^#')
+            price = line_split[1].strip()
+            if price.startswith("-"):
+                item_price_list[-1] = str(round(float(item_price_list[-1])+float(price), 2))
+                continue
+            if item_name.startswith("PRICE REDUCED BY"):
+                continue
+            if not multiple_item_indicator:
+                item_name_list.append(item_name)
+                if price == "":
+                    multiple_item_indicator = True
+                else:
                     item_price_list.append(float(price))
-                    multiple_item_indicator = False
+            elif multiple_item_indicator:
+                item_price_list.append(float(price))
+                multiple_item_indicator = False
         
         data = pd.DataFrame({"item": item_name_list, 'price': item_price_list})
-        data['payer'] = self.username
 
         return data
-    
 
     def move_receipts(self):
         
@@ -100,6 +103,11 @@ class FileSystem:
             directory_path = max(numeric_files)
 
         return directory_path
+    
+
+    def get_receipt_date(self, receipt_name: str) -> str:
+        receipt_date_str = receipt_name.split("_")[3]
+        return receipt_date_str
 
 
     def get_recent_receipt_date(self):
@@ -114,10 +122,11 @@ class FileSystem:
             recent_date_str = "01Jan2000" 
         else:
             receipt_name_list = os.listdir(directory_path)
-            receipt_date_list = [receipt_name.split("_")[3] for receipt_name in receipt_name_list]
+            receipt_date_list = [self.get_receipt_date(receipt_name) for receipt_name in receipt_name_list]
             recent_date_str = max(receipt_date_list)
         return recent_date_str  
     
+
     def save_to_csv(self, df: pd.DataFrame) -> None:
         destination_path = self.expenses_archive / Path(f"{date.today()}.csv")
         df.to_csv(destination_path, index=False)
@@ -276,3 +285,25 @@ class Calculations:
             owes_tally[member] =  round(spent_tally[member] - paid_tally[member],2)
         return owes_tally
 
+
+class DatatbaseConnection2:
+    def __init__(self, connection_details: dict):
+        self.connection_details = connection_details
+        self.conn = None
+        self.cursor = None
+
+
+    def __enter__(self):
+        self.conn = psycopg2.connect(**self.connection_details)
+        self.cursor = self.conn.cursor()
+
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        self.conn.close()
+        if exc_type is not None:
+            print(f"An exception of type {exc_type} occurred")
+
+
+
+    def commit_changes(self):
+        self.conn.commit()

@@ -21,14 +21,18 @@ def update_new_receipts(name):
 
 @app.route('/api/insert_receipts_to_db')
 def insert_receipts_to_db():
-    # process receipts to pandas df
-    item_df = FS.receipts_to_dataframe()
+    receipt_list = FS.get_receipt_names()
+    for receipt in receipt_list:
+        # process receipts to pandas df
+        item_df = FS.receipt_to_dataframe(receipt) # consider this to make it the list of tuples needed - needs to be one receipt at a time
+        receipt_date = FS.get_receipt_date(receipt)
 
-    # upload df to item db
-    with DB_CONN:
-        DB_CONN.insert_df_items_into_table(item_df, household, "items_bought")
-        DB_CONN.commit_changes()
-    FS.move_receipts()
+        # upload to database
+        with DB_CONN:
+            DB_CONN.insert_receipt_into_receipt_table(receipt_date, FS.username, "everyday_rewards") # setting up the receipt_id as a variable in the postgres session env
+            DB_CONN.insert_into_transactions(item_df, "items_bought")
+            DB_CONN.commit_changes()
+        FS.move_receipt()
     # delete tmp folder
     FS.delete_tmp()
     return redirect(url_for('update_weightings'))
