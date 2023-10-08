@@ -40,7 +40,7 @@ CREATE TABLE receipt (
 );
 
 CREATE TABLE weighting (
-    weighting_id SERIAL,
+    weighting_id INT NOT NULL,
     profile_id INT NOT NULL,
     weighting NUMERIC(7,2) CHECK (weighting IS NOT NULL AND weighting >= 0),
     PRIMARY KEY (weighting_id, profile_id),
@@ -52,12 +52,11 @@ CREATE TABLE transactions (
     item_id INT NOT NULL,
     receipt_id INT NOT NULL,
     price NUMERIC(7,2) CHECK (price IS NOT NULL AND price >= 0),
-    weighting_id INT NOT NULL,
+    weighting_id INT,
     weighting_persist BOOLEAN DEFAULT FALSE,
     active_ind BOOLEAN DEFAULT TRUE,
     FOREIGN KEY (item_id) REFERENCES item(item_id),
-    FOREIGN KEY (receipt_id) REFERENCES receipt(receipt_id),
-    FOREIGN KEY (weighting_id) REFERENCES weighting(weighting_id)
+    FOREIGN KEY (receipt_id) REFERENCES receipt(receipt_id)
 );
 -- -- Additional table creations go here...
 
