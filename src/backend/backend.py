@@ -320,7 +320,7 @@ class DatabaseConnection2:
         )
         INSERT INTO new_receipt (new_receipt_id)
         SELECT receipt_id FROM inserted_row;
-        """
+        """ # Need to add a household_id filter aswell to the profile Query
         self.cursor.execute(insert_statement, (receipt_date, payer, source))
 
 
