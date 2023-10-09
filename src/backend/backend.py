@@ -60,7 +60,6 @@ class FileSystem:
                 multiple_item_indicator = False
         
         data = pd.DataFrame({"item": item_name_list, 'price': item_price_list})
-
         return data
 
     def move_receipts(self):
@@ -286,16 +285,21 @@ class Calculations:
         return owes_tally
 
 
-class DatatbaseConnection2:
-    def __init__(self, connection_details: dict):
+class DatabaseConnection2:
+    def __init__(self, connection_details: dict, env):
         self.connection_details = connection_details
         self.conn = None
         self.cursor = None
+        self.env = env
 
 
     def __enter__(self):
         self.conn = psycopg2.connect(**self.connection_details)
         self.cursor = self.conn.cursor()
+        search_path_execute = """
+        SET search_path TO %s;
+        """
+        self.cursor.execute(search_path_execute, (self.env,))
 
 
     def __exit__(self, exc_type, exc_value, traceback):
@@ -303,6 +307,43 @@ class DatatbaseConnection2:
         if exc_type is not None:
             print(f"An exception of type {exc_type} occurred")
 
+
+    def insert_receipt_into_receipt_table(self, receipt_date: str, payer: str, source: str) -> None:
+        """Function to insert a given receipt_date, payer, and source into receipt table and also inserts the receipt_id into a the temp table new_receipt for later processing"""
+        insert_statement = """
+        CREATE TEMP TABLE new_receipt (new_receipt_id INT);
+
+        WITH inserted_row AS(
+            INSERT INTO receipt (receipt_date, profile_id, source) 
+            VALUES (%s, (SELECT profile_id FROM profile WHERE nickname = %s), %s) 
+            RETURNING receipt_id
+        )
+        INSERT INTO new_receipt (new_receipt_id)
+        SELECT receipt_id FROM inserted_row;
+        """
+        self.cursor.execute(insert_statement, (receipt_date, payer, source))
+
+
+    def insert_into_transactions(self, item_df: pd.DataFrame) -> None:
+        """Function to insert the items from the list of tuples into transactions table. Uses the new_receipt_id from the insert_receipt_into_receipt_table method and also inserts item into the item table if it doens't already exist. 
+        Needs to run in the same session of insert_receipt_into_receipt_table"""
+
+        item_df['item_dupe'] = item_df.loc[:, 'item']
+        item_df = item_df[['item', 'item_dupe', 'price']]
+        data_values = [tuple(row) for row in item_df.to_numpy()]
+
+        insert_statement = """
+        WITH ins AS(
+            INSERT INTO item(item_name)
+            VALUES (%s)
+            ON CONFLICT (item_name) DO NOTHING
+            RETURNING item_id
+        )
+        INSERT INTO transactions (item_id, receipt_id, price)
+        VALUES ((SELECT item_id FROM ins UNION ALL SELECT item_id FROM item WHERE item_name = %s), (SELECT MAX(new_receipt_id) FROM new_receipt), %s);
+        """
+
+        self.cursor.executemany(insert_statement, data_values)
 
 
     def commit_changes(self):

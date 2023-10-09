@@ -1,12 +1,12 @@
 from flask import Flask, request, render_template, abort, session, redirect, url_for
 
-from backend import FileSystem, DatabaseConnection, Calculations
+from backend import FileSystem, DatabaseConnection2, Calculations
 import SETTINGS
 
 app = Flask(__name__)
-DB_CONN = DatabaseConnection(SETTINGS.CONNECTION_DETAILS)
-household = SETTINGS.ENV
-FS = FileSystem(SETTINGS.FINANCE_FILE_PATH / household)
+env = SETTINGS.ENV
+DB_CONN = DatabaseConnection2(SETTINGS.CONNECTION_DETAILS, env)
+FS = FileSystem(SETTINGS.FINANCE_FILE_PATH / env)
 
 @app.route('/api/update_new_receipts/<name>', methods = ['GET'])
 def update_new_receipts(name):
@@ -21,6 +21,7 @@ def update_new_receipts(name):
 
 @app.route('/api/insert_receipts_to_db')
 def insert_receipts_to_db():
+    # FS.setup('alex') 
     receipt_list = FS.get_receipt_names()
     for receipt in receipt_list:
         # process receipts to pandas df
@@ -29,9 +30,10 @@ def insert_receipts_to_db():
 
         # upload to database
         with DB_CONN:
-            DB_CONN.insert_receipt_into_receipt_table(receipt_date, FS.username, "everyday_rewards") # setting up the receipt_id as a variable in the postgres session env
-            DB_CONN.insert_into_transactions(item_df, "items_bought")
+            DB_CONN.insert_receipt_into_receipt_table(receipt_date, FS.username, "receipt") # setting up the receipt_id as a variable in the postgres session env
+            DB_CONN.insert_into_transactions(item_df)
             DB_CONN.commit_changes()
+
         FS.move_receipt()
     # delete tmp folder
     FS.delete_tmp()
@@ -43,11 +45,11 @@ def update_weightings():
         weightings_dict = request.form
         with DB_CONN:
             weightings_df = DB_CONN.weightings_dict_to_df(weightings_dict)
-            DB_CONN.insert_weightings_into_table(weightings_df, household, "weightings")
+            DB_CONN.insert_weightings_into_table(weightings_df, env, "weightings")
             DB_CONN.commit_changes()
         return "done"  
     with DB_CONN:
-        list_of_empty_weightings = DB_CONN.get_empty_weightings(household, "items_and_weightings")
+        list_of_empty_weightings = DB_CONN.get_empty_weightings(env, "items_and_weightings")
     
     return render_template('weightings_form.html', item_list=list_of_empty_weightings)
 
@@ -58,14 +60,14 @@ def insert_one_off_costs(occurence): # occruence either 'one_off' or 'recurring'
         expenses_dict = request.form
         if 'id' in expenses_dict:
             with DB_CONN:
-                DB_CONN.delete_expenses_row(expenses_dict, household, f"{occurence}_expenses")
+                DB_CONN.delete_expenses_row(expenses_dict, env, f"{occurence}_expenses")
                 DB_CONN.commit_changes()
         else:
             with DB_CONN:
-                DB_CONN.insert_expenses_into_table(expenses_dict, household, f"{occurence}_expenses")
+                DB_CONN.insert_expenses_into_table(expenses_dict, env, f"{occurence}_expenses")
                 DB_CONN.commit_changes()
     with DB_CONN:
-        data = DB_CONN.get_expenses_table(household, f"{occurence}_expenses")
+        data = DB_CONN.get_expenses_table(env, f"{occurence}_expenses")
 
     return render_template('expenses_form.html', data = data, occurence = occurence)
 
@@ -73,7 +75,7 @@ def insert_one_off_costs(occurence): # occruence either 'one_off' or 'recurring'
 @app.route('/api/totals/dashboard')
 def totals():
     with DB_CONN:
-        expenses_table = DB_CONN.get_combined_expenses_as_df(household, "combined_expenses")
+        expenses_table = DB_CONN.get_combined_expenses_as_df(env, "combined_expenses")
     
     calculations = Calculations(expenses_table)
 
@@ -91,16 +93,16 @@ def confirm():
 def reset():
     # Archive current month spreadsheet into CSV
     with DB_CONN:
-        all_expenses_df = DB_CONN.get_combined_expenses_as_df(household, "combined_expenses")
+        all_expenses_df = DB_CONN.get_combined_expenses_as_df(env, "combined_expenses")
         
 
     FS.save_to_csv(all_expenses_df)
 
     # Delete all rows the current items_bought and one_off_costs tables
     with DB_CONN:
-        DB_CONN.delete_from_table(household, "items_bought")
-        DB_CONN.delete_from_table(household, "one_off_expenses")
+        DB_CONN.delete_from_table(env, "items_bought")
+        DB_CONN.delete_from_table(env, "one_off_expenses")
         # Delete all weightings that are not persistent
-        DB_CONN.delete_from_table(household, "weightings", where_cond="WHERE persist = false")
+        DB_CONN.delete_from_table(env, "weightings", where_cond="WHERE persist = false")
         DB_CONN.commit_changes()
     return redirect(url_for('totals'))
