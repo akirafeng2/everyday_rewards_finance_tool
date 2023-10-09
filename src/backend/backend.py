@@ -326,7 +326,8 @@ class DatabaseConnection2:
 
     def insert_into_transactions(self, item_df: pd.DataFrame) -> None:
         """Function to insert the items from the list of tuples into transactions table. Uses the new_receipt_id from the insert_receipt_into_receipt_table method and also inserts item into the item table if it doens't already exist. 
-        Needs to run in the same session of insert_receipt_into_receipt_table"""
+        Needs to run in the same session of insert_receipt_into_receipt_table
+        Start of the function gets the item_df into right form for the executemany query"""
 
         item_df['item_dupe'] = item_df.loc[:, 'item']
         item_df = item_df[['item', 'item_dupe', 'price']]
