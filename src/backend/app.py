@@ -34,24 +34,34 @@ def insert_receipts_to_db():
             DB_CONN.insert_into_transactions(item_df)
             DB_CONN.commit_changes()
 
-        FS.move_receipt()
+    FS.move_receipts()
     # delete tmp folder
     FS.delete_tmp()
     return redirect(url_for('update_weightings'))
 
+# @app.route('/api/update_weightings', methods = ['GET', 'POST'])
+# def update_weightings():
+#     if request.method == 'POST':
+#         weightings_dict = request.form
+#         with DB_CONN:
+#             weightings_df = DB_CONN.weightings_dict_to_df(weightings_dict)
+#             DB_CONN.insert_weightings_into_table(weightings_df, env, "weightings")
+#             DB_CONN.commit_changes()
+#         return "done"  
+#     with DB_CONN:
+#         list_of_empty_weightings = DB_CONN.get_empty_weightings(env, "items_and_weightings")
+    
+#     return render_template('weightings_form.html', item_list=list_of_empty_weightings)
+
 @app.route('/api/update_weightings', methods = ['GET', 'POST'])
 def update_weightings():
     if request.method == 'POST':
-        weightings_dict = request.form
-        with DB_CONN:
-            weightings_df = DB_CONN.weightings_dict_to_df(weightings_dict)
-            DB_CONN.insert_weightings_into_table(weightings_df, env, "weightings")
-            DB_CONN.commit_changes()
-        return "done"  
+        print(request.form)
     with DB_CONN:
-        list_of_empty_weightings = DB_CONN.get_empty_weightings(env, "items_and_weightings")
-    
-    return render_template('weightings_form.html', item_list=list_of_empty_weightings)
+        household_profile_list = DB_CONN.get_household_names('1') # session will log in and hold the profile_id
+        list_of_null_weightings = DB_CONN.get_items_with_null_weightings('1') # session will log in and hold the profile_id
+        list_of_persistent_weightings = DB_CONN.get_persistent_weightings_within_household('1')
+    return render_template('weightings_form.html', profile_list = household_profile_list, item_list = list_of_null_weightings, persist_weights = list_of_persistent_weightings) # item_list = [eggs, bread, broc] profiles = [1,2,3] return = {eggs[1] : 0.1, eggs[2] : 0.3}
 
 
 @app.route('/api/input_expenses/<occurence>', methods = ['GET', 'POST'])

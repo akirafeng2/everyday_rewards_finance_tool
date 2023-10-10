@@ -347,5 +347,82 @@ class DatabaseConnection2:
         self.cursor.executemany(insert_statement, data_values)
 
 
+    def get_household_names(self, household: str) -> list:
+        """Returns the list names within a household"""
+        select_statement = """
+        SELECT nickname
+        FROM profile
+        WHERE household_id = (
+            SELECT household_id
+            FROM profile
+            WHERE profile_id = %s)
+        ORDER BY profile_id
+        """
+        self.cursor.execute(select_statement, household)
+        result = self.cursor.fetchall()
+        household_names = [row[0] for row in result]
+        return household_names
+    
+    def get_items_with_null_weightings(self, profile_id: str) -> list:
+        """Returns a list of tuples of length two. tuple[0] is the transaction number of the item with no weighting, and tuple[1] is the item name"""
+        select_statement = """
+        SELECT transactions.transaction_id, item.item_name
+        FROM transactions
+        LEFT JOIN item
+        ON transactions.item_id = item.item_id
+        WHERE transactions.weighting_id is null
+        AND transactions.receipt_id in (
+            SELECT receipt_id 
+            FROM receipt
+            WHERE profile_id = %s
+        );
+        """
+        self.cursor.execute(select_statement, profile_id)
+        result = self.cursor.fetchall()
+        item_list = [(row[0], row[1]) for row in result]
+        return item_list
+
+
+    def get_persistent_weightings_within_household(self, profile_id: str) -> list:
+        """Returns a list of tuples of length <household size> + 1 with weightings of each household member and item_id """
+        select_statement = """
+            SELECT item.item_name, profile.profile_id, weighting.weighting
+            FROM (
+                SELECT *
+                FROM transactions
+                WHERE weighting_persist = true
+                AND receipt_id in (
+                    SELECT receipt_id
+                    FROM receipt
+                    WHERE profile_id in (
+                        SELECT profile_id
+                        FROM profile
+                        WHERE household_id = (
+                            SELECT household_id
+                            FROM PROFILE
+                            WHERE profile_id = %s
+                        )
+                    )
+                )
+            ) as household_persist_weight
+            INNER JOIN weighting
+            ON household_persist_weight.weighting_id = weighting.weighting_id
+            INNER JOIN profile
+            ON weighting.profile_id = profile.profile_id
+            INNER JOIN item
+            ON household_persist_weight.item_id = item.item_id
+            ORDER BY profile.profile_id
+        """
+        self.cursor.execute(select_statement, profile_id)
+        result = self.cursor.fetchall()
+        column_names = [desc[0] for desc in self.cursor.description]
+        df  = pd.DataFrame(result, columns=column_names)
+        df_wide = df.pivot(index='item_id', columns='profile_id', values='weighting')
+
+        # Reset the index to make 'id' a regular column
+        df_wide.reset_index(inplace=True)
+        weighting_list = [tuple(row) for row in df_wide.to_numpy()]
+        return weighting_list
+
     def commit_changes(self):
         self.conn.commit()

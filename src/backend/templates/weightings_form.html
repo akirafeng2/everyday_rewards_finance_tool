@@ -7,15 +7,13 @@
     <form method="POST">
         {% for item in item_list %}
             <fieldset>
-                <legend>{{ item }}:</legend>
-                <label for="{{ item }}_adam">Adam:</label>
-                <input type = "number" id = "{{ item }}_adam" name = "{{ item }}[adam]" min = "0" step = "0.01" value = "1"><br><br>
-                <label for="{{ item }}_alex">Alex:</label>
-                <input type = "number" id = "{{ item }}_alex" name = "{{ item }}[alex]" min = "0" step = "0.01" value = "1"><br><br>
-                <label for="{{ item }}_tyler">Tyler:</label>
-                <input type = "number" id = "{{ item }}_tyler" name = "{{ item }}[tyler]" min = "0" step = "0.01" value = "1"><br><br>
-                <label for="{{ item }}_persist">Persist:</label>
-                <input type = "checkbox" id = "{{ item }}_persist" name = "{{ item }}[persist]"><br><br>
+                <legend>{{ item[1] }}:</legend>
+                {% for profile in profile_list %}
+                    <label for="{{ item }}_{{ profile }}">{{ profile }}:</label>
+                    <input type = "number" id = "{{ item }}_{{ profile }}" name = "{{ profile }}[{{ item[0] }}]" min = "0" step = "0.01" value = "1"><br><br>
+                {% endfor %}
+                <label for="{{ item[1] }}_persist">Persist:</label>
+                <input type = "checkbox" id = "{{ item[1] }}_persist" name = "persist[{{ item[0] }}]"><br><br>
             </fieldset>        
             <label>{{ label }}</label>
             {{ input_field|safe }}
