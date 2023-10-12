@@ -403,7 +403,7 @@ class DatabaseConnection2:
     def get_items_with_null_weightings_with_persistent_weights(self, profile_id: str) -> list:
         """Returns a list of tuples of length <household size> + 1 with weightings of each household member and item_id """
         select_statement = """
-        SELECT item.item_name, profile.profile_id, weighting.weighting
+        SELECT item.item_id, item.item_name, profile.profile_id, weighting.weighting
         FROM transactions
         LEFT JOIN item ON transactions.item_id = item.item_id
         LEFT JOIN (
@@ -438,7 +438,7 @@ class DatabaseConnection2:
         result = self.cursor.fetchall()
         column_names = [desc[0] for desc in self.cursor.description]
         df  = pd.DataFrame(result, columns=column_names)
-        df_wide = df.pivot(index='item_name', columns='profile_id', values='weighting')
+        df_wide = df.pivot(index=['item_id', 'item_name'], columns='profile_id', values='weighting')
 
         # Reset the index to make 'id' a regular column
         df_wide.reset_index(inplace=True)

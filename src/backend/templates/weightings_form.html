@@ -2,21 +2,43 @@
 <html>
 <head>
     <title>Dynamic Form</title>
+    <style>
+        input:invalid {
+            border: 1px solid red;
+        }
+
+        input:valid {
+            border: 1px solid green;
+        }
+        .persistent_weightings{
+            border: 1px darkgrey;
+            background-color: rgb(207, 206, 206);
+        }
+    </style>
 </head>
 <body>
     <form method="POST">
-        {% for item in item_list %}
+        {% for item in item_list_no_persistent_weights %}
             <fieldset>
                 <legend>{{ item[1] }}:</legend>
                 {% for profile in profile_list %}
                     <label for="{{ item }}_{{ profile }}">{{ profile }}:</label>
-                    <input type = "number" id = "{{ item }}_{{ profile }}" name = "{{ profile }}[{{ item[0] }}]" min = "0" step = "0.01" value = "1"><br><br>
+                    <input type = "number" id = "{{ item }}_{{ profile }}" name = "{{ profile }}[{{ item[0] }}]" min = "0" step = "0.01" value = "0" required><br><br>
                 {% endfor %}
                 <label for="{{ item[1] }}_persist">Persist:</label>
                 <input type = "checkbox" id = "{{ item[1] }}_persist" name = "persist[{{ item[0] }}]"><br><br>
             </fieldset>        
-            <label>{{ label }}</label>
-            {{ input_field|safe }}
+        {% endfor %}
+        {% for item in item_list_with_persistent_weights %}
+            <fieldset class="persistent_weightings">
+                <legend style = "color: grey;">{{ item[1] }}:</legend>
+                {% for profile in profile_list %}
+                    <label for="{{ item }}_{{ profile }}">{{ profile }}:</label>
+                    <input type = "number" id = "{{ item }}_{{ profile }}" name = "{{ profile }}[{{ item[0] }}]" min = "0" step = "0.01" value = "{{ item[2 + loop.index0] }}"><br><br>
+                {% endfor %}
+                <label for="{{ item[1] }}_persist">Persist:</label>
+                <input type = "checkbox" id = "{{ item[1] }}_persist" name = "persist[{{ item[0] }}]"><br><br>
+            </fieldset>        
         {% endfor %}
         <button type="submit">Submit</button>
     </form>
