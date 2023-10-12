@@ -59,9 +59,13 @@ def update_weightings():
         print(request.form)
     with DB_CONN:
         household_profile_list = DB_CONN.get_household_names('1') # session will log in and hold the profile_id
-        list_of_null_weightings = DB_CONN.get_items_with_null_weightings('1') # session will log in and hold the profile_id
-        list_of_persistent_weightings = DB_CONN.get_persistent_weightings_within_household('1')
-    return render_template('weightings_form.html', profile_list = household_profile_list, item_list = list_of_null_weightings, persist_weights = list_of_persistent_weightings) # item_list = [eggs, bread, broc] profiles = [1,2,3] return = {eggs[1] : 0.1, eggs[2] : 0.3}
+        list_of_null_weightings_no_persistent_weights = DB_CONN.get_items_with_null_weightings_no_persistent_weights('1') # session will log in and hold the profile_id
+        list_of_null_weightings_with_persistent_weights = DB_CONN.get_items_with_null_weightings_with_persistent_weights('1')
+    
+    print(list_of_null_weightings_no_persistent_weights)
+    print(list_of_null_weightings_with_persistent_weights)
+
+    return render_template('weightings_form.html', profile_list = household_profile_list, item_list_no_persistent_weights = list_of_null_weightings_no_persistent_weights, item_list_with_persistent_weights = list_of_null_weightings_with_persistent_weights) # item_list = [eggs, bread, broc] profiles = [1,2,3] return = {eggs[1] : 0.1, eggs[2] : 0.3}
 
 
 @app.route('/api/input_expenses/<occurence>', methods = ['GET', 'POST'])

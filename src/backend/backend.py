@@ -363,19 +363,36 @@ class DatabaseConnection2:
         household_names = [row[0] for row in result]
         return household_names
     
-    def get_items_with_null_weightings(self, profile_id: str) -> list:
+    def get_items_with_null_weightings_no_persistent_weights(self, profile_id: str) -> list:
         """Returns a list of tuples of length two. tuple[0] is the transaction number of the item with no weighting, and tuple[1] is the item name"""
         select_statement = """
         SELECT transactions.transaction_id, item.item_name
         FROM transactions
-        LEFT JOIN item
-        ON transactions.item_id = item.item_id
-        WHERE transactions.weighting_id is null
-        AND transactions.receipt_id in (
+        LEFT JOIN item ON transactions.item_id = item.item_id
+        LEFT JOIN (
             SELECT receipt_id 
             FROM receipt
-            WHERE profile_id = %s
-        );
+            WHERE profile_id = 1
+        ) as receipt ON transactions.receipt_id = receipt.receipt_id
+        LEFT JOIN (
+            SELECT *
+            FROM transactions
+            WHERE weighting_persist = true
+            AND receipt_id in (
+                SELECT receipt_id
+                FROM receipt
+                WHERE profile_id in (
+                    SELECT profile_id
+                    FROM profile
+                    WHERE household_id = (
+                        SELECT household_id
+                        FROM PROFILE
+                        WHERE profile_id = %s
+                    )
+                )
+            )
+        ) as household_persist_weight ON transactions.item_id = household_persist_weight.item_id
+        WHERE household_persist_weight.weighting_id is null;
         """
         self.cursor.execute(select_statement, profile_id)
         result = self.cursor.fetchall()
@@ -383,41 +400,45 @@ class DatabaseConnection2:
         return item_list
 
 
-    def get_persistent_weightings_within_household(self, profile_id: str) -> list:
+    def get_items_with_null_weightings_with_persistent_weights(self, profile_id: str) -> list:
         """Returns a list of tuples of length <household size> + 1 with weightings of each household member and item_id """
         select_statement = """
-            SELECT item.item_name, profile.profile_id, weighting.weighting
-            FROM (
-                SELECT *
-                FROM transactions
-                WHERE weighting_persist = true
-                AND receipt_id in (
-                    SELECT receipt_id
-                    FROM receipt
-                    WHERE profile_id in (
-                        SELECT profile_id
-                        FROM profile
-                        WHERE household_id = (
-                            SELECT household_id
-                            FROM PROFILE
-                            WHERE profile_id = %s
-                        )
+        SELECT item.item_name, profile.profile_id, weighting.weighting
+        FROM transactions
+        LEFT JOIN item ON transactions.item_id = item.item_id
+        LEFT JOIN (
+            SELECT receipt_id 
+            FROM receipt
+            WHERE profile_id = 1
+        ) as receipt ON transactions.receipt_id = receipt.receipt_id
+        LEFT JOIN (
+            SELECT *
+            FROM transactions
+            WHERE weighting_persist = true
+            AND receipt_id in (
+                SELECT receipt_id
+                FROM receipt
+                WHERE profile_id in (
+                    SELECT profile_id
+                    FROM profile
+                    WHERE household_id = (
+                        SELECT household_id
+                        FROM PROFILE
+                        WHERE profile_id = %s
                     )
                 )
-            ) as household_persist_weight
-            INNER JOIN weighting
-            ON household_persist_weight.weighting_id = weighting.weighting_id
-            INNER JOIN profile
-            ON weighting.profile_id = profile.profile_id
-            INNER JOIN item
-            ON household_persist_weight.item_id = item.item_id
-            ORDER BY profile.profile_id
+            )
+        ) as household_persist_weight ON transactions.item_id = household_persist_weight.item_id
+        INNER JOIN weighting ON household_persist_weight.weighting_id = weighting.weighting_id
+        LEFT JOIN profile ON weighting.profile_id = profile.profile_id
+        WHERE transactions.weighting_id is null
+        ORDER BY transactions.transaction_id, profile.profile_id
         """
         self.cursor.execute(select_statement, profile_id)
         result = self.cursor.fetchall()
         column_names = [desc[0] for desc in self.cursor.description]
         df  = pd.DataFrame(result, columns=column_names)
-        df_wide = df.pivot(index='item_id', columns='profile_id', values='weighting')
+        df_wide = df.pivot(index='item_name', columns='profile_id', values='weighting')
 
         # Reset the index to make 'id' a regular column
         df_wide.reset_index(inplace=True)
