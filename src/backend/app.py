@@ -32,7 +32,7 @@ def insert_receipts_to_db():
 
         # upload to database
         with DB_CONN:
-            DB_CONN.insert_receipt_into_receipt_table(receipt_date, FS.username, "receipt") # setting up the receipt_id as a variable in the postgres session env
+            DB_CONN.insert_receipt_into_receipt_table(receipt_date, "receipt") # setting up the receipt_id as a variable in the postgres session env
             DB_CONN.insert_into_transactions(item_df)
             DB_CONN.commit_changes()
 
@@ -41,32 +41,23 @@ def insert_receipts_to_db():
     FS.delete_tmp()
     return redirect(url_for('update_weightings'))
 
-# @app.route('/api/update_weightings', methods = ['GET', 'POST'])
-# def update_weightings():
-#     if request.method == 'POST':
-#         weightings_dict = request.form
-#         with DB_CONN:
-#             weightings_df = DB_CONN.weightings_dict_to_df(weightings_dict)
-#             DB_CONN.insert_weightings_into_table(weightings_df, env, "weightings")
-#             DB_CONN.commit_changes()
-#         return "done"  
-#     with DB_CONN:
-#         list_of_empty_weightings = DB_CONN.get_empty_weightings(env, "items_and_weightings")
-    
-#     return render_template('weightings_form.html', item_list=list_of_empty_weightings)
 
 @app.route('/api/update_weightings', methods = ['GET', 'POST'])
 def update_weightings():
+    # input weighting data into database
     if request.method == 'POST':
         print(request.form)
         session['receipt_counter'] += 1
+    # set up receipts to have weighting assigned
     elif request.method == 'GET':
         with DB_CONN:
             session['household_profile_list'] = DB_CONN.get_household_names() # session will log in and hold the profile_id
             session['receipts'] = DB_CONN.get_new_receipts() # [(<receipt_id>, <receipt_date>), ...] 
         session['num_of_receipts'] = len(session['receipts'])
         session['receipt_counter'] = 1
-    
+
+
+    # prepare transaction and weighting data for html
     try:
         current_receipt = session['receipts'].pop(0)
         print(current_receipt)

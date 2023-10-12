@@ -309,20 +309,20 @@ class DatabaseConnection2:
             print(f"An exception of type {exc_type} occurred")
 
 
-    def insert_receipt_into_receipt_table(self, receipt_date: str, payer: str, source: str) -> None:
+    def insert_receipt_into_receipt_table(self, receipt_date: str, source: str) -> None:
         """Function to insert a given receipt_date, payer, and source into receipt table and also inserts the receipt_id into a the temp table new_receipt for later processing"""
         insert_statement = """
         CREATE TEMP TABLE new_receipt (new_receipt_id INT);
 
         WITH inserted_row AS(
             INSERT INTO receipt (receipt_date, profile_id, source) 
-            VALUES (%s, (SELECT profile_id FROM profile WHERE nickname = %s), %s) 
+            VALUES (%s, %s, %s) 
             RETURNING receipt_id
         )
         INSERT INTO new_receipt (new_receipt_id)
         SELECT receipt_id FROM inserted_row;
         """ # Need to add a household_id filter aswell to the profile Query
-        self.cursor.execute(insert_statement, (receipt_date, payer, source))
+        self.cursor.execute(insert_statement, (receipt_date, self.profile_id, source))
 
 
     def insert_into_transactions(self, item_df: pd.DataFrame) -> None:
@@ -430,11 +430,11 @@ class DatabaseConnection2:
         """
         self.cursor.execute(select_statement, (self.profile_id, receipt_id))
         result = self.cursor.fetchall()
+
+        # convert table from long to wide in Pandas
         column_names = [desc[0] for desc in self.cursor.description]
         df  = pd.DataFrame(result, columns=column_names)
         df_wide = df.pivot(index=['item_id', 'item_name'], columns='profile_id', values='weighting')
-
-        # Reset the index to make 'id' a regular column
         df_wide.reset_index(inplace=True)
         weighting_list = [tuple(row) for row in df_wide.to_numpy()]
         return weighting_list
