@@ -5,8 +5,10 @@ import SETTINGS
 
 app = Flask(__name__)
 env = SETTINGS.ENV
-DB_CONN = DatabaseConnection2(SETTINGS.CONNECTION_DETAILS, env)
+DB_CONN = DatabaseConnection2(SETTINGS.CONNECTION_DETAILS, env, "1")
 FS = FileSystem(SETTINGS.FINANCE_FILE_PATH / env)
+
+app.secret_key = "my_secret_key"
 
 @app.route('/api/update_new_receipts/<name>', methods = ['GET'])
 def update_new_receipts(name):
@@ -21,7 +23,7 @@ def update_new_receipts(name):
 
 @app.route('/api/insert_receipts_to_db')
 def insert_receipts_to_db():
-    # FS.setup('alex') 
+    FS.setup('alex') 
     receipt_list = FS.get_receipt_names()
     for receipt in receipt_list:
         # process receipts to pandas df
@@ -57,15 +59,32 @@ def insert_receipts_to_db():
 def update_weightings():
     if request.method == 'POST':
         print(request.form)
-    with DB_CONN:
-        household_profile_list = DB_CONN.get_household_names('1') # session will log in and hold the profile_id
-        list_of_null_weightings_no_persistent_weights = DB_CONN.get_items_with_null_weightings_no_persistent_weights('1') # session will log in and hold the profile_id
-        list_of_null_weightings_with_persistent_weights = DB_CONN.get_items_with_null_weightings_with_persistent_weights('1')
+        session['receipt_counter'] += 1
+    elif request.method == 'GET':
+        with DB_CONN:
+            session['household_profile_list'] = DB_CONN.get_household_names() # session will log in and hold the profile_id
+            session['receipts'] = DB_CONN.get_new_receipts() # [(<receipt_id>, <receipt_date>), ...] 
+        session['num_of_receipts'] = len(session['receipts'])
+        session['receipt_counter'] = 1
     
-    print(list_of_null_weightings_no_persistent_weights)
-    print(list_of_null_weightings_with_persistent_weights)
+    try:
+        current_receipt = session['receipts'].pop(0)
+        print(current_receipt)
+    except IndexError:
+        session.clear()
+        return "done"
+    receipt_id = current_receipt[0]
+    with DB_CONN:
+        list_of_null_weightings_no_persistent_weights = DB_CONN.get_items_with_null_weightings_no_persistent_weights(receipt_id) # session will log in and hold the profile_id
+        list_of_null_weightings_with_persistent_weights = DB_CONN.get_items_with_null_weightings_with_persistent_weights(receipt_id)
 
-    return render_template('weightings_form.html', profile_list = household_profile_list, item_list_no_persistent_weights = list_of_null_weightings_no_persistent_weights, item_list_with_persistent_weights = list_of_null_weightings_with_persistent_weights) # item_list = [eggs, bread, broc] profiles = [1,2,3] return = {eggs[1] : 0.1, eggs[2] : 0.3}
+    return render_template(
+        'weightings_form.html', 
+        profile_list = session['household_profile_list'], 
+        item_list_no_persistent_weights = list_of_null_weightings_no_persistent_weights, 
+        item_list_with_persistent_weights = list_of_null_weightings_with_persistent_weights, 
+        receipt_total = (session['receipt_counter'], session['num_of_receipts'])
+        )
 
 
 @app.route('/api/input_expenses/<occurence>', methods = ['GET', 'POST'])

@@ -286,11 +286,12 @@ class Calculations:
 
 
 class DatabaseConnection2:
-    def __init__(self, connection_details: dict, env):
+    def __init__(self, connection_details: dict, env, profile_id: str):
         self.connection_details = connection_details
         self.conn = None
         self.cursor = None
         self.env = env
+        self.profile_id = profile_id
 
 
     def __enter__(self):
@@ -347,7 +348,7 @@ class DatabaseConnection2:
         self.cursor.executemany(insert_statement, data_values)
 
 
-    def get_household_names(self, household: str) -> list:
+    def get_household_names(self) -> list:
         """Returns the list names within a household"""
         select_statement = """
         SELECT nickname
@@ -358,22 +359,17 @@ class DatabaseConnection2:
             WHERE profile_id = %s)
         ORDER BY profile_id
         """
-        self.cursor.execute(select_statement, household)
+        self.cursor.execute(select_statement, self.profile_id)
         result = self.cursor.fetchall()
         household_names = [row[0] for row in result]
         return household_names
     
-    def get_items_with_null_weightings_no_persistent_weights(self, profile_id: str) -> list:
+    def get_items_with_null_weightings_no_persistent_weights(self, receipt_id: int) -> list:
         """Returns a list of tuples of length two. tuple[0] is the transaction number of the item with no weighting, and tuple[1] is the item name"""
         select_statement = """
         SELECT transactions.transaction_id, item.item_name
         FROM transactions
         LEFT JOIN item ON transactions.item_id = item.item_id
-        LEFT JOIN (
-            SELECT receipt_id 
-            FROM receipt
-            WHERE profile_id = 1
-        ) as receipt ON transactions.receipt_id = receipt.receipt_id
         LEFT JOIN (
             SELECT *
             FROM transactions
@@ -392,25 +388,21 @@ class DatabaseConnection2:
                 )
             )
         ) as household_persist_weight ON transactions.item_id = household_persist_weight.item_id
-        WHERE household_persist_weight.weighting_id is null;
+        WHERE household_persist_weight.weighting_id is null
+        AND transactions.receipt_id = %s;
         """
-        self.cursor.execute(select_statement, profile_id)
+        self.cursor.execute(select_statement, (self.profile_id, receipt_id))
         result = self.cursor.fetchall()
         item_list = [(row[0], row[1]) for row in result]
         return item_list
 
 
-    def get_items_with_null_weightings_with_persistent_weights(self, profile_id: str) -> list:
+    def get_items_with_null_weightings_with_persistent_weights(self, receipt_id: int) -> list:
         """Returns a list of tuples of length <household size> + 1 with weightings of each household member and item_id """
         select_statement = """
-        SELECT item.item_id, item.item_name, profile.profile_id, weighting.weighting
+        SELECT item.item_id, item.item_name, profile.profile_id, MAX(weighting.weighting) as weighting
         FROM transactions
         LEFT JOIN item ON transactions.item_id = item.item_id
-        LEFT JOIN (
-            SELECT receipt_id 
-            FROM receipt
-            WHERE profile_id = 1
-        ) as receipt ON transactions.receipt_id = receipt.receipt_id
         LEFT JOIN (
             SELECT *
             FROM transactions
@@ -432,9 +424,11 @@ class DatabaseConnection2:
         INNER JOIN weighting ON household_persist_weight.weighting_id = weighting.weighting_id
         LEFT JOIN profile ON weighting.profile_id = profile.profile_id
         WHERE transactions.weighting_id is null
-        ORDER BY transactions.transaction_id, profile.profile_id
+        AND transactions.receipt_id = %s
+        GROUP BY (item.item_id, item.item_name, profile.profile_id)
+        ORDER BY item.item_id, profile.profile_id
         """
-        self.cursor.execute(select_statement, profile_id)
+        self.cursor.execute(select_statement, (self.profile_id, receipt_id))
         result = self.cursor.fetchall()
         column_names = [desc[0] for desc in self.cursor.description]
         df  = pd.DataFrame(result, columns=column_names)
@@ -444,6 +438,23 @@ class DatabaseConnection2:
         df_wide.reset_index(inplace=True)
         weighting_list = [tuple(row) for row in df_wide.to_numpy()]
         return weighting_list
+
+
+    def get_new_receipts(self) -> None:
+        select_statement = """
+        SELECT DISTINCT receipt.receipt_id, receipt.receipt_date
+        FROM transactions
+        LEFT JOIN (
+            SELECT * 
+            FROM receipt
+            WHERE profile_id = %s
+        ) as receipt ON transactions.receipt_id = receipt.receipt_id
+        WHERE transactions.weighting_id is null 
+        """
+        self.cursor.execute(select_statement, self.profile_id)
+        result = self.cursor.fetchall()
+        receipt_list = [(row[0], row[1]) for row in result]
+        return receipt_list
 
     def commit_changes(self):
         self.conn.commit()
