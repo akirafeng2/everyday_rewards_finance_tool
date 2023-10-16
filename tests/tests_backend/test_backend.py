@@ -295,13 +295,13 @@ class TestFileSystem:
     def test_iterate_largest_numeric_dir_name_one_level(self, file_system):
         # Given
         first_dir = file_system.receipts_dir_path
-        self.create_numbered_dir_in_path(first_dir, 5)
+        self.create_numbered_dir_in_path(first_dir, 12)
 
         # When 
         greatest_file = file_system.iterate_largest_numeric_dir_name(first_dir, 1)
 
         # Then 
-        assert greatest_file == first_dir / "4"
+        assert greatest_file == first_dir / "11"
 
 
     def test_iterate_largest_numeric_dir_name_two_levels(self, file_system):
