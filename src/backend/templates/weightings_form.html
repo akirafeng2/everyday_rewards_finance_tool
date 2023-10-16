@@ -23,8 +23,8 @@
             <fieldset>
                 <legend>{{ item[1] }}:</legend>
                 {% for profile in profile_list %}
-                    <label for="{{ item }}_{{ profile }}">{{ profile }}:</label>
-                    <input type = "number" id = "{{ item }}_{{ profile }}" name = "{{ profile }}[{{ item[0] }}]" min = "0" step = "0.01" value = "1" required><br><br>
+                    <label for="{{ item }}_{{ profile[1] }}">{{ profile[1] }}:</label>
+                    <input type = "number" id = "{{ item }}_{{ profile[1] }}" name = "{{ profile[0] }}[{{ item[0] }}]" min = "0" step = "0.01" value = "1" required><br><br>
                 {% endfor %}
                 <label for="{{ item[1] }}_persist">Persist:</label>
                 <input type = "checkbox" id = "{{ item[1] }}_persist" name = "persist[{{ item[0] }}]"><br><br>
@@ -34,11 +34,11 @@
             <fieldset class="persistent_weightings">
                 <legend style = "color: grey;">{{ item[1] }}:</legend>
                 {% for profile in profile_list %}
-                    <label for="{{ item }}_{{ profile }}">{{ profile }}:</label>
-                    <input type = "number" id = "{{ item }}_{{ profile }}" name = "{{ profile }}[{{ item[0] }}]" min = "0" step = "0.01" value = "{{ item[2 + loop.index0] }}"><br><br>
+                    <label for="{{ item }}_{{ profile[1] }}">{{ profile[1] }}:</label>
+                    <input type = "number" id = "{{ item }}_{{ profile[1] }}" name = "{{ profile[0] }}[{{ item[0] }}]" min = "0" step = "0.01" value = "{{ item[2 + loop.index0] }}"><br><br>
                 {% endfor %}
                 <label for="{{ item[1] }}_persist">Persist:</label>
-                <input type = "checkbox" id = "{{ item[1] }}_persist" name = "persist[{{ item[0] }}]"><br><br>
+                <input type = "checkbox" id = "{{ item[1] }}_persist" name = "persist[{{ item[0] }}]" checked><br><br>
             </fieldset>        
         {% endfor %}
         <button type="submit">Submit</button>

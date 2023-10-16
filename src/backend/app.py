@@ -15,6 +15,7 @@ def update_new_receipts(name):
     FS.setup(name)
     # check for most recent receipt date
     recent_date = FS.get_recent_receipt_date()
+    print(recent_date)
     # pass recent receipt date to scraper container to scrape
     return redirect(f"http://{SETTINGS.IP_ADDRESS}:5000/api/scrape_everyday_rewards/{name}/{recent_date}/entry")
     # return redirect(f"http://{SETTINGS.IP_ADDRESS}:5050/api/insert_receipts_to_db")
@@ -23,7 +24,6 @@ def update_new_receipts(name):
 
 @app.route('/api/insert_receipts_to_db')
 def insert_receipts_to_db():
-    FS.setup('alex') 
     receipt_list = FS.get_receipt_names()
     for receipt in receipt_list:
         # process receipts to pandas df
@@ -46,7 +46,25 @@ def insert_receipts_to_db():
 def update_weightings():
     # input weighting data into database
     if request.method == 'POST':
-        print(request.form)
+        weightings_dict = request.form # e.g. ImmutableMultiDict([('1[10]', '1'), ('2[10]', '1'), ('3[10]', '1'), ('1[2]', '1.00'), ('2[2]', '1.00'), ('3[2]', '0.00'), ('persist[2]', 'on')]) where (<profile_id>[<transaction_id>], <weighting>)
+        print(weightings_dict)
+        for weighting_identifier in weightings_dict:
+            weight = weightings_dict[weighting_identifier]
+            print(weighting_identifier)
+            # Splitting '<profile_id>[<transaction_id>]'
+            profile_id = weighting_identifier.split('[')[0]
+            transaction_id = weighting_identifier.split('[')[1].strip(']')
+            print(profile_id, transaction_id)
+            if profile_id == 'persist': # detects ('persist[2]', 'on') and means it is a persistent weighting indicator
+                with DB_CONN:
+                    DB_CONN.update_transaction_persistence(transaction_id)
+                    DB_CONN.commit_changes()
+            
+            else: # receives weightings in dict
+                with DB_CONN:
+                    DB_CONN.insert_and_update_weighting(profile_id, weight, transaction_id)
+                    DB_CONN.commit_changes()
+
         session['receipt_counter'] += 1
     # set up receipts to have weighting assigned
     elif request.method == 'GET':
@@ -55,12 +73,12 @@ def update_weightings():
             session['receipts'] = DB_CONN.get_new_receipts() # [(<receipt_id>, <receipt_date>), ...] 
         session['num_of_receipts'] = len(session['receipts'])
         session['receipt_counter'] = 1
+        print(session['receipts'])
 
 
     # prepare transaction and weighting data for html
     try:
         current_receipt = session['receipts'].pop(0)
-        print(current_receipt)
     except IndexError:
         session.clear()
         return "done"
