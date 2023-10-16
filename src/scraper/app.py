@@ -10,7 +10,7 @@ import SETTINGS
 
 app = Flask(__name__)
 
-app.secret_key = "my_secret_key"
+app.secret_key = SETTINGS.SECRET_KEY
 
 @app.route('/api/scrape_everyday_rewards/<name>/<date_to>/entry', methods = ['GET','POST'])
 def scrape_everyday_rewards_entry(name, date_to):

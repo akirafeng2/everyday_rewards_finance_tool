@@ -8,7 +8,7 @@ env = SETTINGS.ENV
 DB_CONN = DatabaseConnection2(SETTINGS.CONNECTION_DETAILS, env, "1")
 FS = FileSystem(SETTINGS.FINANCE_FILE_PATH / env)
 
-app.secret_key = "my_secret_key"
+app.secret_key = SETTINGS.SECRET_KEY
 
 @app.route('/api/update_new_receipts/<name>', methods = ['GET'])
 def update_new_receipts(name):
