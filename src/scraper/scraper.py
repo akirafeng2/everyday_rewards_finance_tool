@@ -20,10 +20,10 @@ class EverydayRewardsScraper():
 
     # Pre MFA methods
 
-    def set_downloads(self, name: str):
+    def set_downloads(self, household:str, name: str):
         params = {
             "behavior": "allow",
-            "downloadPath": f"/app/Finances/{SETTINGS.ENV}/receipts/{name}/tmp"
+            "downloadPath": f"/app/Finances/{SETTINGS.ENV}/{household}/receipts/{name}/tmp"
             }
         self.driver.execute_cdp_cmd("Page.setDownloadBehavior", params) 
 
