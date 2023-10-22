@@ -14,10 +14,11 @@ def login_route():
     if request.method == 'GET':
         return render_template("login.html")
     elif request.method == 'POST':
-        login.post(request, session) # would post() or setup_user_session_details() be a better name?
+        login_info = request.form
+        nickname = login_info['username']
+        household_name = login_info['household']
+        login.post(nickname, hous, session)
         return "Successfull Login" # later on should go to totals dashboard
-    
-
 
 
 @api.route('/api/update_new_receipts/<name>', methods = ['GET'])
