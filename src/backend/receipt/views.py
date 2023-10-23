@@ -1,6 +1,5 @@
 from flask import Flask, request, render_template, abort, session, redirect, url_for, Blueprint
 
-from ..file_system import FileSystem
 from .. import SETTINGS
 from ..file_system import fs
 from ..user.views import needs_login
@@ -22,8 +21,7 @@ def get_new_receipts_route(FS):
 @needs_login
 def insert_receipts_to_db_route():
     insert_receipt_to_db()
-    return "success"
-    # return redirect(url_for('weightings.update_weightings'))
+    return redirect(url_for('weightings.update_weightings'))
 
 
 # @api.route('/api/insert_receipts_to_db')
