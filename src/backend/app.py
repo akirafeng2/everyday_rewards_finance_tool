@@ -1,5 +1,5 @@
 from flask import Flask, request, render_template, abort, session, redirect, url_for
-from . import SETTINGS, user, receipt
+from . import SETTINGS, user, receipt, weighting
 
 
 # env = SETTINGS.ENV
@@ -11,3 +11,4 @@ app = Flask(__name__)
 app.secret_key = SETTINGS.SECRET_KEY
 app.register_blueprint(user.views.blueprint, url_prefix="/api/user")
 app.register_blueprint(receipt.views.blueprint, url_prefix="/api/receipt")
+app.register_blueprint(weighting.views.blueprint, url_prefix="/api/weighting")
