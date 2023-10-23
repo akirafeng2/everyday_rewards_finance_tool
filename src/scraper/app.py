@@ -96,4 +96,4 @@ def scrape_everyday_rewards_post_mfa():
     scraper.download_receipts(recent_date, 50)
     scraper.stop()
 
-    return redirect(f"http://{SETTINGS.IP_ADDRESS}:5050/api/insert_receipts_to_db")
+    return redirect(f"http://{SETTINGS.IP_ADDRESS}:5050/api/receipt/insert_receipts_to_db")

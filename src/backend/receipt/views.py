@@ -21,7 +21,7 @@ def get_new_receipts_route(FS):
 @needs_login
 def insert_receipts_to_db_route():
     insert_receipt_to_db()
-    return redirect(url_for('weightings.update_weightings'))
+    return redirect(url_for('weightings.update_weightings_get_route'))
 
 
 # @api.route('/api/insert_receipts_to_db')
