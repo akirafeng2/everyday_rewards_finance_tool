@@ -5,7 +5,8 @@ from flask import session
 
 @db_conn(ReceiptDatabaseConnection)
 @fs
-def insert_receipt_to_db(FS, DB_CONN):
+def insert_receipt_to_db(FS, DB_CONN) -> None:
+    """Method to insert receipts in the user's tmp folder in the file system and upload to database"""
     receipt_list = FS.get_receipt_names()
     for receipt in receipt_list:
         # process receipts to pandas df
