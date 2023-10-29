@@ -15,9 +15,9 @@ def login_route():
         return render_template("login.html")
     elif request.method == 'POST':
         login_info = request.form
-        nickname = login_info['username']
+        user_name = login_info['username']
         household_name = login_info['household']
-        login.post(nickname, hous, session)
+        login.post(user_name, hous, session)
         return "Successfull Login" # later on should go to totals dashboard
 
 

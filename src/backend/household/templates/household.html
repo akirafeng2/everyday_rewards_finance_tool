@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Welcome to the Finance App</title>
+</head>
+<body>
+    <h1>Welcome, {{ user_name }}!</h1>
+    <p>Choose an action:</p>
+    
+    <form method="GET" action="/api/user/household/join_household">
+        <button type="submit">Join a Household</button>
+    </form>
+
+    <form method="GET" action="/api/user/household/create_household">
+        <button type="submit">Create a Household</button>
+    </form>
+</body>
+</html>
+
+
+
+
+

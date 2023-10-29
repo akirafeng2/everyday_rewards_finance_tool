@@ -6,7 +6,7 @@ class WeightingDatabaseConnection(DatabaseConnection):
     def get_household_names(self) -> list:
         """Returns the list names within a household"""
         select_statement = """
-        SELECT profile_id, nickname
+        SELECT profile_id, user_name
         FROM profile
         WHERE household_id = (
             SELECT household_id
