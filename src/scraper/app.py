@@ -12,9 +12,10 @@ app = Flask(__name__)
 
 app.secret_key = SETTINGS.SECRET_KEY
 
-@app.route('/api/scrape_everyday_rewards/<name>/<date_to>/entry', methods = ['GET','POST'])
-def scrape_everyday_rewards_entry(name, date_to):
+@app.route('/api/scrape_everyday_rewards/<household>/<name>/<date_to>/entry', methods = ['GET','POST'])
+def scrape_everyday_rewards_entry(household ,name, date_to):
     if request.method == 'POST':
+        session['household'] = escape(household)
         session['name'] = escape(name)
         session['email'] = request.form.get('email')
         session['password'] = request.form.get('password')
@@ -28,6 +29,7 @@ def scrape_everyday_rewards_entry(name, date_to):
 @app.route('/api/scrape_everyday_rewards/start', methods=['GET'])
 def scrape_everyday_rewards_pre_mfa():
 
+    household = session.pop('household')
     name = session.pop('name')
     email = session.pop('email')
     password = session.pop('password')
@@ -36,7 +38,7 @@ def scrape_everyday_rewards_pre_mfa():
     
     scraper = EverydayRewardsScraper()
 
-    scraper.set_downloads(name)
+    scraper.set_downloads(household, name)
 
     scraper.start()
 
@@ -94,4 +96,4 @@ def scrape_everyday_rewards_post_mfa():
     scraper.download_receipts(recent_date, 50)
     scraper.stop()
 
-    return redirect(f"http://{SETTINGS.IP_ADDRESS}:5050/api/insert_receipts_to_db")
+    return redirect(f"http://{SETTINGS.IP_ADDRESS}:5050/api/receipt/insert_receipts_to_db")

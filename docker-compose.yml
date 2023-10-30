@@ -10,7 +10,7 @@ services:
     env_file:
       - .env
     volumes:
-      - C:\Users\Alex\Documents\Finances:/app/Finances/
+      - C:\Users\alexa\Documents\Finances:/app/Finances/
     networks:
       - finance_app
     ports:
@@ -36,7 +36,7 @@ services:
     env_file:
       - .env
     volumes:
-      - C:\Users\Alex\Documents\Finances:/app/Finances/
+      - C:\Users\alexa\Documents\Finances:/app/Finances/
     networks:
       - finance_app
     ports:

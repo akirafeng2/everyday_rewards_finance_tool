@@ -27,7 +27,7 @@ CREATE TABLE item (
 CREATE TABLE profile (
     profile_id SERIAL PRIMARY KEY,
     household_id INT, 
-    nickname VARCHAR(12),
+    user_name VARCHAR(12) NOT NULL UNIQUE,
     FOREIGN KEY (household_id) REFERENCES household(household_id)
 );
 
