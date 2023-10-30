@@ -20,3 +20,11 @@ class UserDatabaseConnection(DatabaseConnection):
         self.cursor.execute(query, (user_name,))
         result = self.cursor.fetchone()
         return result
+
+    def add_user_into_db(self, user_name: str) -> None:
+        """adds a given user into the profiles table"""
+        insert_statement = """
+        INSERT INTO profile (user_name)
+        VALUES (%s)
+        """
+        self.cursor.execute(insert_statement, (user_name,))

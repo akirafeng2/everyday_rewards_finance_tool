@@ -6,7 +6,7 @@ from . import login
 from .add_user import user_exists, add_user
 
 
-blueprint = Blueprint('user', __name__, template_folder='../templates')
+blueprint = Blueprint('user', __name__, template_folder='./templates')
 
 env = SETTINGS.ENV
 
@@ -42,7 +42,7 @@ def logout_user_route():
 
 @blueprint.route('/register_user', methods=['GET',])
 def register_user_route():
-    return render_template("register_user")
+    return render_template("register_user.html")
 
 
 @blueprint.route('/register_user', methods=['POST',])
