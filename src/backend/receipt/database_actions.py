@@ -22,7 +22,7 @@ class ReceiptDatabaseConnection(DatabaseConnection):
         self.cursor.execute(
             insert_statement,
             (receipt_date, self.profile_id, source)
-            )
+        )
 
     def insert_into_transactions(self, item_df: pd.DataFrame) -> None:
         """Function to insert the items from the list of tuples into
