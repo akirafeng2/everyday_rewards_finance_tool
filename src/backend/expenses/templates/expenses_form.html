@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dynamic Form</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <form method="POST">
+        <h2>{{ occurence }}</h2>
+        <table>
+            <tr>
+                <th>Item</th>
+                <th>Price</th>
+                <th>Payer</th>
+                <th>Adam</th>
+                <th>Alex</th>
+                <th>Tyler</th>
+                <th>Delete?</th>
+            </tr>
+            {% for row in data %}
+                <tr>
+                    <td>{{ row['item'] }}</td>
+                    <td>{{ row['price'] }}</td>
+                    <td>{{ row['payer'] }}</td>
+                    <td>{{ row['adam'] }}</td>
+                    <td>{{ row['alex'] }}</td>
+                    <td>{{ row['tyler'] }}</td>
+                    <td><input type="checkbox" id="{{ row['id'] }}" name="id" value="{{ row['id'] }}" onchange="this.form.submit()"></td>
+                </tr>
+            {% endfor %}
+            <tr>
+                <td><input type="text" id="item" name="item"></td>
+                <td><input type="number" id="price" name="price" min="0" step="0.01"></td>
+                <td><input type="radio" id="payer_adam" name="payer" value="adam">
+                    <label for="payer_adam">Adam</label>
+                    <input type="radio" id="payer_alex" name="payer" value="alex">
+                    <label for="payer_alex">Alex</label>
+                    <input type="radio" id="payer_tyler" name="payer" value="tyler">
+                    <label for="payer_tyler">Tyler</label>
+                </td>
+                <td><input type="number" id="adam" name="adam" min="0" step="0.01"></td>
+                <td><input type="number" id="alex" name="alex" min="0" step="0.01"></td>
+                <td><input type="number" id="tyler" name="tyler" min="0" step="0.01"></td>
+                <td><input type="submit" value="Add Expense">
+            </tr>
+        </table>
+    </form>
+</body>
+</html>
