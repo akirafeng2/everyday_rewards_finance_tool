@@ -26,7 +26,7 @@ def add_new_household():
             message='Household Name already Exists. Input a different Name'
         )
     create_new_household(household_name)
-    return redirect(url_for("household.assign_household_route"))
+    return redirect(url_for("household.assign_household_route", household_name=household_name), code=307)
 
 
 @blueprint.route('/join_household', methods=['GET',])
@@ -36,14 +36,11 @@ def join_household_route():
 
 @blueprint.route('/join_household', methods=['POST',])
 def assign_household_route():
-    household_name = request.form.get('household_name')
+    household_name = request.values.get('household_name')
     if not exists_household(household_name):
         return render_template(
             'input_household_name.html',
             message='Household Name does not exist, please input another or create a new household'
         )
     assign_household(session.get('user_id'), household_name)
-    household_id = get_household_id(household_name)
-    session['household_name'] = household_name
-    session['household_id'] = household_id
-    return ("Successfully Joined Household")
+    return redirect(url_for('user.login_user_route', name=session.get('user_name')), code=307)

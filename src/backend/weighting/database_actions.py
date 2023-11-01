@@ -3,23 +3,6 @@ import pandas as pd
 
 
 class WeightingDatabaseConnection(DatabaseConnection):
-
-    def get_household_names(self) -> list:
-        """Returns the list names within a household"""
-        select_statement = """
-        SELECT profile_id, user_name
-        FROM profile
-        WHERE household_id = (
-            SELECT household_id
-            FROM profile
-            WHERE profile_id = %s)
-        ORDER BY profile_id
-        """
-        self.cursor.execute(select_statement, (self.profile_id,))
-        result = self.cursor.fetchall()
-        household_names = [(row[0], row[1]) for row in result]
-        return household_names
-
     def get_new_receipts(self) -> list:
         """
         Returns a list of tuples. Each tuple is in the form (<receipt_id>, <receipt_date>) and represents receipts
@@ -79,9 +62,9 @@ class WeightingDatabaseConnection(DatabaseConnection):
 
         query = """
         WITH NextAvailableWeighting AS (
-        SELECT
-            COALESCE(MAX(weighting_id) + 1, 1) AS next_weighting_id
-        FROM weighting
+            SELECT
+                COALESCE(MAX(weighting_id) + 1, 1) AS next_weighting_id
+            FROM weighting
         )
         SELECT
         CASE

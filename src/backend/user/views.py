@@ -18,15 +18,15 @@ def show_login_page_route():
 
 @blueprint.route('/login', methods=['POST',])
 def login_user_route():
-    login_dict = request.form
+    login_name = request.values.get('name')
+    login_info = login.get_user_info(login_name)
 
-    login_info = login.get_user_info(login_dict)
-
-    if login_info[0] is not None:
+    if login_info is not None:
         session['user_id'] = login_info[0]
         session['household_id'] = login_info[1]
         session['user_name'] = login_info[2]
         session['household_name'] = login_info[3]
+        session['household_profile_list'] = login.get_household_profiles()
         session['logged_in'] = True
         return f"Successfull Login of \
             {session['user_name']}, {session['household_name']}"
