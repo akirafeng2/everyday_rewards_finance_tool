@@ -1,5 +1,6 @@
 from ..database import DatabaseConnection
 import pandas as pd
+from datetime import datetime
 
 
 class ExpensesDatabaseConnection(DatabaseConnection):
@@ -63,3 +64,42 @@ class ExpensesDatabaseConnection(DatabaseConnection):
         WHERE transaction_id = %s
         """
         self.cursor.execute(update_statement, (transaction_id,))
+
+    def insert_expense_transactions(self, item_name: str, receipt_date: datetime,
+                                    payer: str, occurence: str, price: str) -> None:
+        """
+        takes attributes from expenses and inserts into transactions row and sets up next available weighting in
+        a temp table
+        """
+        insert_statement = """
+        CREATE TEMPORARY TABLE temp_weighting AS
+        SELECT COALESCE(MAX(weighting_id) + 1, 1) AS next_weighting_id
+        FROM weighting;
+
+        WITH ins_item AS (
+            INSERT INTO item (item_name)
+            VALUES (%s)
+            ON CONFLICT (item_name) DO NOTHING
+            RETURNING item_id
+        ),
+        ins_receipt AS (
+            INSERT INTO receipt (receipt_date, profile_id, source)
+            VALUES (%s, %s, %s)
+            RETURNING receipt_id
+
+        INSERT INTO transactions (item_id, receipt_id, price, weighting_id)
+        SELECT ins_item.item_id, ins_receipt.receipt_id, %s, temp_weighting.next_weighting_id;
+        """
+        self.cursor.execute(insert_statement, (item_name, receipt_date, payer, occurence, price))
+
+    def insert_expense_weightings(self, profile_weightings_tuples: list) -> None:
+        """
+        Takes a list of tuples (<profile_id>, <weighting>) and inputs it into weightings db.
+        Needs to be run after insert_expense_transactions as the temp_weighting temp table needs
+        to be set up
+        """
+        insert_statement = """
+        INSERT INTO weighting (weighting_id, profile_id, weighting)
+        VALUES (temp_weighting.next_weighting_id, %s, %s)
+        """
+        self.cursor.executemany(insert_statement, profile_weightings_tuples)

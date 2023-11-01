@@ -18,7 +18,7 @@ def process_expenses_route(occurence):  # occruence either 'one_off' or 'recurri
     if 'id' in expenses_dict:
         remove_expenses_row(expenses_dict)
     else:
-        add_expenses_row(expenses_dict)
+        add_expenses_row(expenses_dict, occurence)
 
-    target_url = url_for('show_expenses_data_route', occurence=occurence)
+    target_url = url_for('expenses.show_expenses_data_route', occurence=occurence)
     return redirect(target_url)
