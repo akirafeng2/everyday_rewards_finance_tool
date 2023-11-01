@@ -1,6 +1,7 @@
 from ..database import DatabaseConnection
 import pandas as pd
 
+
 class WeightingDatabaseConnection(DatabaseConnection):
 
     def get_household_names(self) -> list:
@@ -18,25 +19,26 @@ class WeightingDatabaseConnection(DatabaseConnection):
         result = self.cursor.fetchall()
         household_names = [(row[0], row[1]) for row in result]
         return household_names
-    
 
     def get_new_receipts(self) -> list:
-        """Returns a list of tuples. Each tuple is in the form (<receipt_id>, <receipt_date>) and represents receipts that have been added to transactions and have yet to been assigned weightings"""
+        """
+        Returns a list of tuples. Each tuple is in the form (<receipt_id>, <receipt_date>) and represents receipts
+        that have been added to transactions and have yet to been assigned weightings
+        """
         select_statement = """
         SELECT DISTINCT receipt.receipt_id, receipt.receipt_date
         FROM transactions
         LEFT JOIN (
-            SELECT * 
+            SELECT *
             FROM receipt
             WHERE profile_id = %s
         ) as receipt ON transactions.receipt_id = receipt.receipt_id
-        WHERE transactions.weighting_id is null 
+        WHERE transactions.weighting_id is null
         """
         self.cursor.execute(select_statement, (self.profile_id,))
         result = self.cursor.fetchall()
         receipt_list = [(row[0], row[1]) for row in result]
         return receipt_list
-    
 
     def update_transaction_persistence(self, transaction_id: str) -> None:
         """Updates the transactions table to override old weighting_id for a particular item in a household"""
@@ -57,7 +59,7 @@ class WeightingDatabaseConnection(DatabaseConnection):
             )
         )
         AND item_id = (
-            SELECT item_id 
+            SELECT item_id
             FROM transactions
             WHERE transaction_id = %s
             AND weighting_persist = True
@@ -69,9 +71,11 @@ class WeightingDatabaseConnection(DatabaseConnection):
         """
         self.cursor.execute(update_statement, (self.profile_id, transaction_id, transaction_id))
 
-
     def get_weighting_id(self, transaction_id: str) -> str:
-        """Returns the weighting_id associated to a paticular transaction_id in the transactions table. If weighting_id does not yet exists, returns the next highest weighting_id number in the weightings table"""
+        """
+        Returns the weighting_id associated to a paticular transaction_id in the transactions table. If weighting_id
+        does not yet exists, returns the next highest weighting_id number in the weightings table
+        """
 
         query = """
         WITH NextAvailableWeighting AS (
@@ -93,13 +97,11 @@ class WeightingDatabaseConnection(DatabaseConnection):
         weighting_id = result[0]
         return weighting_id
 
-
-
     def insert_and_update_weighting(self, profile_id, weight: str, transaction_id: str) -> None:
         """Inserts entry into weighting table and updates transaction table with weighting_ID"""
         weighting_id = self.get_weighting_id(transaction_id)
         query = """
-        INSERT INTO weighting 
+        INSERT INTO weighting
         VALUES (%s, %s, %s);
 
         UPDATE transactions
@@ -108,9 +110,11 @@ class WeightingDatabaseConnection(DatabaseConnection):
         """
         self.cursor.execute(query, (weighting_id, profile_id, weight, weighting_id, transaction_id))
 
-
     def get_items_with_null_weightings_no_persistent_weights(self, receipt_id: int) -> list:
-        """Returns a list of tuples of length two. tuple[0] is the transaction number of the item with no weighting, and tuple[1] is the item name"""
+        """
+        Returns a list of tuples of length two. tuple[0] is the transaction number of the item with no weighting,
+        and tuple[1] is the item name
+        """
         select_statement = """
         SELECT transactions.transaction_id, item.item_name
         FROM transactions
@@ -142,9 +146,10 @@ class WeightingDatabaseConnection(DatabaseConnection):
         item_list = [(row[0], row[1]) for row in result]
         return item_list
 
-
     def get_items_with_null_weightings_with_persistent_weights(self, receipt_id: int) -> list:
-        """Returns a list of tuples of length <household size> + 1 with weightings of each household member and item_id """
+        """
+        Returns a list of tuples of length <household size> + 1 with weightings of each household member and item_id
+        """
         select_statement = """
         SELECT transactions.transaction_id, item.item_name, profile.profile_id, MAX(weighting.weighting) as weighting
         FROM transactions
@@ -179,9 +184,8 @@ class WeightingDatabaseConnection(DatabaseConnection):
 
         # convert table from long to wide in Pandas
         column_names = [desc[0] for desc in self.cursor.description]
-        df  = pd.DataFrame(result, columns=column_names)
+        df = pd.DataFrame(result, columns=column_names)
         df_wide = df.pivot(index=['transaction_id', 'item_name'], columns='profile_id', values='weighting')
         df_wide.reset_index(inplace=True)
         weighting_list = [tuple(row) for row in df_wide.to_numpy()]
         return weighting_list
-
