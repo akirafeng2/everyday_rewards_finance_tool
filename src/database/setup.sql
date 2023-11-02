@@ -35,7 +35,7 @@ CREATE TABLE receipt (
     receipt_id SERIAL PRIMARY KEY,
     receipt_date DATE NOT NULL,
     profile_id INT NOT NULL, 
-    source VARCHAR(20) CHECK (source IN ('receipt', 'one_off_expenses', 'recurring_expenses', 'weighting_update')),
+    source VARCHAR(20) CHECK (source IN ('receipt', 'one_off', 'recurring', 'weighting_update')),
     FOREIGN KEY (profile_id) REFERENCES profile(profile_id)
 );
 

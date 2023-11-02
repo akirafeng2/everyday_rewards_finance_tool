@@ -27,9 +27,9 @@
                 <th>Item</th>
                 <th>Price</th>
                 <th>Payer</th>
-                <th>Adam</th>
-                <th>Alex</th>
-                <th>Tyler</th>
+                {% for user in household %}
+                    <th>{{ user }}</th>
+                {% endfor %}
                 <th>Delete?</th>
             </tr>
             {% for row in data %}
@@ -37,25 +37,24 @@
                     <td>{{ row['item'] }}</td>
                     <td>{{ row['price'] }}</td>
                     <td>{{ row['payer'] }}</td>
-                    <td>{{ row['adam'] }}</td>
-                    <td>{{ row['alex'] }}</td>
-                    <td>{{ row['tyler'] }}</td>
+                    {% for user in household %}
+                        <td>{{ user }}</td>
+                    {% endfor %}
                     <td><input type="checkbox" id="{{ row['id'] }}" name="id" value="{{ row['id'] }}" onchange="this.form.submit()"></td>
                 </tr>
             {% endfor %}
             <tr>
                 <td><input type="text" id="item" name="item"></td>
                 <td><input type="number" id="price" name="price" min="0" step="0.01"></td>
-                <td><input type="radio" id="payer_adam" name="payer" value="adam">
-                    <label for="payer_adam">Adam</label>
-                    <input type="radio" id="payer_alex" name="payer" value="alex">
-                    <label for="payer_alex">Alex</label>
-                    <input type="radio" id="payer_tyler" name="payer" value="tyler">
-                    <label for="payer_tyler">Tyler</label>
+                <td>
+                    {% for user in household %}
+                        <input type="radio" id="payer_{{ user }}" name="payer" value="{{ user }}">
+                        <label for="payer_{{ user }}">{{ user }}</label>
+                    {% endfor %}
                 </td>
-                <td><input type="number" id="adam" name="adam" min="0" step="0.01"></td>
-                <td><input type="number" id="alex" name="alex" min="0" step="0.01"></td>
-                <td><input type="number" id="tyler" name="tyler" min="0" step="0.01"></td>
+                {% for user in household %}
+                    <td><input type="number" id="{{ user }}" name="{{ user }}" min="0" step="0.01"></td>
+                {% endfor %}
                 <td><input type="submit" value="Add Expense">
             </tr>
         </table>

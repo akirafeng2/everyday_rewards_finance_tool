@@ -18,7 +18,7 @@ def remove_expenses_row(DB_CONN, remove_id_dict: MultiDict) -> None:
 def add_expenses_row(DB_CONN, expenses_row_dict: MultiDict, occurence: str) -> None:
 
     # variables for insert_expense_transactions
-    item_name = expenses_row_dict.get('item_name')
+    item_name = expenses_row_dict.get('item')
     payer = expenses_row_dict.get('payer')
     price = expenses_row_dict.get('price')
     receipt_date = datetime.date.today()
@@ -33,3 +33,4 @@ def add_expenses_row(DB_CONN, expenses_row_dict: MultiDict, occurence: str) -> N
     with DB_CONN:
         DB_CONN.insert_expense_transactions(item_name, receipt_date, payer, occurence, price)
         DB_CONN.insert_expense_weightings(profile_weightings_tuples)
+        DB_CONN.commit_changes()

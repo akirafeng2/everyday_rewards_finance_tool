@@ -4,7 +4,7 @@ from datetime import datetime
 
 
 class ExpensesDatabaseConnection(DatabaseConnection):
-    def get_expenses(self, occurrence: str) -> list:
+    def get_expenses(self, occurrence: str, household_names: list) -> list:
         """
         Returns a list of tuples with expense line items
         (<transaction_id>, <item_name>, <price>, <payer>, <N weightings>)
@@ -48,13 +48,26 @@ class ExpensesDatabaseConnection(DatabaseConnection):
         column_names = [desc[0] for desc in self.cursor.description]
         df = pd.DataFrame(result, columns=column_names)
         df_wide = df.pivot(
-            index=['transaction_id', 'price', 'item_name', 'payer'],
-            columns='profile_id',
+            index=['transaction_id', 'item_name', 'price', 'payer'],
+            columns='user_name',
             values='weighting'
         )
         df_wide.reset_index(inplace=True)
         weighting_list = [tuple(row) for row in df_wide.to_numpy()]
-        return weighting_list
+
+        # converting to dicts
+        list_of_dict = []
+        keys = [
+            'id',
+            'item',
+            'price',
+            'payer',
+        ]
+        keys.extend(household_names)
+        for row in weighting_list:
+            row_dict = dict(zip(keys, row))
+            list_of_dict.append(row_dict)
+        return list_of_dict
 
     def deactivate_active_ind(self, transaction_id: str) -> None:
         """takes a given transaction_id and sets the active_ind to False"""
@@ -84,13 +97,38 @@ class ExpensesDatabaseConnection(DatabaseConnection):
         ),
         ins_receipt AS (
             INSERT INTO receipt (receipt_date, profile_id, source)
-            VALUES (%s, %s, %s)
+            VALUES (
+                %s,
+                (SELECT profile_id
+                FROM profile
+                WHERE user_name = %s),
+                %s)
             RETURNING receipt_id
-
+        )
         INSERT INTO transactions (item_id, receipt_id, price, weighting_id)
-        SELECT ins_item.item_id, ins_receipt.receipt_id, %s, temp_weighting.next_weighting_id;
+        VALUES (
+            (
+                SELECT item_id
+                FROM ins_item
+                UNION ALL
+                SELECT item_id
+                FROM item
+                WHERE item_name = %s
+            ),
+            (
+                SELECT receipt_id
+                FROM ins_receipt
+            ),
+            %s,
+            (
+                SELECT next_weighting_id
+                FROM temp_weighting
+            )
+        )
         """
-        self.cursor.execute(insert_statement, (item_name, receipt_date, payer, occurence, price))
+        self.cursor.execute(insert_statement,
+                            (item_name, receipt_date, payer, occurence, item_name, price)
+                            )
 
     def insert_expense_weightings(self, profile_weightings_tuples: list) -> None:
         """
@@ -100,6 +138,11 @@ class ExpensesDatabaseConnection(DatabaseConnection):
         """
         insert_statement = """
         INSERT INTO weighting (weighting_id, profile_id, weighting)
-        VALUES (temp_weighting.next_weighting_id, %s, %s)
+        VALUES (
+            (SELECT MAX(temp_weighting.next_weighting_id)
+            FROM temp_weighting),
+            %s,
+            %s
+            )
         """
         self.cursor.executemany(insert_statement, profile_weightings_tuples)
