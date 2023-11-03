@@ -20,7 +20,7 @@
     </style>
 </head>
 <body>
-    <h1>Attribute Costs</h1>
+    <h1>Attributed Spend</h1>
     <table>
         {% for key, value in spent.items() %}
         <tr>
@@ -40,7 +40,7 @@
         {% endfor %}
     </table>
     <h1>Reset Finances</h1>
-    <form method="POST" action="/api/totals/confirm">
+    <form method="POST" action="/api/reset/confirm">
         <input type="submit" value="Submit" />
     </form>
 </body>

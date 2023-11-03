@@ -1,5 +1,5 @@
-from flask import Flask, request, render_template, abort, session, redirect, url_for
-from . import SETTINGS, user, receipt, weighting, household, expenses
+from flask import Flask
+from . import SETTINGS, user, receipt, weighting, household, expenses, dashboard
 
 
 # env = SETTINGS.ENV
@@ -15,3 +15,4 @@ app.register_blueprint(receipt.views.blueprint, url_prefix="/api/receipt")
 app.register_blueprint(weighting.views.blueprint, url_prefix="/api/weighting")
 app.register_blueprint(household.views.blueprint, url_prefix="/api/household")
 app.register_blueprint(expenses.views.blueprint, url_prefix="/api/expenses")
+app.register_blueprint(dashboard.views.blueprint, url_prefix="/api/dashboard")
