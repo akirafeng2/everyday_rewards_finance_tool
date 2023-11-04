@@ -43,15 +43,23 @@ class FileSystem:
         # split items into list - each item and it's price is 56 characters long
         item_list = [items_string[i:i + 56] for i in range(0, len(items_string), 56)]
 
+        # collecting item name and price
         for line in item_list:
+            # Sample line string -> '#Cenovis Tablts Vit C Sgarls500mg300pk             18.50'
             line_split = line.split("   ", 1)
-            item_name = line_split[0].strip(' ^#')
-            price = line_split[1].strip()
+            item_name = line_split[0].strip(' ^#')  # all lines starts with one a combination of ' ^#'
+            price = line_split[1].strip()  # remove extra spaces
+
+            # handling discounts applied on the followng line
             if price.startswith("-"):
                 item_price_list[-1] = str(round(float(item_price_list[-1]) + float(price), 2))
                 continue
+
+            # skipping markdowns info - Markdown have second line announcing discount amount to reduced price
             if item_name.startswith("PRICE REDUCED BY"):
                 continue
+
+            # handle cases where discounts have one line for the original price, and another for the discount
             if not multiple_item_indicator:
                 item_name_list.append(item_name)
                 if price == "":
@@ -70,7 +78,7 @@ class FileSystem:
             if not receipt.startswith("eReceipt"):
                 continue
 
-            receipt_date = receipt.split("_")[3]
+            receipt_date = receipt.split("_")[3]  # example: 'eReceipt_1638_Green Square_07Aug2023__fooaa'
             date_format = "%d%b%Y"
             receipt_datetime = datetime.strptime(receipt_date, date_format)
             month = str(receipt_datetime.month)
