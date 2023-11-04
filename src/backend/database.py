@@ -17,9 +17,7 @@ class DatabaseConnection:
     def __enter__(self):
         self.conn = psycopg2.connect(**self.connection_details)
         self.cursor = self.conn.cursor()
-        search_path_execute = """
-        SET search_path TO %s;
-        """
+        search_path_execute = """SET search_path TO %s;"""
         self.cursor.execute(search_path_execute, (self.env,))
 
     def __exit__(self, exc_type, exc_value, traceback):
