@@ -60,4 +60,3 @@ class TestDatabaseConnection:
 
         # Then
         mock_commit.assert_called_once_with()
-            
