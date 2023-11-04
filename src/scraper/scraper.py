@@ -9,6 +9,8 @@ from datetime import datetime
 
 import time
 
+import SETTINGS
+
 class EverydayRewardsScraper():
     
     def __init__(self):
@@ -18,10 +20,10 @@ class EverydayRewardsScraper():
 
     # Pre MFA methods
 
-    def set_downloads(self, name: str):
+    def set_downloads(self, household:str, name: str):
         params = {
             "behavior": "allow",
-            "downloadPath": f"/app/Finances/dev/receipts/{name}/tmp"
+            "downloadPath": f"/app/Finances/{SETTINGS.ENV}/{household}/receipts/{name}/tmp"
             }
         self.driver.execute_cdp_cmd("Page.setDownloadBehavior", params) 
 
@@ -78,8 +80,7 @@ class EverydayRewardsScraper():
         error_counter = 0
 
         for receipt_num in range(2, max_iterations):
-            receipt_xpath = '//*[@id="angular-view-div"]/div/div[5]/wr-my-activity-new-element/div/div/div[3]/div[' + str(
-                receipt_num) + ']'
+            receipt_xpath = '//*[@id="angular-view-div"]/div/div[5]/wr-my-activity-new-element/div/div/div[3]/div[' + str(receipt_num) + ']'
             receipt_date_xpath = receipt_xpath + '/div[1]/div/div/div[1]'
 
             try:
@@ -116,14 +117,16 @@ class EverydayRewardsScraper():
 
             # download receipt if the date is after specified date_up_to parameter
             if receipt_date > date_up_to:
+                print(receipt_xpath)
                 receipt_banner = WebDriverWait(self.driver, 60).until(ec.presence_of_element_located((By.XPATH, receipt_xpath)))
                 receipt_banner.click()
-                time.sleep(2)
+                time.sleep(5)
                 receipt_download = WebDriverWait(self.driver, 60).until(
                     ec.presence_of_element_located((By.XPATH, '//*[@id="ereceiptSidesheet"]/div/div/div[1]/a/img')))
                 try:
                     receipt_download.click()
                 except selenium.common.exceptions.ElementNotInteractableException as e:
+                    print(e)
                     # if this exception occurs, it means the item has no receipt to download
                     continue
                 else:
@@ -132,9 +135,7 @@ class EverydayRewardsScraper():
                     x_click_out.click()
 
             else:
-                break        
-
-        pass 
+                break  
 
 
     def stop(self):

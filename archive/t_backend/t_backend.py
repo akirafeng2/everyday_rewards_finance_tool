@@ -9,6 +9,7 @@ import numpy as np
 from datetime import datetime, date
 from unittest.mock import patch, Mock
 from werkzeug.datastructures import MultiDict
+from pandas.testing import assert_frame_equal
 
 
 CONNECTION_DETAILS = {
@@ -71,11 +72,6 @@ def get_different_rows(source_df: pd.DataFrame, new_df: pd.DataFrame) -> pd.Data
 
 class TestFileSystem:
     
-    def add_col_to_df(self, df: pd.DataFrame, username: str) -> pd.DataFrame:
-        """Adds processing columns to dataframe"""
-        df['payer'] = username
-        return df
-    
     def copy_file_into_temp_path_location(self, file_name: str, data_directory: Path, tmp_path_instance: Path, username: str) -> None:
         """copy files in test files to the */receipt/<username>/tmp path for FileSystem to mimic download directory"""
         test_receipt = data_directory / Path(file_name)
@@ -90,27 +86,46 @@ class TestFileSystem:
             dir_file.mkdir(parents=True)
 
     # Tests
-    def test_receipts_to_dataframe_nothing_in_dir(self, file_system):
+    def test_get_receipt_names(self, file_system, datadir, tmp_path, username):
+        # Given
+        test_files = [
+            "eReceipt_1638_Green Square Town Centre_14Apr2023__ljkod.pdf",
+            "eReceipt_1248_Town Hall_10Jun2023__xbkgs.pdf",
+            "eReceipt_1638_Green Square Town Centre_08Apr2023__fckor.pdf"
+            ]
         
-        df = file_system.receipts_to_dataframe()
-        assert df.empty
+        for file in test_files:
+            self.copy_file_into_temp_path_location(file, datadir, tmp_path, username)
+
+        test_files.sort()
+        # When
+        output = file_system.get_receipt_names()
+        output_list = [file for file in output]
+        output_list.sort()
+        # Then
+        assert output_list == test_files
+
+    # def test_receipts_to_dataframe_nothing_in_dir(self, file_system):
+        
+    #     df = file_system.receipts_to_dataframe()
+    #     assert df.empty
 
 
-    def test_receipts_to_dataframe_receipt_column_types(self, file_system, datadir, tmp_path, username):
+    def test_receipt_to_dataframe_receipt_column_types(self, file_system, datadir, tmp_path, username):
         # Given        
         ## Setup the folder with the receipt
         test_file = "eReceipt_1638_Green Square Town Centre_14Apr2023__ljkod.pdf"
         self.copy_file_into_temp_path_location(test_file, datadir, tmp_path, username)
 
         # When
-        df = file_system.receipts_to_dataframe()
+        df = file_system.receipt_to_dataframe(test_file)
 
         # Then
         assert df['item'].dtype == "object"
         assert df['price'].dtype == "float64"
 
 
-    def test_receipts_to_dataframe_receipt_test(self, file_system, datadir, tmp_path, username):
+    def test_receipt_to_dataframe_receipt_test(self, file_system, datadir, tmp_path, username):
         # Given
         ## Setup data to test against
         test_data = [
@@ -122,22 +137,18 @@ class TestFileSystem:
         
         test_df = pd.DataFrame(test_data, columns = ['item', 'price'])
 
-        test_df = self.add_col_to_df(test_df, username)
-
         ## Setup the folder with the receipt
         test_file = "eReceipt_1638_Green Square Town Centre_14Apr2023__ljkod.pdf"
         self.copy_file_into_temp_path_location(test_file, datadir, tmp_path, username)
 
         # When
-        df = file_system.receipts_to_dataframe()
-
-        diff = get_different_rows(df, test_df)
+        df = file_system.receipt_to_dataframe(test_file)
 
         # Then
-        assert diff.empty
+        assert_frame_equal(df, test_df)
 
 
-    def test_receipts_to_dataframe_prefixed_item(self, file_system, datadir, tmp_path, username):
+    def test_receipt_to_dataframe_prefixed_item(self, file_system, datadir, tmp_path, username):
         # Given
         ## Setup data to test against
         test_data = [
@@ -147,22 +158,18 @@ class TestFileSystem:
 
         test_df = pd.DataFrame(test_data, columns = ['item', 'price'])
 
-        test_df = self.add_col_to_df(test_df, username)
-
         ## Setup the folder with the receipt
         test_file = "eReceipt_1248_Town Hall_10Jun2023__xbkgs.pdf"
         self.copy_file_into_temp_path_location(test_file, datadir, tmp_path, username)
 
         # When
-        df = file_system.receipts_to_dataframe()
-
-        diff = get_different_rows(df, test_df)        
+        df = file_system.receipt_to_dataframe(test_file)      
 
         # Then
-        assert diff.empty
+        assert_frame_equal(df, test_df)
     
     
-    def test_receipts_to_dataframe_quantity(self, file_system, datadir, tmp_path, username):
+    def test_receipt_to_dataframe_quantity(self, file_system, datadir, tmp_path, username):
         # Given
         ## Setup data to test against
         test_data = [
@@ -172,39 +179,35 @@ class TestFileSystem:
 
         test_df = pd.DataFrame(test_data, columns = ['item', 'price'])
 
-        test_df = self.add_col_to_df(test_df, username)
-
         ## Setup the folder with the receipt
         test_file = "eReceipt_1638_Green Square Town Centre_08Apr2023__fckor.pdf"
         self.copy_file_into_temp_path_location(test_file, datadir, tmp_path, username)
 
         # When
-        df = file_system.receipts_to_dataframe()
-
-        diff = get_different_rows(df, test_df)        
+        df = file_system.receipt_to_dataframe(test_file)  
 
         # Then
-        assert diff.empty
+        assert_frame_equal(df, test_df)
 
 
-    def test_receipts_to_dataframe_offer_discount(self, file_system, datadir, tmp_path, username):
+    def test_receipt_to_dataframe_offer_discount(self, file_system, datadir, tmp_path, username):
         # eReceipt_1638_Green%20Square_05Jul2023__nrbqp.pdf
         # Given
         ## Setup data to test against
-        test_data = np.array(['Primo Double Smoked Leg Ham 100G', 6.3, username])
+        test_data = np.array(['Primo Double Smoked Leg Ham 100G', 6.3])
 
         ## Setup the folder with the receipt
         test_file = "eReceipt_1638_Green Square_05Jul2023__nrbqp.pdf"
         self.copy_file_into_temp_path_location(test_file, datadir, tmp_path, username)
 
         # When
-        df = file_system.receipts_to_dataframe()
+        df = file_system.receipt_to_dataframe(test_file)
 
         # Then
         assert (df==test_data).all(1).any()
 
 
-    def test_receipts_to_dataframe_markdown_price_reduction(self, file_system, datadir, tmp_path, username):
+    def test_receipt_to_dataframe_markdown_price_reduction(self, file_system, datadir, tmp_path, username):
         # Given
         ## Setup data to test against
         test_data = [
@@ -216,19 +219,15 @@ class TestFileSystem:
 
         test_df = pd.DataFrame(test_data, columns = ['item', 'price'])
 
-        test_df = self.add_col_to_df(test_df, username)
-
         ## Setup the folder with the receipt
         test_file = "eReceipt_1638_Green Square Town Centre_28Sep2022__enirr.pdf"
         self.copy_file_into_temp_path_location(test_file, datadir, tmp_path, username)
 
         # When
-        df = file_system.receipts_to_dataframe()
-
-        diff = get_different_rows(df, test_df)        
+        df = file_system.receipt_to_dataframe(test_file)     
 
         # Then
-        assert diff.empty
+        assert_frame_equal(df, test_df)
 
         # Tests for move_receipts
     
@@ -296,13 +295,13 @@ class TestFileSystem:
     def test_iterate_largest_numeric_dir_name_one_level(self, file_system):
         # Given
         first_dir = file_system.receipts_dir_path
-        self.create_numbered_dir_in_path(first_dir, 5)
+        self.create_numbered_dir_in_path(first_dir, 12)
 
         # When 
         greatest_file = file_system.iterate_largest_numeric_dir_name(first_dir, 1)
 
         # Then 
-        assert greatest_file == first_dir / "4"
+        assert greatest_file == first_dir / "11"
 
 
     def test_iterate_largest_numeric_dir_name_two_levels(self, file_system):

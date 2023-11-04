@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dynamic Form</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h2>Woolworths Expenses</h2>
+    <table>
+        <tr>
+            <th>Item</th>
+            <th>Price</th>
+            <th>Payer</th>
+            <th>Date</th>
+            {% for user in household %}
+                <th>{{ user }}</th>
+            {% endfor %}
+        </tr>
+        {% for row in data %}
+            <tr>
+                <td>{{ row['item'] }}</td>
+                <td>{{ row['price'] }}</td>
+                <td>{{ row['payer'] }}</td>
+                <td>{{ row['date'] }}</td>
+                {% for user in household %}
+                    <td>{{ row[user] }}</td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </table>
+    <br>
+    <form method="GET" action="/api/receipt/get_new_receipts">
+        <button type="submit">Add Receipts</button>
+    </form>
+    <br>
+    <form method="GET" action="/api/dashboard">
+        <button type="submit">Return to Dashboard</button>
+    </form>
+</body>
+</html>

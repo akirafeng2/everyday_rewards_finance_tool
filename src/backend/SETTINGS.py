@@ -14,3 +14,4 @@ CONNECTION_DETAILS = {
 }
 ENV = os.getenv("ENV")
 IP_ADDRESS = os.getenv("IP_ADDRESS")
+SECRET_KEY = os.getenv("SECRET_KEY")
