@@ -1,7 +1,7 @@
 from flask import session, redirect, url_for, Blueprint
 
 from .. import SETTINGS
-from ..file_system import fs
+from ..common import fs
 from ..user.views import needs_login
 from .insert_receipts_to_db import insert_receipt_to_db
 
