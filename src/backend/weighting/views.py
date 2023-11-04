@@ -35,7 +35,7 @@ def input_weightings_route():
         current_receipt = session['receipts'].pop(0)
         session.modified = True
     except IndexError:
-        return "done"
+        return redirect(url_for('expenses.show_receipt_expenses_route'))
     print(session['receipts'])
 
     receipt_id = current_receipt[0]

@@ -39,7 +39,21 @@
         </tr>
         {% endfor %}
     </table>
+
+    <h1>Expenses</h1>
+    <form method="GET" action="/api/expenses/receipt">
+        <button type="submit">Receipt Expenses</button>
+    </form>
     <br>
+    <form method="GET" action="/api/expenses/input/one_off">
+        <button type="submit">One Off Expenses</button>
+    </form>
+    <br>
+    <form method="GET" action="/api/expenses/input/recurring">
+        <button type="submit">Recurring Expenses</button>
+    </form>
+
+    <h3>Reset</h3>
     <form method="GET" action="/api/reset/confirm">
         <button type="submit">Reset Expenses</button>
     </form>

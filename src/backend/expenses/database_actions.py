@@ -146,3 +146,72 @@ class ExpensesDatabaseConnection(DatabaseConnection):
             )
         """
         self.cursor.executemany(insert_statement, profile_weightings_tuples)
+
+    def get_receipt_expenses(self, household_names: list):
+        """
+        Returns a list of dicts with expense line items
+        (<transaction_id>, <item_name>, <price>, <payer>, <N weightings>)
+        where N is number of people in the household
+        """
+        query = """
+        SELECT
+            i.item_name AS item_name,
+            t.price AS price,
+            p.user_name as payer,
+            w.weighting as weighting,
+            r.receipt_date as date,
+            p2.user_name as user_weighting
+        FROM (
+            SELECT *
+            FROM transactions
+            WHERE active_ind = true
+            AND receipt_id in (
+                SELECT receipt_id
+                FROM receipt
+                WHERE source = 'receipt'
+                AND profile_id in (
+                    SELECT profile_id
+                    FROM profile
+                    WHERE household_id = (
+                        SELECT household_id
+                        FROM profile
+                        WHERE profile_id = %s
+                    )
+                )
+            )
+        )
+        AS t
+        LEFT JOIN receipt AS r on t.receipt_id = r.receipt_id
+        LEFT JOIN profile AS p on r.profile_id = p.profile_id
+        LEFT JOIN item AS i on t.item_id = i.item_id
+        LEFT JOIN weighting as w on t.weighting_id = w.weighting_id
+        LEFT JOIN profile as p2 on w.profile_id = p2.profile_id
+        ORDER BY t.transaction_id, w.profile_id
+        """
+        self.cursor.execute(query, (self.profile_id,))
+        result = self.cursor.fetchall()
+
+        # Convert table from long to wide in pandas
+        column_names = [desc[0] for desc in self.cursor.description]
+        df = pd.DataFrame(result, columns=column_names)
+        df_wide = df.pivot(
+            index=['item_name', 'price', 'payer', 'date'],
+            columns='user_weighting',
+            values='weighting'
+        )
+        df_wide.reset_index(inplace=True)
+        weighting_list = [tuple(row) for row in df_wide.to_numpy()]
+
+        # converting to dicts
+        list_of_dict = []
+        keys = [
+            'item',
+            'price',
+            'payer',
+            'date'
+        ]
+        keys.extend(household_names)
+        for row in weighting_list:
+            row_dict = dict(zip(keys, row))
+            list_of_dict.append(row_dict)
+        return list_of_dict

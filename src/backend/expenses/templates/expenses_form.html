@@ -38,7 +38,7 @@
                     <td>{{ row['price'] }}</td>
                     <td>{{ row['payer'] }}</td>
                     {% for user in household %}
-                        <td>{{ user }}</td>
+                        <td>{{ row[user] }}</td>
                     {% endfor %}
                     <td><input type="checkbox" id="{{ row['id'] }}" name="id" value="{{ row['id'] }}" onchange="this.form.submit()"></td>
                 </tr>
@@ -58,6 +58,10 @@
                 <td><input type="submit" value="Add Expense">
             </tr>
         </table>
+    </form>
+    <br>
+    <form method="GET" action="/api/dashboard">
+        <button type="submit">Return to Dashboard</button>
     </form>
 </body>
 </html>
