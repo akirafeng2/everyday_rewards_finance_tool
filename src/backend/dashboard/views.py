@@ -7,7 +7,7 @@ blueprint = Blueprint('dashboard', __name__, template_folder="./templates")
 
 @blueprint.route('/', methods=['GET',])
 @needs_login
-def totals():
+def totals_route():
 
     spent_accumalated, owes = get_totals()
 

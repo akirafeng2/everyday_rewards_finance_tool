@@ -28,7 +28,7 @@ def login_user_route():
         session['household_name'] = login_info[3]
         session['household_profile_list'] = login.get_household_profiles()
         session['logged_in'] = True
-        return redirect(url_for("dashboard.totals"))
+        return redirect(url_for("dashboard.totals_route"))
     else:
         return redirect(url_for("user.register_user_route"))
 

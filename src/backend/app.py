@@ -1,5 +1,5 @@
 from flask import Flask
-from . import SETTINGS, user, receipt, weighting, household, expenses, dashboard
+from . import SETTINGS, user, receipt, weighting, household, expenses, dashboard, reset
 
 
 # env = SETTINGS.ENV
@@ -16,3 +16,4 @@ app.register_blueprint(weighting.views.blueprint, url_prefix="/api/weighting")
 app.register_blueprint(household.views.blueprint, url_prefix="/api/household")
 app.register_blueprint(expenses.views.blueprint, url_prefix="/api/expenses")
 app.register_blueprint(dashboard.views.blueprint, url_prefix="/api/dashboard")
+app.register_blueprint(reset.views.blueprint, url_prefix="/api/reset")

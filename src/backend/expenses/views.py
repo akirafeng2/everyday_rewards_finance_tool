@@ -2,6 +2,7 @@ from flask import request, render_template, redirect, url_for, session, Blueprin
 from .show_expenses import get_expenses_data
 from .processing_expenses import remove_expenses_row, add_expenses_row
 from ..user.views import needs_login
+
 blueprint = Blueprint('expenses', __name__, template_folder="./templates")
 
 
