@@ -1,6 +1,6 @@
 from .database_actions import ResetDatabaseConnection
-from ..database import db_conn
-from ..file_system import fs, FileSystem
+from ..common import db_conn, fs
+from ..file_system import FileSystem
 
 
 @db_conn(ResetDatabaseConnection)

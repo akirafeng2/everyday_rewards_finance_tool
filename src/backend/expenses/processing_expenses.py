@@ -1,5 +1,5 @@
 from .database_actions import ExpensesDatabaseConnection
-from ..database import db_conn
+from ..common import db_conn
 from werkzeug.datastructures import MultiDict
 import datetime
 from flask import session

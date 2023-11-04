@@ -1,10 +1,5 @@
 import psycopg2
 
-from .SETTINGS import CONNECTION_DETAILS, ENV
-from functools import wraps
-
-from flask import session
-
 
 class DatabaseConnection:
     def __init__(self, connection_details: dict, env, profile_id: str):
@@ -27,14 +22,3 @@ class DatabaseConnection:
 
     def commit_changes(self):
         self.conn.commit()
-
-
-def db_conn(db_class):
-    """decorator to instantiate a DatabaseConnection and pass it into the local env of a function"""
-    def decorator(func):
-        @wraps(func)
-        def wrapper(*args, **kwargs):
-            instance = db_class(CONNECTION_DETAILS, ENV, session.get('user_id'))
-            return func(instance, *args, **kwargs)
-        return wrapper
-    return decorator

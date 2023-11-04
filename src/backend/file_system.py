@@ -5,11 +5,6 @@ import os
 from datetime import datetime, date
 import shutil
 import re
-from functools import wraps
-
-from .SETTINGS import FINANCE_FILE_PATH, ENV
-
-from flask import session
 
 
 class FileSystem:
@@ -40,7 +35,12 @@ class FileSystem:
         reader = PdfReader(string_path)
         page = reader.pages[0]
         receipt_text = page.extract_text()
+        print(receipt_text)
+
+        # get items on the 3rd line of the receipt
         items_string = receipt_text.splitlines()[2]
+
+        # split items into list - each item and it's price is 56 characters long
         item_list = [items_string[i:i + 56] for i in range(0, len(items_string), 56)]
 
         for line in item_list:
@@ -128,12 +128,3 @@ class FileSystem:
     def save_to_csv(self, df: pd.DataFrame) -> None:
         destination_path = self.expenses_archive / Path(f"{date.today()}.csv")
         df.to_csv(destination_path, index=False)
-
-
-def fs(func):
-    """decorator to instantiate a DatabaseConnection and pass it into the local env of a function"""
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        instance = FileSystem(FINANCE_FILE_PATH, ENV, session['user_name'], session['household_name'])
-        return func(instance, *args, **kwargs)
-    return wrapper

@@ -2,7 +2,7 @@ from flask import request, render_template, redirect, url_for, session, Blueprin
 
 from .exists_household import exists_household
 from .create_new_household import create_new_household
-from .assign_household import assign_household, get_household_id
+from .assign_household import assign_household
 
 blueprint = Blueprint('household', __name__, template_folder="./templates")
 

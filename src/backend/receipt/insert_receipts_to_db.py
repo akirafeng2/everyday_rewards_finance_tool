@@ -1,5 +1,4 @@
-from ..database import db_conn
-from ..file_system import fs
+from ..common import db_conn, fs
 from .database_actions import ReceiptDatabaseConnection
 
 

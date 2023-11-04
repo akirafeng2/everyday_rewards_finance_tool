@@ -1,6 +1,5 @@
 from .database_actions import UserDatabaseConnection
-from ..database import db_conn
-from werkzeug.datastructures import MultiDict
+from ..common import db_conn
 
 
 @db_conn(UserDatabaseConnection)

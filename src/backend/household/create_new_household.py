@@ -1,5 +1,5 @@
 from .database_actions import HouseholdDatabaseConnection
-from ..database import db_conn
+from ..common import db_conn
 
 
 @db_conn(HouseholdDatabaseConnection)
