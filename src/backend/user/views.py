@@ -1,22 +1,22 @@
 from flask import request, render_template, session, redirect, url_for, \
     Blueprint
 from functools import wraps
-from .. import SETTINGS
-from . import login
-from .add_user import user_exists, add_user
+from backend.SETTINGS import ENV
+import login
+from add_user import user_exists, add_user
 
 
-blueprint = Blueprint('user', __name__, template_folder='./templates')
+user_blueprint = Blueprint('user', __name__, template_folder='./templates')
 
-env = SETTINGS.ENV
+env = ENV
 
 
-@blueprint.route('/login', methods=['GET',])
+@user_blueprint.route('/login', methods=['GET',])
 def show_login_page_route():
     return render_template("login.html")
 
 
-@blueprint.route('/login', methods=['POST',])
+@user_blueprint.route('/login', methods=['POST',])
 def login_user_route():
     login_name = request.values.get('name')
     login_info = login.get_user_info(login_name)
@@ -33,18 +33,18 @@ def login_user_route():
         return redirect(url_for("user.register_user_route"))
 
 
-@blueprint.route('/logout', methods=['GET',])
+@user_blueprint.route('/logout', methods=['GET',])
 def logout_user_route():
     session.clear()
     return redirect(url_for('user.show_login_page_route'))
 
 
-@blueprint.route('/register_user', methods=['GET',])
+@user_blueprint.route('/register_user', methods=['GET',])
 def register_user_route():
     return render_template("register_user.html")
 
 
-@blueprint.route('/register_user', methods=['POST',])
+@user_blueprint.route('/register_user', methods=['POST',])
 def add_user_route():
     user_name = request.form['username']
     if user_exists(user_name):

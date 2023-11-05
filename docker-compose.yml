@@ -10,7 +10,7 @@ services:
     env_file:
       - .env
     volumes:
-      - C:\Users\alexa\Documents\Finances:/app/Finances/
+      - /home/alex/Documents/Finances:/app/Finances/
     networks:
       - finance_app
     ports:
@@ -36,17 +36,17 @@ services:
     env_file:
       - .env
     volumes:
-      - C:\Users\alexa\Documents\Finances:/app/Finances/
+      - /home/alex/Documents/Finances:/app/Finances/
     networks:
       - finance_app
     ports:
-      - 5050:5000
+      - 5050:8000
     command: gunicorn -w 3 app:app
 
 networks:
   finance_app:
     driver: bridge
 
-volumes:
-  postgres_data:
-    driver: local  
+# volumes:
+#   postgres_data:
+#     driver: local  

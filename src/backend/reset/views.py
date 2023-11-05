@@ -2,16 +2,16 @@ from flask import render_template, redirect, url_for, Blueprint
 from ..user.views import needs_login
 from .reset import archive_month, deactivate_transactions
 
-blueprint = Blueprint('reset', __name__, template_folder="./templates")
+reset_blueprint = Blueprint('reset', __name__, template_folder="./templates")
 
 
-@blueprint.route('/confirm', methods=['GET',])
+@reset_blueprint.route('/confirm', methods=['GET',])
 @needs_login
 def confirm_route():
     return render_template('confirm.html')
 
 
-@blueprint.route('/month_reset', methods=['GET',])
+@reset_blueprint.route('/month_reset', methods=['GET',])
 @needs_login
 def reset_route():
     # Archive current month spreadsheet into CSV
