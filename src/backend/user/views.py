@@ -1,7 +1,7 @@
 from flask import request, render_template, session, redirect, url_for, \
     Blueprint
 from functools import wraps
-from backend.SETTINGS import ENV
+from ..SETTINGS import ENV
 import login
 from .add_user import user_exists, add_user
 
