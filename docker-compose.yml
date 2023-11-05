@@ -14,8 +14,8 @@ services:
     networks:
       - finance_app
     ports:
-      - 5000:8000
-    command: gunicorn -w 3 app:app
+      - 5000:5000
+    command: flask run --host=0.0.0.0
 
   # db:
   #   build: ./src/database
@@ -40,8 +40,8 @@ services:
     networks:
       - finance_app
     ports:
-      - 5050:8000
-    command: gunicorn -w 3 app:app
+      - 5050:5000
+    command: flask run --host=0.0.0.0
 
 networks:
   finance_app:
