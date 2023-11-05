@@ -2,10 +2,10 @@ from flask import render_template, Blueprint
 from ..user.views import needs_login
 from .totals import get_totals
 
-dashboard_blueprint = Blueprint('dashboard', __name__, template_folder="./templates")
+blueprint = Blueprint('dashboard', __name__, template_folder="./templates")
 
 
-@dashboard_blueprint.route('/', methods=['GET',])
+@blueprint.route('/', methods=['GET',])
 @needs_login
 def totals_route():
 

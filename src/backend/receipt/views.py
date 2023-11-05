@@ -6,10 +6,10 @@ from ..user.views import needs_login
 from .insert_receipts_to_db import insert_receipt_to_db
 
 
-receipt_blueprint = Blueprint('receipt', __name__, template_folder='../templates')
+blueprint = Blueprint('receipt', __name__, template_folder='../templates')
 
 
-@receipt_blueprint.route('/get_new_receipts', methods=['GET',])
+@blueprint.route('/get_new_receipts', methods=['GET',])
 @needs_login
 @fs
 def get_new_receipts_route(FS):
@@ -23,7 +23,7 @@ def get_new_receipts_route(FS):
     )
 
 
-@receipt_blueprint.route('/insert_receipts_to_db')
+@blueprint.route('/insert_receipts_to_db')
 @needs_login
 def insert_receipts_to_db_route():
     insert_receipt_to_db()
