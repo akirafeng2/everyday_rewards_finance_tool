@@ -1,8 +1,8 @@
 from flask import request, render_template, session, redirect, url_for, \
     Blueprint
 from functools import wraps
-from .. import SETTINGS
-from . import login
+from backend import SETTINGS
+import login
 from .add_user import user_exists, add_user
 
 
