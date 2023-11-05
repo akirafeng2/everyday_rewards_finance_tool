@@ -14,20 +14,20 @@ services:
     networks:
       - finance_app
     ports:
-      - 5000:5000
-    command: flask run --host=0.0.0.0
+      - 5000:8000
+    command: gunicorn -w 3 app:app
 
-  db:
-    build: ./src/database
-    restart: always
-    env_file:
-      - .env
-    networks:
-      - finance_app
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data    
+  # db:
+  #   build: ./src/database
+  #   restart: always
+  #   env_file:
+  #     - .env
+  #   networks:
+  #     - finance_app
+  #   ports:
+  #     - "5432:5432"
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data    
 
   backend:
     build: ./src/backend
@@ -40,8 +40,8 @@ services:
     networks:
       - finance_app
     ports:
-      - 5050:5000
-    command: flask run --host=0.0.0.0
+      - 5000:8000
+    command: gunicorn -w 3 app:app
 
 networks:
   finance_app:
