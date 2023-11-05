@@ -20,13 +20,7 @@ pipeline{
                 git url: 'https://github.com/akirafeng2/everyday_rewards_finance_tool.git', branch: 'main', credentialsId: 'git-email'
             }
         }
-        stage('Conditional Build and Run Docker Compose') {
-            when {
-                expression {
-                    // This stage will only run when the pull request is merged into the main branch
-                    currentBuild.changeSets.any { it.branch == 'main' }
-                }
-            }
+        stage('Run Docker Compose') {
             steps {
                 script {
                     // Define your Docker Compose command here
@@ -44,5 +38,4 @@ pipeline{
             }
         }
     }
-
 }
