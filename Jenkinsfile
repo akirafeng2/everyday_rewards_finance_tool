@@ -30,7 +30,7 @@ pipeline{
             steps {
                 script {
                     // Define your Docker Compose command here
-                    def dockerComposeCmd = "docker-compose up --build"
+                    def dockerComposeCmd = "docker-compose up --build -d"
 
                     // Execute the Docker Compose command
                     sh(script: dockerComposeCmd, returnStatus: true)
