@@ -6,6 +6,8 @@ WORKDIR /app
 
 RUN pip install -r requirements.txt
 
+RUN touch /app/__init__.py
+
 COPY . /app/backend/
 
 WORKDIR /app/backend
