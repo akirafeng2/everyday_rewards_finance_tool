@@ -1,12 +1,12 @@
 from flask import Flask
 import SETTINGS
-import user
-import receipt
-import weighting
-import household
-import expenses
-import dashboard
-import reset
+from user.views import user_blueprint
+from receipt.views import receipt_blueprint
+from weighting.views import weighting_blueprint
+from household.views import household_blueprint
+from expenses.views import expenses_blueprint
+from dashboard.views import dashboard_blueprint
+from reset.views import reset_blueprint
 
 
 # env = SETTINGS.ENV
@@ -17,10 +17,10 @@ import reset
 app = Flask(__name__)
 
 app.secret_key = SETTINGS.SECRET_KEY
-app.register_blueprint(user.views.blueprint, url_prefix="/api/user")
-app.register_blueprint(receipt.views.blueprint, url_prefix="/api/receipt")
-app.register_blueprint(weighting.views.blueprint, url_prefix="/api/weighting")
-app.register_blueprint(household.views.blueprint, url_prefix="/api/household")
-app.register_blueprint(expenses.views.blueprint, url_prefix="/api/expenses")
-app.register_blueprint(dashboard.views.blueprint, url_prefix="/api/dashboard")
-app.register_blueprint(reset.views.blueprint, url_prefix="/api/reset")
+app.register_blueprint(user_blueprint, url_prefix="/api/user")
+app.register_blueprint(receipt_blueprint, url_prefix="/api/receipt")
+app.register_blueprint(weighting_blueprint, url_prefix="/api/weighting")
+app.register_blueprint(household_blueprint, url_prefix="/api/household")
+app.register_blueprint(expenses_blueprint, url_prefix="/api/expenses")
+app.register_blueprint(dashboard_blueprint, url_prefix="/api/dashboard")
+app.register_blueprint(reset_blueprint, url_prefix="/api/reset")
