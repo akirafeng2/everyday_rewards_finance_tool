@@ -15,7 +15,7 @@ services:
       - finance_app
     ports:
       - 5000:5000
-    command: flask run --host=0.0.0.0
+    command: flask run --host=192.168.0.8
 
   # db:
   #   build: ./src/database
@@ -41,7 +41,7 @@ services:
       - finance_app
     ports:
       - 5050:5000
-    command: flask run --host=0.0.0.0
+    command: flask run --host=192.168.0.8
 
 networks:
   finance_app:
