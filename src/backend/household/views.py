@@ -4,20 +4,20 @@ from .exists_household import exists_household
 from .create_new_household import create_new_household
 from .assign_household import assign_household
 
-household_blueprint = Blueprint('household', __name__, template_folder="./templates")
+blueprint = Blueprint('household', __name__, template_folder="./templates")
 
 
-@household_blueprint.route('/', methods=['GET',])
+@blueprint.route('/', methods=['GET',])
 def join_or_create_route():
     return render_template('household.html', user_name=session.get('user_name'))
 
 
-@household_blueprint.route('/create_household', methods=['GET',])
+@blueprint.route('/create_household', methods=['GET',])
 def create_household_route():
     return render_template('input_household_name.html', message='Input an Household Name')
 
 
-@household_blueprint.route('/create_household', methods=['POST',])
+@blueprint.route('/create_household', methods=['POST',])
 def add_new_household():
     household_name = request.form.get('household_name')
     if exists_household(household_name):
@@ -29,12 +29,12 @@ def add_new_household():
     return redirect(url_for("household.assign_household_route", household_name=household_name), code=307)
 
 
-@household_blueprint.route('/join_household', methods=['GET',])
+@blueprint.route('/join_household', methods=['GET',])
 def join_household_route():
     return render_template('input_household_name.html', message='Input an Household Name')
 
 
-@household_blueprint.route('/join_household', methods=['POST',])
+@blueprint.route('/join_household', methods=['POST',])
 def assign_household_route():
     household_name = request.values.get('household_name')
     if not exists_household(household_name):
