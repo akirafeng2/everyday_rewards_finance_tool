@@ -1,14 +1,14 @@
 from flask import request, render_template, session, redirect, url_for, \
     Blueprint
 from functools import wraps
-from backend import SETTINGS
+from backend.SETTINGS import ENV
 import login
 from .add_user import user_exists, add_user
 
 
 blueprint = Blueprint('user', __name__, template_folder='./templates')
 
-env = SETTINGS.ENV
+env = ENV
 
 
 @blueprint.route('/login', methods=['GET',])
