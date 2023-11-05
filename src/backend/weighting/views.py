@@ -6,17 +6,17 @@ from .get_weightings_for_next_receipt import get_weightings_for_next_receipt
 
 from ..user.views import needs_login
 
-blueprint = Blueprint('weighting', __name__, template_folder='./templates')
+weighting_blueprint = Blueprint('weighting', __name__, template_folder='./templates')
 
 
-@blueprint.route('/update_receipt_weightings', methods=['GET',])
+@weighting_blueprint.route('/update_receipt_weightings', methods=['GET',])
 @needs_login
 def update_weightings_get_route():
     set_up_receipts_for_weightings()
     return redirect(url_for('weighting.input_weightings_route'))
 
 
-@blueprint.route('/update_receipt_weightings', methods=['POST',])
+@weighting_blueprint.route('/update_receipt_weightings', methods=['POST',])
 @needs_login
 def update_weightings_post_route():
     # e.g. ImmutableMultiDict([('1[10]', '1'), ('2[10]', '1'), ('3[10]', '1'), ('1[2]', '1.00'), ('2[2]', '1.00'),
@@ -27,7 +27,7 @@ def update_weightings_post_route():
     return redirect(url_for('weighting.input_weightings_route'))
 
 
-@blueprint.route('/input_weightings', methods=['GET',])
+@weighting_blueprint.route('/input_weightings', methods=['GET',])
 @needs_login
 def input_weightings_route():
     print(session['receipts'])
