@@ -15,7 +15,7 @@ services:
       - finance_app
     ports:
       - 5000:8000
-    command: gunicorn app:app
+    command: gunicorn -w 3 app:app
 
   # db:
   #   build: ./src/database
@@ -41,7 +41,7 @@ services:
       - finance_app
     ports:
       - 5050:8000
-    command: gunicorn app:app
+    command: gunicorn -w 3 app:app
 
 networks:
   finance_app:
