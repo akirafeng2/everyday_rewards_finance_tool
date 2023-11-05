@@ -23,11 +23,7 @@ pipeline{
         stage('Run Docker Compose') {
             steps {
                 script {
-                    // Define your Docker Compose command here
-                    def dockerComposeCmd = "docker-compose up --build -d"
-
-                    // Execute the Docker Compose command
-                    sh(script: dockerComposeCmd, returnStatus: true)
+                    sh 'docker-compose up --build -d'
 
                     if (currentBuild.resultIsBetterOrEqualTo('SUCCESS')) {
                         echo "Docker Compose executed successfully."
