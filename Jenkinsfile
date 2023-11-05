@@ -24,7 +24,7 @@ pipeline{
             steps {
                 script {
                     // Define your Docker Compose command here
-                    sh 'docker-compose up --build -d'
+                    sh 'sudo docker-compose up --build -d'
 
                     if (currentBuild.resultIsBetterOrEqualTo('SUCCESS')) {
                         echo "Docker Compose executed successfully."
