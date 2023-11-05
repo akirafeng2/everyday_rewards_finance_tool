@@ -14,12 +14,6 @@ pipeline{
     }
 
     stages {
-        stage('Checkout Git Repository') {
-            steps {
-                // Use the 'git' step to clone the repository
-                git url: 'https://github.com/akirafeng2/everyday_rewards_finance_tool.git', branch: 'main', credentialsId: 'git-email'
-            }
-        }
         stage('Conditional Build and Run Docker Compose') {
             when {
                 expression {
