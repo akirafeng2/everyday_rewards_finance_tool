@@ -10,24 +10,24 @@ services:
     env_file:
       - .env
     volumes:
-      - C:\Users\alexa\Documents\Finances:/app/Finances/
+      - /home/alex/Documents/Finances:/app/Finances/
     networks:
       - finance_app
     ports:
       - 5000:5000
-    command: flask run --host=0.0.0.0
+    command: gunicorn app:app
 
-  db:
-    build: ./src/database
-    restart: always
-    env_file:
-      - .env
-    networks:
-      - finance_app
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data    
+  # db:
+  #   build: ./src/database
+  #   restart: always
+  #   env_file:
+  #     - .env
+  #   networks:
+  #     - finance_app
+  #   ports:
+  #     - "5432:5432"
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data    
 
   backend:
     build: ./src/backend
@@ -36,17 +36,17 @@ services:
     env_file:
       - .env
     volumes:
-      - C:\Users\alexa\Documents\Finances:/app/Finances/
+      - /home/alex/Documents/Finances:/app/Finances/
     networks:
       - finance_app
     ports:
       - 5050:5000
-    command: flask run --host=0.0.0.0
+    command: gunicorn app:app
 
 networks:
   finance_app:
     driver: bridge
 
-volumes:
-  postgres_data:
-    driver: local  
+# volumes:
+#   postgres_data:
+#     driver: local  
