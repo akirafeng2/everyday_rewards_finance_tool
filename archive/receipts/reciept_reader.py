@@ -1,5 +1,5 @@
 import pandas as pd
-from PyPDF2 import PdfReader
+from pypdf import PdfReader
 import os
 
 from tabulate import tabulate
@@ -12,7 +12,7 @@ item_name_list = []
 item_price_list = []
 multiple_item_indicator = False
 
-directory = rf'C:\Users\Alex\Documents\Finances\receipts\{year}\{month}'
+directory = r"c:\Users\Alex Feng\Documents\Finances\receipts\alex\tmp"
 
 for file in os.scandir(directory):
     reader = PdfReader(file.path)
@@ -40,7 +40,11 @@ for file in os.scandir(directory):
             item_price_list.append(price)
             multiple_item_indicator = False
 data = pd.DataFrame({"item": item_name_list, 'price': item_price_list})
+data['payer'] = 'alex'
+# change data price to float
 print(tabulate(data, headers='keys', tablefmt='psql'))
+print(item_name_list)
+print(item_price_list)
 
 
 """

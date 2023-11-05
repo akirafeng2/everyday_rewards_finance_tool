@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+
+  scraper:
+    build: ./src/scraper
+    stdin_open: true
+    tty: true
+    shm_size: 1gb
+    env_file:
+      - .env
+    volumes:
+      - C:\Users\alexa\Documents\Finances:/app/Finances/
+    networks:
+      - finance_app
+    ports:
+      - 5000:5000
+    command: flask run --host=0.0.0.0
+
+  db:
+    build: ./src/database
+    restart: always
+    env_file:
+      - .env
+    networks:
+      - finance_app
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data    
+
+  backend:
+    build: ./src/backend
+    stdin_open: true
+    tty: true
+    env_file:
+      - .env
+    volumes:
+      - C:\Users\alexa\Documents\Finances:/app/Finances/
+    networks:
+      - finance_app
+    ports:
+      - 5050:5000
+    command: flask run --host=0.0.0.0
+
+networks:
+  finance_app:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local  

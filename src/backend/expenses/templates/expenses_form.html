@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dynamic Form</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <form method="POST">
+        <h2>{{ occurence }}</h2>
+        <table>
+            <tr>
+                <th>Item</th>
+                <th>Price</th>
+                <th>Payer</th>
+                {% for user in household %}
+                    <th>{{ user }}</th>
+                {% endfor %}
+                <th>Delete?</th>
+            </tr>
+            {% for row in data %}
+                <tr>
+                    <td>{{ row['item'] }}</td>
+                    <td>{{ row['price'] }}</td>
+                    <td>{{ row['payer'] }}</td>
+                    {% for user in household %}
+                        <td>{{ row[user] }}</td>
+                    {% endfor %}
+                    <td><input type="checkbox" id="{{ row['id'] }}" name="id" value="{{ row['id'] }}" onchange="this.form.submit()"></td>
+                </tr>
+            {% endfor %}
+            <tr>
+                <td><input type="text" id="item" name="item"></td>
+                <td><input type="number" id="price" name="price" min="0" step="0.01"></td>
+                <td>
+                    {% for user in household %}
+                        <input type="radio" id="payer_{{ user }}" name="payer" value="{{ user }}">
+                        <label for="payer_{{ user }}">{{ user }}</label>
+                    {% endfor %}
+                </td>
+                {% for user in household %}
+                    <td><input type="number" id="{{ user }}" name="{{ user }}" min="0" step="0.01"></td>
+                {% endfor %}
+                <td><input type="submit" value="Add Expense">
+            </tr>
+        </table>
+    </form>
+    <br>
+    <form method="GET" action="/api/dashboard">
+        <button type="submit">Return to Dashboard</button>
+    </form>
+</body>
+</html>
