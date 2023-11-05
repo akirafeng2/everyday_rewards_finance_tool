@@ -1,6 +1,12 @@
 from flask import Flask
 import SETTINGS
-from . import user, receipt, weighting, household, expenses, dashboard, reset
+import user
+import receipt
+import weighting
+import household
+import expenses
+import dashboard
+import reset
 
 
 # env = SETTINGS.ENV
