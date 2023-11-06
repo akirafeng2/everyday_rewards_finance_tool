@@ -9,3 +9,7 @@ RUN pip install -r requirements.txt
 COPY . /app/backend/
 
 WORKDIR /app/backend
+
+EXPOSE 5000
+
+CMD ["flask", "run", "--host=0.0.0.0"]
