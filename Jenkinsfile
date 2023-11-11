@@ -2,47 +2,40 @@ pipeline{
     
     agent any
 
-    environment {
-        ENV = 'prod'
-        IP_ADDRESS = '192.168.0.8'
-        DB_NAME = 'finance_prod'
-        USER = 'root'
-        PASSWORD = 'root'
-        HOST = '192.168.0.8'
-        PORT = '5432'
-        SECRET_KEY = 'my_secret_key'
-    }
-
     stages {
         stage('Checkout Git Repository') {
             steps {
                 // Use the 'git' step to clone the repository
-                git url: 'https://github.com/akirafeng2/everyday_rewards_finance_tool.git', branch: 'main', credentialsId: 'token'
+                git url: 'https://github.com/akirafeng2/everyday_rewards_finance_tool.git', branch: 'aws-release', credentialsId: 'git-email'
             }
         }
-        stage('Conditional Build and Run Docker Compose') {
-            when {
-                expression {
-                    // This stage will only run when the pull request is merged into the main branch
-                    currentBuild.changeSets.any { it.branch == 'main' }
-                }
-            }
+
+        stage('Connect to ECR') {
             steps {
                 script {
-                    // Define your Docker Compose command here
-                    def dockerComposeCmd = "docker-compose up --build"
+                    sh 'aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/r9z0m9j3'
+                }
+            }
+        }
 
-                    // Execute the Docker Compose command
-                    sh(script: dockerComposeCmd, returnStatus: true)
+        stage('Building and push backend image') {
+            steps {
+                script {
+                    sh 'docker build -t finance-app-backend ./src/backend'
+                    sh 'docker tag finance-app-backend:latest public.ecr.aws/r9z0m9j3/finance-app-backend:latest'
+                    sh 'docker push public.ecr.aws/r9z0m9j3/finance-app-backend:latest'
+                }
+            }
+        }
 
-                    if (currentBuild.resultIsBetterOrEqualTo('SUCCESS')) {
-                        echo "Docker Compose executed successfully."
-                    } else {
-                        error "Docker Compose command failed."
-                    }
+        stage('Building and push scraper image') {
+            steps {
+                script {
+                    sh 'docker build -t finance-app-scraper ./src/scraper'
+                    sh 'docker tag finance-app-scraper:latest public.ecr.aws/r9z0m9j3/finance-app-scraper:latest'
+                    sh 'docker push public.ecr.aws/r9z0m9j3/finance-app-scraper:latest'
                 }
             }
         }
     }
-
 }
