@@ -6,7 +6,7 @@ pipeline{
         stage('Checkout Git Repository') {
             steps {
                 // Use the 'git' step to clone the repository
-                git url: 'https://github.com/akirafeng2/everyday_rewards_finance_tool.git', branch: 'aws-release', credentialsId: 'git-email'
+                git url: 'https://github.com/akirafeng2/everyday_rewards_finance_tool.git', branch: 'develop', credentialsId: 'git-email'
             }
         }
 
