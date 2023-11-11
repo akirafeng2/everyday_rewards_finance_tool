@@ -6,7 +6,7 @@ pipeline{
         stage('Checkout Git Repository') {
             steps {
                 // Use the 'git' step to clone the repository
-                git url: 'https://github.com/akirafeng2/everyday_rewards_finance_tool.git', branch: 'main', credentialsId: 'git-email'
+                git url: 'https://github.com/akirafeng2/everyday_rewards_finance_tool.git', branch: 'aws-release', credentialsId: 'git-email'
             }
         }
 
@@ -22,7 +22,7 @@ pipeline{
             steps {
                 script {
                     sh 'docker build -t finance-app-backend ./src/backend'
-                    sh 'docker tag finance-app-backend:latest public.ecr.aws/r9z0m9j3/finance-app:latest'
+                    sh 'docker tag finance-app-backend:latest public.ecr.aws/r9z0m9j3/finance-app-backend:latest'
                     sh 'docker push public.ecr.aws/r9z0m9j3/finance-app-backend:latest'
                 }
             }
@@ -32,7 +32,7 @@ pipeline{
             steps {
                 script {
                     sh 'docker build -t finance-app-scraper ./src/scraper'
-                    sh 'docker tag finance-app-scraper:latest public.ecr.aws/r9z0m9j3/finance-app:latest'
+                    sh 'docker tag finance-app-scraper:latest public.ecr.aws/r9z0m9j3/finance-app-scraper:latest'
                     sh 'docker push public.ecr.aws/r9z0m9j3/finance-app-scraper:latest'
                 }
             }
