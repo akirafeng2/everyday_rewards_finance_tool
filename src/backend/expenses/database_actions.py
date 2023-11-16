@@ -155,6 +155,7 @@ class ExpensesDatabaseConnection(DatabaseConnection):
         """
         query = """
         SELECT
+            t.transaction_id AS transaction_id,
             i.item_name AS item_name,
             t.price AS price,
             p.user_name as payer,
@@ -195,7 +196,7 @@ class ExpensesDatabaseConnection(DatabaseConnection):
         column_names = [desc[0] for desc in self.cursor.description]
         df = pd.DataFrame(result, columns=column_names)
         df_wide = df.pivot(
-            index=['item_name', 'price', 'payer', 'date'],
+            index=['transaction_id', 'item_name', 'price', 'payer', 'date'],
             columns='user_weighting',
             values='weighting'
         )
@@ -205,6 +206,7 @@ class ExpensesDatabaseConnection(DatabaseConnection):
         # converting to dicts
         list_of_dict = []
         keys = [
+            'transaction_id',
             'item',
             'price',
             'payer',
