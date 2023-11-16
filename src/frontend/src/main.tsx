@@ -13,10 +13,12 @@ import './index.css'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <Sidebar />
-    <App />
-    {/* Router defines what routes are available and which page it then checks out from that  */}
+
+    {/* Router defines what routes are available and which page it then checks out from that .
+      Anything using these links should be placed inside BrowserRouter */}
     <BrowserRouter>
+      <Sidebar />
+      <App />
       <Routes>
         <Route path="/" element={<App />} />
         <Route path="/Dashboard" element={<Dashboard />} />

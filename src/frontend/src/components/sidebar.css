@@ -1,0 +1,19 @@
+.Sidebar {
+    /* Height is 100% of parent (body)*/
+    height: 100%;
+    width: 15%;
+    position: fixed;
+    /* stack order of elements, this is on top of 0 */
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: rgba(255, 255, 255, 0.87);/*#F5F5F5;*/
+    overflow-x: hidden;
+    padding-top: 20px;
+    border-right-color: #EAECF0;
+  }
+  
+
+.nav-menu-items{
+    list-style: none;
+}

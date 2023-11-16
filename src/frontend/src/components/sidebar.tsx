@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import {Link} from 'react-router-dom'
-
+import './sidebar.css'
 
 function Sidebar() {
   const [count, setCount] = useState(0)
