@@ -23,6 +23,7 @@
 .hcontainer {
   display: flex;
   justify-content: flex-start;
+  flex-direction: row;
   margin-top: 23px;
   margin-bottom: 50px;
 }
@@ -30,6 +31,7 @@
 .vcontainter{
   display: flex;
   justify-content: flex-start;
+  flex-direction: column;
 }
 
 #transaction_history_wrapper {
