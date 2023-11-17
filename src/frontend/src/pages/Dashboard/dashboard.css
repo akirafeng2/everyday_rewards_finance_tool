@@ -3,10 +3,13 @@
   border-radius: 28px;
   box-shadow: 0px 0px 1px #0000000a, 0px 2px 6px #0000000a,
     0px 16px 24px #0000000f;
-  height: 120px;
-  left: 0;
-  top: 0;
-  width: 291px;
+  
+  min-height: 120px;
+
+  min-width: 20ch;
+  max-width: 25ch;
+  width: 20vw;
+
   margin-right: 45px;
 }
 
@@ -15,8 +18,13 @@
   border-radius: 19px;
   box-shadow: 0px 0px 1px #0000000a, 0px 2px 6px #0000000a,
     0px 16px 24px #0000000f;
+  
   height: 392px;
-  width: 689px;
+  
+  min-width: 50ch;
+  max-width: 70ch;
+  width: 50vw;
+
   margin-top: 23px;
 }
 
