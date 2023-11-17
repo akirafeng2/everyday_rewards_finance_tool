@@ -1,7 +1,7 @@
 .Sidebar {
     /* Height is 100% of parent (body)*/
     height: 100%;
-    width: 15%;
+    width: 18%;
     position: fixed;
     /* stack order of elements, this is on top of 0 */
     z-index: 1;
@@ -15,10 +15,6 @@
 
     text-align: left;
     font-size: 150%;
-
-    border-right-style: solid;
-    border-right-color: #EAECF0;
-    border-right-width: thin;
   }
   
 
