@@ -1,11 +1,11 @@
-import "./App.css";
-import React,{ useState } from 'react'
-import Header from "./components/header";
-import SubHeader from "./components/subheader";
-import OwingTiles from "./pages/Dashboard/components/owing_tiles";
-import DashboardTable from "./pages/Dashboard/components/dashboard_table";
+import Header from "../../components/header";
+import SubHeader from "../../components/subheader";
+import OwingTiles from "./components/owing_tiles";
+import DashboardTable from "./components/dashboard_table";
+import './dashboard.css'
 
-function App() {
+
+function Dashboard() {
   return (
     <>
       <div id="main">
@@ -17,11 +17,14 @@ function App() {
           <OwingTiles></OwingTiles>
           <OwingTiles></OwingTiles>
         </div>
-        Transaction History
+        <div id="transaction_history_wrapper">
+          Transaction History
+        </div>
+
         <DashboardTable/>
       </div>
     </>
   );
 }
 
-export default App;
+export default Dashboard
