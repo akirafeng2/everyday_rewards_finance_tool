@@ -9,11 +9,42 @@
     left: 0;
     background-color: rgba(255, 255, 255, 0.87);/*#F5F5F5;*/
     overflow-x: hidden;
-    padding-top: 20px;
+    
+    padding-top: 10%;
+    padding-right: 2%;
+
+    text-align: left;
+    font-size: 150%;
+
+    border-right-style: solid;
     border-right-color: #EAECF0;
+    border-right-width: thin;
   }
   
 
 .nav-menu-items{
     list-style: none;
 }
+
+.navbar-toggle{
+    padding: 5% 10% 5% 10%;
+}
+
+.nav-menu-items li:hover{
+    background-color: #D9D9D9;
+    color: black;
+}
+.nav-menu-items li{
+    border-radius: 28px;
+    color:#BDBDBD;
+}
+
+.nav-menu-items  a{
+    font-weight: bold;
+}
+
+/* Inherits the colour of the parent class, i.e. the li*/
+.navbar-toggle a {
+    color: inherit;
+  }
+  

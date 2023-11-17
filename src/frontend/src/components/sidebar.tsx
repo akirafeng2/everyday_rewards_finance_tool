@@ -1,13 +1,14 @@
-import { useState } from 'react'
+import Logo from '../assets/logo.png'
 import {Link} from 'react-router-dom'
 import './sidebar.css'
 
+
 function Sidebar() {
-  const [count, setCount] = useState(0)
 
   return (
     <>
         <div className="Sidebar">
+            {/* <img src={Logo}/> */}
             <ul className='nav-menu-items'>
                 <li className='navbar-toggle'>
                     <Link to="/Dashboard">Dashboard</Link>
