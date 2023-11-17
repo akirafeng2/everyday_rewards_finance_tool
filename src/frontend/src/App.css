@@ -63,7 +63,7 @@ line-height: 48px;
 width: 533px;
 white-space: nowrap;
 margin-top: 7%;
-margin-bottom: 1%;
+margin-bottom: 19px;
 }
 
 .subheader {
@@ -73,7 +73,8 @@ margin-bottom: 1%;
   font-weight: 400;
   letter-spacing: -0.2px;
   line-height: 24px;
-  margin-bottom: 4%
+  margin-bottom: 59px;
+  margin-left: 5px;
 }
 
 
