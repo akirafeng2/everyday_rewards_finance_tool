@@ -44,7 +44,6 @@
   width: 100%;
   padding: 20px;
   margin: 0% 0% 0% 20%;
-  border-left: 1px solid #EAECF0;
   color: #000000;
   font-family: "DM Sans-Bold", Helvetica;
   font-size: 24px;
@@ -62,8 +61,8 @@ letter-spacing: -0.53px;
 line-height: 48px;
 width: 533px;
 white-space: nowrap;
-margin-top: 7%;
-margin-bottom: 1%;
+margin-top: 4%;
+margin-bottom: 19px;
 }
 
 .subheader {
@@ -73,7 +72,6 @@ margin-bottom: 1%;
   font-weight: 400;
   letter-spacing: -0.2px;
   line-height: 24px;
-  margin-bottom: 4%
+  margin-bottom: 59px;
+  margin-left: 5px;
 }
-
-
