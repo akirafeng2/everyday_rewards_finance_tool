@@ -11,6 +11,7 @@
   margin-right: 45px;
   padding-bottom: 26px;
   padding-top: 1.625rem;
+  padding-left: 1.5rem;
 }
 
 .dashboard_table_box {
@@ -40,6 +41,10 @@
   margin-bottom: 50px;
 }
 
+.hcontainer.owings{
+  margin-top:0;
+  margin-bottom:0;
+}
 .vcontainter {
   display: flex;
   justify-content: flex-start;
@@ -147,3 +152,14 @@ td.cost {
 
   padding-top: 0.625rem;
 }
+
+.profile_circle{
+  height: 60px;
+  width: 60px;
+  border-radius: 30px;
+
+  background: rgb(210, 247, 253);
+  margin-right: 1.125rem;
+}
+
+
