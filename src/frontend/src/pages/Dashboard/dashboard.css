@@ -127,6 +127,7 @@ td.cost {
   color: #3f3f3f;
   font-family: "Lato-Bold", Helvetica;
   font-weight: 700;
+
 }
 
 .item {
@@ -139,6 +140,7 @@ td.cost {
 
 .cost {
   width: 13%;
+  text-align: right;
 }
 
 .owing_text {
