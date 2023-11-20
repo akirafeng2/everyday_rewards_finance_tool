@@ -12,14 +12,14 @@ const DashboardTable = () => {
       t_id: "1",
       item: "WW Sliced Frozen Strawberries 500g",
       date: "06 Jul 2023",
-      payer: "Adam",
+      payer: "Alex",
       cost: "6.20",
     },
     {
       t_id: "2",
       item: "Tomato",
       date: "12 Jul 2023",
-      payer: "A Long Name",
+      payer: "Steph",
       cost: "1500.00",
     },
   ];
