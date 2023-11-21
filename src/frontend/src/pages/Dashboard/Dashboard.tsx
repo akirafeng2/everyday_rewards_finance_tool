@@ -11,7 +11,7 @@ function Dashboard() {
       <Header text="Welcome back, Alex 👋" />
       <SubHeader text="Here's your household expenses summary" />
       Household Balances
-      <OwingGroup/>
+      <OwingGroup />
       <div className="hcontainer">
         <div className="vcontainer">
           <div id="transaction_history_wrapper">Transaction History</div>
@@ -19,8 +19,12 @@ function Dashboard() {
         </div>
         <div className="vcontainer">
           <div id="upload_wrapper">Upload</div>
-          <UploadTile colour="red" />
-          <UploadTile colour="blue" />
+          <UploadTile colour="blue">Add one-off expense</UploadTile>
+          <UploadTile colour="red">
+            Upload everyday 
+            <br/>
+            rewards purchases
+          </UploadTile>
         </div>
       </div>
     </div>

@@ -16,7 +16,7 @@ const OwingTile = ({ name, owes }: OwingTileProp) => {
   }
   return (
     <div className="owings_box">
-      <div className="hcontainer owings">
+      <div className="hcontainer">
         <div className="profile_circle"></div>
         <div className="vcontainer">
           <div className="owing_text">{owing_statement}</div>

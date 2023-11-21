@@ -37,14 +37,21 @@
   display: flex;
   justify-content: flex-start;
   flex-direction: row;
+}
+
+.hcontainer.owings {
   margin-top: 23px;
   margin-bottom: 50px;
 }
 
-.hcontainer.owings{
-  margin-top:0;
-  margin-bottom:0;
+.hcontainer.upload_tile_text {
+  position: absolute;
+  bottom: 0;
+  align-items: center;
+  height: 3rem;
+  padding-bottom: 0.75rem;
 }
+
 .vcontainter {
   display: flex;
   justify-content: flex-start;
@@ -68,6 +75,17 @@
   width: 323px;
   margin-top: 13px;
   margin-left: 52px;
+
+  padding-left: 1rem;
+
+  position: relative;
+
+  color: #F9FAFF;
+  font-family: "DM Sans-Bold", Helvetica;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.26px;
+  line-height: 24px;
 }
 
 .upload_tile.red {
@@ -127,7 +145,6 @@ td.cost {
   color: #3f3f3f;
   font-family: "Lato-Bold", Helvetica;
   font-weight: 700;
-
 }
 
 .item {
@@ -155,7 +172,7 @@ td.cost {
   padding-top: 0.625rem;
 }
 
-.profile_circle{
+.profile_circle {
   height: 60px;
   width: 60px;
   border-radius: 30px;
@@ -164,4 +181,11 @@ td.cost {
   margin-right: 1.125rem;
 }
 
+.upload_tile_text {
+}
 
+img.chevron {
+  height: 19px;
+  width: 12px;
+  padding-left: 12px;
+}
