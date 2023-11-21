@@ -3,14 +3,15 @@
   border-radius: 28px;
   box-shadow: 0px 0px 1px #0000000a, 0px 2px 6px #0000000a,
     0px 16px 24px #0000000f;
-  
-  min-height: 120px;
 
   min-width: 20ch;
   max-width: 25ch;
   width: 20vw;
 
   margin-right: 45px;
+  padding-bottom: 26px;
+  padding-top: 1.625rem;
+  padding-left: 1.5rem;
 }
 
 .dashboard_table_box {
@@ -18,9 +19,9 @@
   border-radius: 19px;
   box-shadow: 0px 0px 1px #0000000a, 0px 2px 6px #0000000a,
     0px 16px 24px #0000000f;
-  
+
   height: 392px;
-  
+
   min-width: 50ch;
   max-width: 70ch;
   width: 48vw;
@@ -36,11 +37,22 @@
   display: flex;
   justify-content: flex-start;
   flex-direction: row;
+}
+
+.hcontainer.owings {
   margin-top: 23px;
   margin-bottom: 50px;
 }
 
-.vcontainter{
+.hcontainer.upload_tile_text {
+  position: absolute;
+  bottom: 0;
+  align-items: center;
+  height: 3rem;
+  padding-bottom: 0.75rem;
+}
+
+.vcontainter {
   display: flex;
   justify-content: flex-start;
   flex-direction: column;
@@ -55,22 +67,42 @@
   margin-bottom: 23px;
 }
 
-.upload_tile{
+.upload_tile {
   border-radius: 19px;
-  box-shadow: 0px 0px 1px #0000000a, 0px 2px 6px #0000000a, 0px 16px 24px #0000000f;
+  box-shadow: 0px 0px 1px #0000000a, 0px 2px 6px #0000000a,
+    0px 16px 24px #0000000f;
   height: 179px;
   width: 323px;
   margin-top: 13px;
   margin-left: 52px;
+
+  padding-left: 1rem;
+
+  position: relative;
+
+  color: #F9FAFF;
+  font-family: "DM Sans-Bold", Helvetica;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.26px;
+  line-height: 24px;
 }
 
 .upload_tile.red {
-  background: linear-gradient(180deg, rgb(255, 90, 0) 0%, rgb(255, 134.21, 69.06) 100%);  
+  background: linear-gradient(
+    180deg,
+    rgb(255, 90, 0) 0%,
+    rgb(255, 134.21, 69.06) 100%
+  );
 }
 
 .upload_tile.blue {
-  background: linear-gradient(180deg, rgb(0, 179, 255) 0%, rgb(112.06, 188.74, 240.12) 100%);
-  height: 200px;  
+  background: linear-gradient(
+    180deg,
+    rgb(0, 179, 255) 0%,
+    rgb(112.06, 188.74, 240.12) 100%
+  );
+  height: 200px;
 }
 
 table {
@@ -78,7 +110,7 @@ table {
 }
 
 th {
-  color: #91A6BC;
+  color: #91a6bc;
   font-family: "DM Sans-Regular", Helvetica;
   font-size: 1.2rem;
   font-weight: 400;
@@ -93,7 +125,7 @@ td {
   border-bottom: 1px solid #ddd;
 
   letter-spacing: 0;
-  line-height: normal;  
+  line-height: normal;
   font-size: 1rem;
   font-weight: 400;
 }
@@ -103,8 +135,9 @@ td.item {
   font-family: "DM Sans-Regular", Helvetica;
 }
 
-td.date, td.payer {
-  color: #C7C7C7;
+td.date,
+td.payer {
+  color: #c7c7c7;
   font-family: "DM Sans-Regular", Helvetica;
 }
 
@@ -124,5 +157,35 @@ td.cost {
 
 .cost {
   width: 13%;
+  text-align: right;
 }
 
+.owing_text {
+  color: #afafaf;
+  font-family: "DM Sans-Bold", Helvetica;
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: -0.009375rem;
+  line-height: 1.5rem;
+  white-space: nowrap;
+
+  padding-top: 0.625rem;
+}
+
+.profile_circle {
+  height: 60px;
+  width: 60px;
+  border-radius: 30px;
+
+  background: rgb(210, 247, 253);
+  margin-right: 1.125rem;
+}
+
+.upload_tile_text {
+}
+
+img.chevron {
+  height: 19px;
+  width: 12px;
+  padding-left: 12px;
+}
