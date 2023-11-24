@@ -7,6 +7,7 @@ import Dashboard from './pages/Dashboard/Dashboard.tsx'
 import Transactions from './pages/Transactions'
 import Weights from './pages/Weights'
 import Settings from './pages/Settings'
+import OneOff from './pages/OneOff'
 
 
 import './index.css'
@@ -23,6 +24,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         <Route path="/" element={<App />} />
         <Route path="/Dashboard" element={<Dashboard />} />
         <Route path="/Transactions" element={<Transactions />} />
+        <Route path="/OneOff" element={<OneOff />} />
         <Route path="/Weights" element={<Weights />} />
         <Route path="/Settings" element={<Settings />} />
       </Routes>

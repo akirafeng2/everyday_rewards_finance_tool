@@ -5,7 +5,7 @@ import Dashboard from "./dashboard-sidebar";
 import Transactions from "./transactions-sidebar";
 import Weights from "./weights-sidebar";
 import Settings from "./settings-sidebar";
-
+import OneOff from "./oneOff-sidebar";
 
 function Sidebar() {
     // Data to identify which page for each link
@@ -18,6 +18,9 @@ function Sidebar() {
     const routeDataWeights={
         current: 'Weights'
     }
+    const routeOneOff={
+        current: 'OneOff'
+    }
     const routeDataSettings={
         current: 'Settings'
     }
@@ -28,11 +31,13 @@ function Sidebar() {
 
     var dashboardClass='navbar-toggle'
     var transactionsClass='navbar-toggle'
+    var oneOffClass='navbar-toggle'
     var weightsClass='navbar-toggle'
     var settingsClass='navbar-toggle'
 
     var dashboardColor="currentColor"
     var transactionsColor="currentColor"
+    var oneOffColor="currentColor"
     var weightsColor="currentColor"
     var settingsColor="currentColor"
 
@@ -45,6 +50,9 @@ function Sidebar() {
     }else if(state=="Settings"){
         settingsClass='navbar-toggle-active'
         settingsColor='#101934'
+    }else if (state=="OneOff"){
+        oneOffClass='navbar-toggle-active'
+        oneOffColor='#101934'
     }else{ // NOTE: since beginning will be null, all else is dashboard as we often start at dashboard
         dashboardClass='navbar-toggle-active'
         dashboardColor='#101934'
@@ -67,6 +75,12 @@ function Sidebar() {
                         <Transactions fill={transactionsColor}/>
                     </span>
                     <Link to="/Transactions" state ={routeDataTransactions}>Transactions</Link>
+                </li>
+                <li className={oneOffClass}>
+                    <span className="sidebar-icon">
+                        <OneOff fill={oneOffColor}/>
+                    </span>
+                    <Link to="/OneOff" state ={routeOneOff}>One-off costs</Link>
                 </li>
                 <li className={weightsClass}>
                     <span className="sidebar-icon">
