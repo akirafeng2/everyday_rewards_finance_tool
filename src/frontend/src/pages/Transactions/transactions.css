@@ -1,0 +1,90 @@
+.tableFunctionalities{
+    margin-bottom: 1rem;
+
+}
+
+.tableData{
+    background-color: #ffffff;
+    border-radius: 0.625rem;
+    border: 1px solid var(--neutrals-neutral-200, #E2E8F1);
+    width: 64.9375rem;
+    height: 40.5625rem;
+
+
+}
+
+#transactionsTable{
+    width: inherit;
+    /* Ensures no gaps between tables form border */
+    border-collapse: collapse;
+
+}
+
+#transactionsTable tr{
+    background-color: #E2E8F1;
+    color: #91A6BC;
+    border-radius: 0.625rem 0.625rem 0rem 0rem;
+    height: 2.6875rem;
+    font-size: 1rem;
+    font-weight: 500;
+
+
+}
+
+
+
+#transactionsTable tbody tr{
+    border-bottom: 0.5px solid #ECECEC;
+    height: 3.5rem;
+
+
+
+}
+
+#transactionsTable td{
+    background-color: #ffffff;
+    font-size: 0.825rem;
+    font-weight: 500;
+    text-align: center;
+
+
+}
+
+.percentageSplit {
+    border-left: 0.5px solid #ECECEC;;
+}
+
+
+.tableFooter {
+    background-color: #f1f1f1;
+    padding: 8px 0px;
+    width: 100%;
+    font-weight: 500;
+    text-align: left;
+    font-size: 16px;
+    color: #2c3e50;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .button {
+    border: none;
+    padding: 7px 14px;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-right: 4px;
+    margin-left: 4px;
+  }
+  
+  .activeButton {
+    color: white;
+    background: #185adb;
+  }
+  
+  .inactiveButton {
+    color: #2c3e50;
+    background: #f9f9f9;
+  }

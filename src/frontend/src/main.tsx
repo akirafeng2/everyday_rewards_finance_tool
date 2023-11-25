@@ -4,7 +4,7 @@ import App from './App.tsx'
 import Sidebar from './components/sidebar.tsx'
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Dashboard from './pages/Dashboard/Dashboard.tsx'
-import Transactions from './pages/Transactions'
+import Transactions from './pages/Transactions/Transactions'
 import Weights from './pages/Weights'
 import Settings from './pages/Settings'
 import OneOff from './pages/OneOff'

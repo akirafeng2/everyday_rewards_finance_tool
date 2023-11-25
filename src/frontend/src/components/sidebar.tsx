@@ -7,6 +7,7 @@ import Weights from "./weights-sidebar";
 import Settings from "./settings-sidebar";
 import OneOff from "./oneOff-sidebar";
 
+
 function Sidebar() {
     // Data to identify which page for each link
     const routeDataDashboard={
@@ -25,8 +26,11 @@ function Sidebar() {
         current: 'Settings'
     }
 
+    var state ="Dashboard"
     const location = useLocation();
-    const state = location.state['current'];
+    if (location.state!=null){
+        state = location.state['current'];
+    }
     console.log(state);
 
     var dashboardClass='navbar-toggle'
