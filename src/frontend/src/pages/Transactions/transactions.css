@@ -17,6 +17,7 @@
     width: inherit;
     /* Ensures no gaps between tables form border */
     border-collapse: collapse;
+    border-radius: 0.625rem;
 
 }
 
@@ -42,10 +43,12 @@
 }
 
 #transactionsTable td{
+    
     background-color: #ffffff;
     font-size: 0.825rem;
     font-weight: 500;
     text-align: center;
+    color: #404040;
 
 
 }
@@ -56,35 +59,25 @@
 
 
 .tableFooter {
-    background-color: #f1f1f1;
-    padding: 8px 0px;
-    width: 100%;
-    font-weight: 500;
-    text-align: left;
-    font-size: 16px;
-    color: #2c3e50;
+    font-size: 1rem;
     border-bottom-left-radius: 15px;
-    border-bottom-right-radius: 15px;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: right;
+    width: 64.9375rem;
   }
+
+  .tableFooter button{
+    border-radius: 0.1875rem;
+    background:  #ffffff;
+    margin: 0.94rem 0.25rem;
+  }
+ 
   
-  .button {
+ .tableFooter .activeButton {
     border: none;
-    padding: 7px 14px;
-    border-radius: 10px;
-    cursor: pointer;
-    margin-right: 4px;
-    margin-left: 4px;
+    border-radius: 0.1875rem;
+    background:  #F1F6FE;
+
   }
   
-  .activeButton {
-    color: white;
-    background: #185adb;
-  }
-  
-  .inactiveButton {
-    color: #2c3e50;
-    background: #f9f9f9;
-  }

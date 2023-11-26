@@ -56,30 +56,32 @@ function Transactions() {
     {
       Id: '1',
       Date:'13 Dec 2020',
-      Name: 'Butter', 
+      Name: 'MORE Butter', 
       Cost: '$4.00',
       Paid: 'Alex'
     },
     {
       Id:'2',
       Date:'13 Dec 2020',
-      Name: 'Milk',
+      Name: 'MORE Milk',
       Cost: '$2.00',
       Paid: 'Adam'
     },
     {
       Id: '3',
       Date:'13 Dec 2020',
-      Name: 'Egg',
+      Name: 'MORE Egg',
       Cost: '$6.20',
       Paid: 'Tyler' 
     }
   ]
 
     const rowsPerPage=2
+    const lastPage = Math.ceil(tableDataManual.length/rowsPerPage)
     const [tableRange, setTableRange] = useState([]);
     const [slice, setSlice] = useState([]);
     const [page, setPage] = useState(1);
+
 
 
     useEffect(() => { 
@@ -120,7 +122,7 @@ function Transactions() {
 
         <div className='tableFunctionalities'>
           June 2023  {/* Need to change so dyamic for month */}
-        </div>
+        </div >
 
         <div className='tableData'>
             <table id="transactionsTable">
@@ -144,7 +146,7 @@ function Transactions() {
               </tbody>
             </table>
         </div>
-        <TableFooter range={tableRange} slice={slice} setPage={setPage} page={page} />
+        <TableFooter lastPage={lastPage} range={tableRange} slice={slice} setPage={setPage} page={page} />
 
       </div>
     </>
