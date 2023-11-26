@@ -181,11 +181,24 @@ td.cost {
   margin-right: 1.125rem;
 }
 
-.upload_tile_text {
-}
-
 img.chevron {
   height: 19px;
   width: 12px;
   padding-left: 12px;
 }
+
+img.clouds {
+  width: 48%;
+  margin-top: 2.7%;
+  opacity: 0.08;
+}
+
+img.er_logo {
+  width: 13%;
+  margin-top: 2.7%;
+  opacity: 0.08;
+  padding-top: 6.4%;
+  padding-bottom: 6.4%;
+  padding-left: 22.6%
+}
+
