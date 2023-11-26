@@ -1,8 +1,48 @@
 .tableFunctionalities{
-    margin-bottom: 1rem;
-
+    margin-bottom: 1.5rem;
+    width: 65rem;
+    align-items: center;
 }
 
+.functionsRight{
+    /* margin-left: 25rem; */
+    list-style: none;
+    float: right;
+
+}
+.tableFunctionalities button{
+    display: inline;
+    margin: 0rem 0.5rem;
+    color: #3C4F66;
+    font-size: 0.875rem;
+    font-style: normal;
+    font-weight: 500;
+}
+
+.tableFunctionalities img{
+    width: 0.7775rem;
+    height: 0.77788rem;
+    margin:  0rem 0.3rem;
+}
+
+.tableChange{
+    background-color: white;
+    padding: 0;
+    border-radius: 0.3125rem;
+}
+
+.exportButton{
+    background-color: white;
+    border-color: #E2E8F1;
+}
+
+/* NOTE: if the classs is referred to in that type, use this  */
+button.uploadRewards{
+    border-radius: 0.3125rem;
+    background: #FF5E06;
+    color: white;
+    font-weight: 700;
+}
 .tableData{
     background-color: #ffffff;
     border-radius: 0.625rem;
@@ -80,4 +120,16 @@
     background:  #F1F6FE;
 
   }
+
+  .transactionsSort{
+    width: 0.5625rem;
+    height: 0.28125rem;
+    flex-shrink: 0;
+    margin-left: 0.41rem;
+  }
   
+
+  #transactionDateDiv{
+    align-items: center;
+    display: inline-flex;
+  }

@@ -38,18 +38,20 @@
 .read-the-docs {
   color: #888;
 }
-
-#main {
+/* window.innerHeight */
+.main {
   height: 100%;
-  width: 100%;
+  width: 72.88rem; 
   padding: 20px;
-  margin: 0% 0% 0% 20%;
+  padding: 0 0 0 17.12rem;
   color: #000000;
   font-family: "DM Sans-Bold", Helvetica;
   font-size: 24px;
   font-weight: 700;
   letter-spacing: -0.26px;
   line-height: 24px;
+  top: 0;
+  left: 0;
 }
 
 .header {

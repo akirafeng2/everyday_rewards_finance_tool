@@ -5,7 +5,11 @@ import TransactionRow from "./transactionRow";
 
 // import useTable from "./transactionHooks";
 import TableFooter from "./tableFooter";
-
+import Delete from '../../assets/bin.svg';
+import Filter from '../../assets/filter.svg';
+import Export from '../../assets/export.svg';
+import Down from '../../assets/down.svg'
+import Up from '../../assets/up.svg'
 import { useState, useEffect } from "react";
 
 
@@ -29,82 +33,96 @@ const sliceData=(data, page, rowsPerPage)=>{
 
 }
 
+// Reverse the data list 
+const reverse=(data)=>{
+  return data.reverse();
+}
+
 function Transactions() {
 
   const tableDataManual=[
     {
       Id: '1',
-      Date:'13 Dec 2020',
+      Date:'10 Dec 2020',
       Name: 'Butter', 
       Cost: '$4.00',
       Paid: 'Alex'
     },
     {
       Id:'2',
-      Date:'13 Dec 2020',
+      Date:'10 Dec 2020',
       Name: 'Milk',
       Cost: '$2.00',
       Paid: 'Adam'
     },
     {
       Id: '3',
-      Date:'13 Dec 2020',
+      Date:'10 Dec 2020',
       Name: 'Egg',
       Cost: '$6.20',
       Paid: 'Tyler' 
     },
     {
-      Id: '1',
+      Id: '4',
       Date:'13 Dec 2020',
       Name: 'MORE Butter', 
       Cost: '$4.00',
       Paid: 'Alex'
     },
-    {
-      Id:'2',
+    { 
+      Id:'5',
       Date:'13 Dec 2020',
       Name: 'MORE Milk',
       Cost: '$2.00',
       Paid: 'Adam'
     },
     {
-      Id: '3',
+      Id: '6',
       Date:'13 Dec 2020',
       Name: 'MORE Egg',
       Cost: '$6.20',
       Paid: 'Tyler' 
     }
   ]
-
+    const [sort, setSort] = useState('asc');
+    const [data, setData] = useState(tableDataManual)
     const rowsPerPage=2
-    const lastPage = Math.ceil(tableDataManual.length/rowsPerPage)
+    const lastPage = Math.ceil(data.length/rowsPerPage)
     const [tableRange, setTableRange] = useState([]);
     const [slice, setSlice] = useState([]);
     const [page, setPage] = useState(1);
-
+    
 
 
     useEffect(() => { 
       console.log('effectused')
-      const range = calculateRange(tableDataManual, rowsPerPage);
+      const range = calculateRange(data, rowsPerPage);
       // ... is spread operator to convert array into set of arguments e.g. in a list
       setTableRange([...range]);
       console.log(range)
  
-      const slice = sliceData(tableDataManual, page, rowsPerPage);
+      const slice = sliceData(data, page, rowsPerPage);
       setSlice([...slice]);
       console.log(slice)
 
-      // ...
+      // should trigger if page
     }, [ page]);
 
- 
+    useEffect(() => {
+      console.log('entered reversal')
+      setData(reverse(data))
 
-    console.log(page)
-    // const { slice, range } = useTable(tableDataManual, page, 2);
-    console.log(slice)
-    console.log(tableRange)
-    console.log('hi')
+      const range = calculateRange(data, rowsPerPage);
+      // ... is spread operator to convert array into set of arguments e.g. in a list
+      setTableRange([...range]);
+      console.log(range)
+ 
+      const slice = sliceData(data, page, rowsPerPage);
+      setSlice([...slice]);
+    }, [sort])
+  
+    
+
 
     // Creates a list of Transaction rows. The Map maps the items 
     //form the entries in tableDataManuel to the kth item in transactionsList?
@@ -113,15 +131,42 @@ function Transactions() {
     })
 
 
+    var imgSort = (<img className='transactionsSort'src={Down} onClick={() => setSort(sort==='asc'? 'desc': 'asc')}></img>)
+    if (sort=='desc'){
+      imgSort=<img className='transactionsSort'src={Up} onClick={() => setSort(sort==='asc'? 'desc': 'asc')}></img>
+
+    }
+
+
+
+
  
   return (
     <>
-      <div id="main">
+      <div className="main">
         <Header text="Imported Transaction History" />
         <SubHeader text = "start date dd/mm/yyyy" />
 
         <div className='tableFunctionalities'>
           June 2023  {/* Need to change so dyamic for month */}
+   
+          <div className="functionsRight">
+            <button className='tableChange'>
+              <img src={Delete}></img>
+              Delete
+              </button>
+            <button className='tableChange'>
+              <img src={Filter}></img>
+              Filter
+              </button>
+              <button className='exportButton'>
+              <img src={Export}></img>
+              Export
+              </button>
+              <button className='uploadRewards'>
+              + Upload Everyday Rewards
+              </button>
+          </div>
         </div >
 
         <div className='tableData'>
@@ -129,7 +174,12 @@ function Transactions() {
               <thead>
                 <tr id="transactionsTableHeader">
                       <th>Checkbox</th>
-                      <th>Transaction Date</th>
+                      <th>
+                        <div id='transactionDateDiv'>
+                        Transaction Date
+                        {imgSort}
+                        </div>
+                      </th>
                       <th>Item Name</th>
 
                       <th>Cost</th>
