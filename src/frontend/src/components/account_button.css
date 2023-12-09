@@ -1,0 +1,9 @@
+.account_button {
+  border: 2px solid;
+  border-color: rgba(107, 145, 205, 0.976);
+  border-radius: 50px 50px 0px 50px;
+  height: 84px;
+  float: right;
+  top: 0;
+  width: 254px;
+}
