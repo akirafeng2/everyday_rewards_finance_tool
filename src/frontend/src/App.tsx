@@ -1,7 +1,7 @@
 import "./App.css";
 import Header from "./components/header";
 import SubHeader from "./components/subheader";
-import OwingTiles from "./pages/Dashboard/components/owing_tiles";
+import OwingTiles from "./pages/Dashboard/components/owing_group";
 import DashboardTable from "./pages/Dashboard/components/dashboard_table";
 
 function App() {
