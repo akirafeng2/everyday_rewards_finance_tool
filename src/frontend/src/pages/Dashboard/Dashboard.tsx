@@ -7,17 +7,6 @@ import "./dashboard.css";
 
 function Dashboard() {
   return (
-<<<<<<< HEAD
-    <>
-      <div className="main">
-        <Header text="Welcome back, Alex 👋" />
-        <SubHeader text = "Here's your household expenses summary" />
-        Household Balances
-        <div className="container">
-          <OwingTiles></OwingTiles>
-          <OwingTiles></OwingTiles>
-          <OwingTiles></OwingTiles>
-=======
     <div>
       <Header text="Welcome back, Alex 👋" />
       <SubHeader text="Here's your household expenses summary" />
@@ -27,7 +16,6 @@ function Dashboard() {
         <div className="vcontainer">
           <div id="transaction_history_wrapper">Transaction History</div>
           <DashboardTable />
->>>>>>> 4b49e7290f232ae0a920625767231923ff6ea571
         </div>
         <div className="vcontainer">
           <div id="upload_wrapper">Upload</div>
