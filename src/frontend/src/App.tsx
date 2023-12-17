@@ -1,6 +1,6 @@
 import "./App.css";
-import Header from "./components/header";
-import SubHeader from "./components/subheader";
+import Header from "./components/headers/header";
+import SubHeader from "./components/headers/subheader";
 import OwingTiles from "./pages/Dashboard/components/owing_group";
 import DashboardTable from "./pages/Dashboard/components/dashboard_table";
 

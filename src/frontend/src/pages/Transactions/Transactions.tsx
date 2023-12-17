@@ -1,5 +1,5 @@
-import Header from "../../components/header";
-import SubHeader from "../../components/subheader";
+import Header from "../../components/headers/header";
+import SubHeader from "../../components/headers/subheader";
 import './transactions.css'
 import TransactionRow from "./transactionRow";
 
@@ -143,7 +143,7 @@ function Transactions() {
  
   return (
     <>
-      <div className="main">
+      <div>
         <Header text="Imported Transaction History" />
         <SubHeader text = "start date dd/mm/yyyy" />
 

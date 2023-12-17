@@ -1,5 +1,5 @@
-import Header from "../../components/header";
-import SubHeader from "../../components/subheader";
+import Header from "../../components/headers/header";
+import SubHeader from "../../components/headers/subheader";
 import OwingGroup from "./components/owing_group";
 import DashboardTable from "./components/dashboard_table";
 import UploadTile from "./components/upload_tiles";
