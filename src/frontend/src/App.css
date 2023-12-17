@@ -1,14 +1,8 @@
-.content_wrapper {
-  display: flex;
-  justify-content: center;
-  max-width: 1960px;
-}
-
 .main {
   height: 100%;
   max-width: 1536px;
   padding: 20px;
-  margin: 0% 0% 0% 20%;
+  margin: 0% 0% 0% 18.5rem;
   color: #000000;
   font-family: "DM Sans-Bold", Helvetica;
   font-size: 24px;

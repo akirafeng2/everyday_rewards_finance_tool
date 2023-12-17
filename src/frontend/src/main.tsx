@@ -17,19 +17,17 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     {/* Router defines what routes are available and which page it then checks out from that .
       Anything using these links should be placed inside BrowserRouter */}
     <BrowserRouter>
-      <div className="content_wrapper">
-        <Sidebar />
-        <div className="main">
-          <AccountButton />
-          <Routes>
-            <Route path="/" element={<App />} />
-            <Route path="/Dashboard" element={<Dashboard />} />
-            <Route path="/Transactions" element={<Transactions />} />
-            <Route path="/OneOff" element={<OneOff />} />
-            <Route path="/Weights" element={<Weights />} />
-            <Route path="/Settings" element={<Settings />} />
-          </Routes>
-        </div>
+      <Sidebar />
+      <div className="main">
+        <AccountButton />
+        <Routes>
+          <Route path="/" element={<App />} />
+          <Route path="/Dashboard" element={<Dashboard />} />
+          <Route path="/Transactions" element={<Transactions />} />
+          <Route path="/OneOff" element={<OneOff />} />
+          <Route path="/Weights" element={<Weights />} />
+          <Route path="/Settings" element={<Settings />} />
+        </Routes>
       </div>
     </BrowserRouter>
   </React.StrictMode>
