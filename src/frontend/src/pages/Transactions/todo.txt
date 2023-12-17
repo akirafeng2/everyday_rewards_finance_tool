@@ -1,0 +1,9 @@
+# TODO
+- update household people from manual to retrived in api
+- update weightings
+- check for table pagination max
+- implement filter, export, delete and add prooduct
+- fix sizing
+- retrive month header
+- transaction date sort: stop refresh bug triggering it
+- font colors

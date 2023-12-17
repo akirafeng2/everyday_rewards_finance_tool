@@ -1,0 +1,135 @@
+.tableFunctionalities{
+    margin-bottom: 1.5rem;
+    width: 65rem;
+    align-items: center;
+}
+
+.functionsRight{
+    /* margin-left: 25rem; */
+    list-style: none;
+    float: right;
+
+}
+.tableFunctionalities button{
+    display: inline;
+    margin: 0rem 0.5rem;
+    color: #3C4F66;
+    font-size: 0.875rem;
+    font-style: normal;
+    font-weight: 500;
+}
+
+.tableFunctionalities img{
+    width: 0.7775rem;
+    height: 0.77788rem;
+    margin:  0rem 0.3rem;
+}
+
+.tableChange{
+    background-color: white;
+    padding: 0;
+    border-radius: 0.3125rem;
+}
+
+.exportButton{
+    background-color: white;
+    border-color: #E2E8F1;
+}
+
+/* NOTE: if the classs is referred to in that type, use this  */
+button.uploadRewards{
+    border-radius: 0.3125rem;
+    background: #FF5E06;
+    color: white;
+    font-weight: 700;
+}
+.tableData{
+    background-color: #ffffff;
+    border-radius: 0.625rem;
+    border: 1px solid var(--neutrals-neutral-200, #E2E8F1);
+    width: 64.9375rem;
+    height: 40.5625rem;
+
+
+}
+
+#transactionsTable{
+    width: inherit;
+    /* Ensures no gaps between tables form border */
+    border-collapse: collapse;
+    border-radius: 0.625rem;
+
+}
+
+#transactionsTable tr{
+    background-color: #E2E8F1;
+    color: #91A6BC;
+    border-radius: 0.625rem 0.625rem 0rem 0rem;
+    height: 2.6875rem;
+    font-size: 1rem;
+    font-weight: 500;
+
+
+}
+
+
+
+#transactionsTable tbody tr{
+    border-bottom: 0.5px solid #ECECEC;
+    height: 3.5rem;
+
+
+
+}
+
+#transactionsTable td{
+    
+    background-color: #ffffff;
+    font-size: 0.825rem;
+    font-weight: 500;
+    text-align: center;
+    color: #404040;
+
+
+}
+
+.percentageSplit {
+    border-left: 0.5px solid #ECECEC;;
+}
+
+
+.tableFooter {
+    font-size: 1rem;
+    border-bottom-left-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: right;
+    width: 64.9375rem;
+  }
+
+  .tableFooter button{
+    border-radius: 0.1875rem;
+    background:  #ffffff;
+    margin: 0.94rem 0.25rem;
+  }
+ 
+  
+ .tableFooter .activeButton {
+    border: none;
+    border-radius: 0.1875rem;
+    background:  #F1F6FE;
+
+  }
+
+  .transactionsSort{
+    width: 0.5625rem;
+    height: 0.28125rem;
+    flex-shrink: 0;
+    margin-left: 0.41rem;
+  }
+  
+
+  #transactionDateDiv{
+    align-items: center;
+    display: inline-flex;
+  }

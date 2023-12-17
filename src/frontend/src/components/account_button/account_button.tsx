@@ -1,5 +1,5 @@
 import "./account_button.css";
-import chevron from "../assets/downChevron.png"
+import chevron from "./assets/downChevron.png"
 
 const AccountButton = () => {
   return (
