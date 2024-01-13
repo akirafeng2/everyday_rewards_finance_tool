@@ -1,34 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
-import Sidebar from "./components/sidebar/sidebar.tsx";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Dashboard from "./pages/Dashboard/Dashboard.tsx";
-import Transactions from "./pages/Transactions/Transactions";
-import Weights from "./pages/Weights";
-import Settings from "./pages/Settings";
-import AccountButton from "./components/account_button/account_button.tsx";
-import OneOff from "./pages/OneOff";
-
+import { BrowserRouter} from "react-router-dom";
 import "./index.css";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    {/* Router defines what routes are available and which page it then checks out from that .
-      Anything using these links should be placed inside BrowserRouter */}
     <BrowserRouter>
-      <Sidebar />
-      <div className="main">
-        <AccountButton />
-        <Routes>
-          <Route path="/" element={<App />} />
-          <Route path="/Dashboard" element={<Dashboard />} />
-          <Route path="/Transactions" element={<Transactions />} />
-          <Route path="/OneOff" element={<OneOff />} />
-          <Route path="/Weights" element={<Weights />} />
-          <Route path="/Settings" element={<Settings />} />
-        </Routes>
-      </div>
+      <App />
     </BrowserRouter>
   </React.StrictMode>
 );

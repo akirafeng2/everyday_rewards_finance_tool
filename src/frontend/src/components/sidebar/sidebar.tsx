@@ -67,7 +67,7 @@ function Sidebar() {
       <div className="Sidebar">
         {/* <img src={Logo}/> */}
         <ul className="nav-menu-items">
-          <Link to="/Dashboard" state={routeDataDashboard}>
+          <Link to="/Page/Dashboard" state={routeDataDashboard}>
             <li className={dashboardClass}>
               <span className="sidebar-icon">
                 <Dashboard fill={dashboardColor} />
@@ -76,7 +76,7 @@ function Sidebar() {
             </li>
           </Link>
 
-          <Link to="/Transactions" state={routeDataTransactions}>
+          <Link to="/Page/Transactions" state={routeDataTransactions}>
             <li className={transactionsClass}>
               <span className="sidebar-icon">
                 <Transactions fill={transactionsColor} />
@@ -85,7 +85,7 @@ function Sidebar() {
             </li>
           </Link>
 
-          <Link to="/OneOff" state={routeOneOff}>
+          <Link to="/Page/OneOff" state={routeOneOff}>
             <li className={oneOffClass}>
               <span className="sidebar-icon">
                 <OneOff fill={oneOffColor} />
@@ -94,7 +94,7 @@ function Sidebar() {
             </li>
           </Link>
 
-          <Link to="/Weights" state={routeDataWeights}>
+          <Link to="/Page/Weights" state={routeDataWeights}>
             <li className={weightsClass}>
               <span className="sidebar-icon">
                 <Weights fill={weightsColor} />
@@ -103,7 +103,7 @@ function Sidebar() {
             </li>
           </Link>
 
-          <Link to="/Settings" state={routeDataSettings}>
+          <Link to="/Page/Settings" state={routeDataSettings}>
             <li className={settingsClass}>
               <span className="sidebar-icon">
                 <Settings fill={settingsColor} />

@@ -7,7 +7,7 @@ import "./dashboard.css";
 
 function Dashboard() {
   return (
-    <div>
+    <div className="main">
       <Header text="Welcome back, Alex 👋" />
       <SubHeader text="Here's your household expenses summary" />
       Household Balances

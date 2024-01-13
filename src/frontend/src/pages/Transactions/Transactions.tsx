@@ -143,7 +143,7 @@ function Transactions() {
  
   return (
     <>
-      <div>
+      <div className="main">
         <Header text="Imported Transaction History" />
         <SubHeader text = "start date dd/mm/yyyy" />
 
