@@ -5,8 +5,12 @@ import Transactions from "./pages/Transactions/Transactions";
 import Weights from "./pages/Weights";
 import Settings from "./pages/Settings";
 import OneOff from "./pages/OneOff";
-import Login from "./pages/Authentication/Login.tsx";
 import PageLayout from "./pages/PageLayout.tsx";
+
+import Login from "./pages/Authentication/Login";
+import Signup from "./pages/Authentication/signup.tsx";
+import HouseholdSetup from "./pages/Authentication/HouseholdSetup.tsx";
+
 
 // function App() {
 //   return (
@@ -33,6 +37,9 @@ function App() {
 
         <Routes>
           <Route path="/Login" element={<Login/>} />
+          <Route path="/Signup" element={<Signup/>} />
+          <Route path="/Household" element={<HouseholdSetup />} />
+
           <Route path="/Page" element={<PageLayout />}>
             <Route path="Dashboard" element={<Dashboard />} />
             <Route path="Transactions" element={<Transactions />} />
