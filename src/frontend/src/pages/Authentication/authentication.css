@@ -117,13 +117,29 @@ div.whiteBox {
   line-height: 24px;
 }
 
-.auth .householdOptions{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: row;
+.auth .householdOptions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
 }
 
-.auth .emoji{
-    font-size: 96px;
+.auth .emoji {
+  font-size: 96px;
+}
+
+.householdOptions .householdButton {
+  background: #1a7bbd;
+  border-radius: 10px;
+
+  color: white;
+  font-size: 16px;
+  font-family: "DM Sans-Regular", Helvetica;
+  font-weight: 400;
+  line-height: 24px;
+  word-wrap: "break-word";
+  text-align: center;
+
+  width: 129px;
+  padding:8px 0px; 
 }

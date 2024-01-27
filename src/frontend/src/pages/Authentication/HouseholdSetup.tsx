@@ -8,10 +8,12 @@ const HouseholdSetup = () => {
       <div className="title">Set Up Your Household</div>
       <div className="householdOptions">
         <div className="whiteBox">
-          <Emoji label="tools" symbol="🛠️"/>
+          <Emoji label="tools" symbol="🛠️" />
+          <Link to="/household/create" className="householdButton">Create a <br/> Household </Link>
         </div>
         <div className="whiteBox">
-        <Emoji label="house" symbol="🏠"/>
+          <Emoji label="house" symbol="🏠" />
+          <Link to="/household/join" className="householdButton">Join a <br/> Household </Link>
         </div>
       </div>
     </main>
