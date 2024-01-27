@@ -8,7 +8,7 @@ import OneOff from "./pages/OneOff";
 import PageLayout from "./pages/PageLayout.tsx";
 
 import Login from "./pages/Authentication/Login";
-import Signup from "./pages/Authentication/signup.tsx";
+import Signup from "./pages/Authentication/Signup.tsx";
 import HouseholdSetup from "./pages/Authentication/HouseholdSetup.tsx";
 
 
