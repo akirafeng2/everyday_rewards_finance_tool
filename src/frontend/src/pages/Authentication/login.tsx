@@ -30,6 +30,7 @@ function Login() {
         Cookies.set('household_id', res.data['household_id']);
         Cookies.set('user_name', res.data['user_name']);
         Cookies.set('household_name', res.data['household_name']);
+        Cookies.set('household_members', JSON.stringify(res.data['household_profile_list']));
         navigate('/page/dashboard')
       })
       .catch((err: AxiosError) => {

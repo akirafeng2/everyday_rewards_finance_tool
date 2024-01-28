@@ -17,7 +17,7 @@ def get_user_info(DB_CONN: UserDatabaseConnection, login_email: str, password: s
 
 
 @db_conn(UserDatabaseConnection)
-def get_household_profiles(DB_CONN: UserDatabaseConnection):
+def get_household_profiles(DB_CONN: UserDatabaseConnection, user_id: str):
     with DB_CONN:
-        result = DB_CONN.get_household_names()
+        result = DB_CONN.get_household_names(user_id)
     return result

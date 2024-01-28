@@ -10,7 +10,7 @@ def db_conn(db_class):
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
-            instance = db_class(CONNECTION_DETAILS, ENV, session.get('user_id'))
+            instance = db_class(CONNECTION_DETAILS, ENV)
             return func(instance, *args, **kwargs)
         return wrapper
     return decorator

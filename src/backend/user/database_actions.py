@@ -31,7 +31,7 @@ class UserDatabaseConnection(DatabaseConnection):
         """
         self.cursor.execute(insert_statement, (user_name,))
 
-    def get_household_names(self) -> list:
+    def get_household_names(self, user_id: str) -> dict:
         """Returns the list names within a household"""
         select_statement = """
         SELECT profile_id, user_name
@@ -42,7 +42,7 @@ class UserDatabaseConnection(DatabaseConnection):
             WHERE profile_id = %s)
         ORDER BY profile_id
         """
-        self.cursor.execute(select_statement, (self.profile_id,))
+        self.cursor.execute(select_statement, (user_id,))
         result = self.cursor.fetchall()
-        household_names = [(row[0], row[1]) for row in result]
+        household_names = {row[0]: row[1] for row in result}
         return household_names

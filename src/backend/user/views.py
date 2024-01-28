@@ -29,7 +29,8 @@ def login_user_route():
         login_password = request.json.get('password')
         login_info = login.get_user_info(login_email, login_password)
         if login_info is not None:
-            login_info['household_profile_list'] = login.get_household_profiles()
+            login_info['household_profile_list'] = login.get_household_profiles(login_info['profile_id'])
+            print(login_info)
             return jsonify(login_info)
         else:
             return jsonify({'error': 'Invalid email/password combination'}), 401
