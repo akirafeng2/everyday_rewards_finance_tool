@@ -2,6 +2,7 @@ import "./authentication.css";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios, { AxiosError, AxiosResponse } from "axios";
+import Cookies from 'js-cookie';
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -25,6 +26,10 @@ function Login() {
       })
       .then((res: AxiosResponse) => {
         console.log(res);
+        Cookies.set('user_id', res.data['profile_id']);
+        Cookies.set('household_id', res.data['household_id']);
+        Cookies.set('user_name', res.data['user_name']);
+        Cookies.set('household_name', res.data['household_name']);
         navigate('/page/dashboard')
       })
       .catch((err: AxiosError) => {

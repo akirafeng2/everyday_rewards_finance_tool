@@ -3,9 +3,11 @@ import SubHeader from "../../components/headers/subheader";
 import OwingGroup from "./components/owing_group";
 import DashboardTable from "./components/dashboard_table";
 import UploadTile from "./components/upload_tiles";
+import Cookies from "js-cookie";
 import "./dashboard.css";
 
 function Dashboard() {
+  console.log(Cookies.get())
   return (
     <div className="main">
       <Header text="Welcome back, Alex 👋" />
