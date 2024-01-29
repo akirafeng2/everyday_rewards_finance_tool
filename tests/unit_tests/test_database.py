@@ -1,21 +1,12 @@
 import pytest
-import psycopg2
 from unittest.mock import patch
 from ...src.backend.database import DatabaseConnection
-from .common_fixtures import username, household, env
-
-test_connection_details = {
-    "database": "test_db",
-    "user": "test_user",
-    "password": "test_password",
-    "host": "localhost",
-    "port": "5432"
-}
+from .common_fixtures import username, household, env, test_connection
 
 
 @pytest.fixture
-def database_connection(env):
-    return DatabaseConnection(test_connection_details, env)
+def database_connection(test_connection, env):
+    return DatabaseConnection(test_connection, env)
 
 
 class TestDatabaseConnection:

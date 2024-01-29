@@ -11,11 +11,6 @@ blueprint = Blueprint('user', __name__, template_folder='./templates')
 env = SETTINGS.ENV
 
 
-# @blueprint.route('/login', methods=['GET',])
-# def show_login_page_route():
-#     return render_template("login.html")
-
-
 @blueprint.route('/login', methods=['POST', 'OPTIONS'])
 def login_user_route():
     if request.method == 'OPTIONS':
@@ -35,16 +30,7 @@ def login_user_route():
         else:
             return jsonify({'error': 'Invalid email/password combination'}), 401
 
-        # if login_info is not None:
-        #     session['user_id'] = login_info[0]
-        #     session['household_id'] = login_info[1]
-        #     session['user_name'] = login_info[2]
-        #     session['household_name'] = login_info[3]
-        #     session['household_profile_list'] = login.get_household_profiles()
-        #     session['logged_in'] = True
-        #     return redirect(url_for("dashboard.totals_route"))
-        # else:
-        #     return redirect(url_for("user.register_user_route"))
+# OLD vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 
 
 @blueprint.route('/logout', methods=['GET',])

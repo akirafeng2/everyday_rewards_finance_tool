@@ -21,6 +21,7 @@ class UserDatabaseConnection(DatabaseConnection):
         """
         self.cursor.execute(query, (user_email, hash_password))
         result = self.cursor.fetchone()
+        print(type(result))
         return result
 
     def add_user_into_db(self, user_name: str) -> None:
@@ -44,5 +45,4 @@ class UserDatabaseConnection(DatabaseConnection):
         """
         self.cursor.execute(select_statement, (user_id,))
         result = self.cursor.fetchall()
-        household_names = {row[0]: row[1] for row in result}
-        return household_names
+        return result

@@ -20,4 +20,5 @@ def get_user_info(DB_CONN: UserDatabaseConnection, login_email: str, password: s
 def get_household_profiles(DB_CONN: UserDatabaseConnection, user_id: str):
     with DB_CONN:
         result = DB_CONN.get_household_names(user_id)
-    return result
+    household_names = {row[0]: row[1] for row in result}
+    return household_names
