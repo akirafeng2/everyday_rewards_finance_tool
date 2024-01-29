@@ -1,5 +1,6 @@
 from flask import Flask
 from . import SETTINGS, user, receipt, weighting, household, expenses, dashboard, reset
+from flask_cors import CORS
 
 
 # env = SETTINGS.ENV
@@ -8,6 +9,7 @@ from . import SETTINGS, user, receipt, weighting, household, expenses, dashboard
 # FS = FileSystem(SETTINGS.FINANCE_FILE_PATH / env)
 
 app = Flask(__name__)
+CORS(app)
 
 app.secret_key = SETTINGS.SECRET_KEY
 app.register_blueprint(user.views.blueprint, url_prefix="/api/user")

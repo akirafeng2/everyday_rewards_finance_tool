@@ -2,9 +2,8 @@ import psycopg2
 
 
 class DatabaseConnection:
-    def __init__(self, connection_details: dict, env, profile_id: str):
+    def __init__(self, connection_details: dict, env):
         self.connection_details = connection_details
-        self.profile_id = profile_id
         self.conn = None
         self.cursor = None
         self.env = env
