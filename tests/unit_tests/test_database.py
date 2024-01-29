@@ -14,8 +14,8 @@ test_connection_details = {
 
 
 @pytest.fixture
-def database_connection(env, household):
-    return DatabaseConnection(test_connection_details, env, household)
+def database_connection(env):
+    return DatabaseConnection(test_connection_details, env)
 
 
 class TestDatabaseConnection:
