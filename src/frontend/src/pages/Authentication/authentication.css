@@ -143,5 +143,44 @@ div.whiteBox {
   text-align: center;
 
   width: 129px;
-  padding:8px 0px; 
+  padding: 8px 0px;
+}
+
+.auth input.invalid {
+  border-color: #c80106;
+  margin-bottom: 4px;
+}
+
+.auth .loginForm span.invalid {
+  color: #c80106;
+  font-size: 11px;
+  font-family: "Inter-Light", Helvetica;
+  font-style: italic;
+  font-weight: 300;
+  line-height: 12px;
+  word-wrap: break-word;
+  vertical-align: top;
+}
+
+.red_exclamation {
+  background: #c80106;
+  border-radius: 50%;
+
+  width: 12px;
+  height: 12px;
+  padding: 0px 4px;
+  margin-right: 4px;
+
+  font-size: 11px;
+  color: white;
+  font-family: "Inter-Light", Helvetica;
+  font-weight: 500;
+  line-height: 12px;
+  text-align: center;
+  vertical-align: top;
+}
+
+.auth .error{
+  height: 12px;
+  margin-bottom: 6px;
 }
