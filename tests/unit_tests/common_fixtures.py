@@ -1,4 +1,13 @@
 import pytest
+from ...src.backend.app import app
+
+
+@pytest.fixture
+def client():
+    """Create a test client for Flask application"""
+    app.config['TESTING'] = True
+    with app.test_client() as client:
+        yield client
 
 
 @pytest.fixture

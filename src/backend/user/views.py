@@ -11,24 +11,26 @@ blueprint = Blueprint('user', __name__, template_folder='./templates')
 env = SETTINGS.ENV
 
 
-@blueprint.route('/login', methods=['POST', 'OPTIONS'])
-def login_user_route():
-    if request.method == 'OPTIONS':
-        # Handle preflight request
-        response = jsonify()
-        response.headers.add('Access-Control-Allow-Methods', 'POST')
-        response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
-        return response
+@blueprint.route('/login', methods=['OPTIONS'])
+def options_send_post():
+    # Handle preflight request
+    response = jsonify()
+    response.headers.add('Access-Control-Allow-Methods', 'POST')
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
+    return response
+
+
+@blueprint.route('/login', methods=['POST'])
+def login_user_route_post_response():
+    login_email = request.json.get('email')
+    login_password = request.json.get('password')
+    login_info = login.get_user_info(login_email, login_password)
+    if login_info is not None:
+        login_info['household_profile_list'] = login.get_household_profiles(login_info['profile_id'])
+        print(login_info)
+        return jsonify(login_info)
     else:
-        login_email = request.json.get('email')
-        login_password = request.json.get('password')
-        login_info = login.get_user_info(login_email, login_password)
-        if login_info is not None:
-            login_info['household_profile_list'] = login.get_household_profiles(login_info['profile_id'])
-            print(login_info)
-            return jsonify(login_info)
-        else:
-            return jsonify({'error': 'Invalid email/password combination'}), 401
+        return jsonify({'error': 'Invalid email/password combination'}), 401
 
 # OLD vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 
