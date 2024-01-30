@@ -11,9 +11,12 @@ def get_user_info(DB_CONN: UserDatabaseConnection, login_email: str, password: s
     hash_password = hash_string_md5(password)
     with DB_CONN:
         user_info = DB_CONN.get_user_info(login_email, hash_password)
-    data_titles = ('profile_id', 'household_id', 'user_name', 'household_name')
-    login_info_dict = dict(zip(data_titles, user_info))
-    return login_info_dict
+    if user_info is None:
+        return None
+    else:
+        data_titles = ('profile_id', 'household_id', 'user_name', 'household_name')
+        login_info_dict = dict(zip(data_titles, user_info))
+        return login_info_dict
 
 
 @db_conn(UserDatabaseConnection)
