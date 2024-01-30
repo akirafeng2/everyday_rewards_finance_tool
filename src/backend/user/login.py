@@ -11,13 +11,17 @@ def get_user_info(DB_CONN: UserDatabaseConnection, login_email: str, password: s
     hash_password = hash_string_md5(password)
     with DB_CONN:
         user_info = DB_CONN.get_user_info(login_email, hash_password)
-    data_titles = ('profile_id', 'household_id', 'user_name', 'household_name')
-    login_info_dict = dict(zip(data_titles, user_info))
-    return login_info_dict
+    if user_info is None:
+        return None
+    else:
+        data_titles = ('profile_id', 'household_id', 'user_name', 'household_name')
+        login_info_dict = dict(zip(data_titles, user_info))
+        return login_info_dict
 
 
 @db_conn(UserDatabaseConnection)
 def get_household_profiles(DB_CONN: UserDatabaseConnection, user_id: str):
     with DB_CONN:
         result = DB_CONN.get_household_names(user_id)
-    return result
+    household_names = {row[0]: row[1] for row in result}
+    return household_names
