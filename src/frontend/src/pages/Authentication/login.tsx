@@ -3,10 +3,12 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import Cookies from 'js-cookie';
+import RedExclamation from "./components/red_exclamation";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [invalid_attempt, setAttempt] = useState("valid");
   const navigate = useNavigate();
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -35,6 +37,7 @@ function Login() {
       })
       .catch((err: AxiosError) => {
         console.log(err);
+        setAttempt("invalid")
       });
   };
 
@@ -45,9 +48,16 @@ function Login() {
         <form className="loginForm" onSubmit={attemptLogin}>
           <label>
             Email Address <br />
-            <input type="text" id="email" value={email} onChange={handleEmailChange}></input>
+            <input type="text" id="email" value={email} onChange={handleEmailChange} className={invalid_attempt}></input>
           </label>
-          <br />
+          <br/>
+          {
+          invalid_attempt == "invalid" &&
+          <div className="error">
+          <RedExclamation></RedExclamation>
+          <span className={invalid_attempt}>Sorry, we can't find your account! </span>
+          </div>
+          }
           <label>
             <span>Password</span>
             <Link to="/recovery" className="forgotPassword">

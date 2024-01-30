@@ -44,3 +44,29 @@ def test_login_user_route_post_response_valid_user(mock_get_user_info: MagicMock
     # Then
     assert response.status_code == 200
     assert response.json == expected_result
+
+
+@patch('everyday_rewards_finance_tool.src.backend.user.views.login.get_household_profiles')
+@patch('everyday_rewards_finance_tool.src.backend.user.views.login.get_user_info')
+def test_login_user_route_post_response_invalid_user(mock_get_user_info: MagicMock,
+                                                     mock_get_household_profiles: MagicMock,
+                                                     client):
+    """Tests json response when user is not in database"""
+
+    # Given
+    # # Setting up Mocks
+    mock_get_user_info.return_value = None
+
+    mock_get_household_profiles.return_value = None
+
+    # # Set up expected result
+    expected_result = {
+        'error': 'Invalid email/password combination'
+    }
+
+    # When
+    response = client.post('/api/user/login', json={})
+
+    # Then
+    assert response.status_code == 401
+    assert response.json == expected_result
