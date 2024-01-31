@@ -21,7 +21,9 @@ const HouseholdJoin = () => {
           <div className="subTitle">Add House Code</div>
             <div className="subText">Find the share code in household admin settings</div>
             {inputTiles()}
-        
+            <br/>
+            <div className="centrediv"><input type="submit"value="Confirm Code" className="button"></input></div>
+            
           </form>
         </div>
     </main>
