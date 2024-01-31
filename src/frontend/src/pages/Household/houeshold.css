@@ -1,0 +1,80 @@
+main.household {
+  background: linear-gradient(
+    180deg,
+    rgba(31.57, 149.36, 229.5, 0.2) 0%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  background-color: #24384d;
+  width: 100vw;
+  height: 100vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.household div.title {
+  color: #ffffff;
+
+  font-family: "DMSans-Bold", Helvetica;
+  font-size: 36px;
+  font-style: normal;
+  font-weight: 700;
+  letter-spacing: -0.39600000858306883px;
+  line-height: 24px;
+  white-space: nowrap;
+
+  padding: 32px;
+}
+
+.household .emoji {
+  font-size: 96px;
+}
+
+.householdOptions .householdButton {
+  background: #1a7bbd;
+  border-radius: 10px;
+
+  color: white;
+  font-size: 16px;
+  font-family: "DM Sans-Regular", Helvetica;
+  font-weight: 400;
+  line-height: 24px;
+  word-wrap: "break-word";
+  text-align: center;
+
+  width: 129px;
+  padding: 8px 0px;
+}
+
+.household .householdOptions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+}
+
+.household input.inputTiles {
+  height: 84px;
+  width: 67px;
+  border-radius: 10px;
+  border: 1px #e2e8f1 solid;
+  margin: 0px 5px;
+}
+
+.household .subTitle {
+  color: black;
+  font-size: 24px;
+  font-family: "DMSans-Bold", Helvetica;
+  font-weight: 700;
+  line-height: 24px;
+}
+
+.household .subText {
+  color: #aeaeae;
+  font-size: 12px;
+  font-family: "Inter-Light", Helvetica;
+  font-weight: 300;
+  line-height: 24px;
+}

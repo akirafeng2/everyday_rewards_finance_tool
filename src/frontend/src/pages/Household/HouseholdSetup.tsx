@@ -1,10 +1,10 @@
-import "./authentication.css";
+import "./houeshold.css";
 import { Link } from "react-router-dom";
 import Emoji from "./components/emoji";
 
 const HouseholdSetup = () => {
   return (
-    <main className="auth">
+    <main className="household">
       <div className="title">Set Up Your Household</div>
       <div className="householdOptions">
         <div className="whiteBox">
