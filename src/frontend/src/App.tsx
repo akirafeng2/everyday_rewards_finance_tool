@@ -10,7 +10,8 @@ import PageLayout from "./pages/PageLayout.tsx";
 import Login from "./pages/Authentication/Login";
 import Signup from "./pages/Authentication/Signup.tsx";
 import HouseholdSetup from "./pages/Authentication/HouseholdSetup.tsx";
-
+import PrivatePageRoute from "./components/private_routes/PrivatePageRoute.tsx";
+import PrivateHouseholdRoute from "./components/private_routes/PrivateHouseholdRoute.tsx";
 
 // function App() {
 //   return (
@@ -34,20 +35,19 @@ import HouseholdSetup from "./pages/Authentication/HouseholdSetup.tsx";
 function App() {
   return (
     <>
+      <Routes>
+        <Route path="/Login" element={<Login />} />
+        <Route path="/Signup" element={<Signup />} />
+        <Route path="/Household" element={<PrivateHouseholdRoute><HouseholdSetup /></PrivateHouseholdRoute>} />
 
-        <Routes>
-          <Route path="/Login" element={<Login/>} />
-          <Route path="/Signup" element={<Signup/>} />
-          <Route path="/Household" element={<HouseholdSetup />} />
-
-          <Route path="/Page" element={<PageLayout />}>
-            <Route path="Dashboard" element={<Dashboard />} />
-            <Route path="Transactions" element={<Transactions />} />
-            <Route path="OneOff" element={<OneOff />} />
-            <Route path="Weights" element={<Weights />} />
-            <Route path="Settings" element={<Settings />} />
-          </Route>
-        </Routes>
+        <Route path="/Page" element={<PrivatePageRoute><PageLayout /></PrivatePageRoute>}>
+          <Route path="Dashboard" element={<Dashboard />} />
+          <Route path="Transactions" element={<Transactions />} />
+          <Route path="OneOff" element={<OneOff />} />
+          <Route path="Weights" element={<Weights />} />
+          <Route path="Settings" element={<Settings />} />
+        </Route>
+      </Routes>
     </>
   );
 }
