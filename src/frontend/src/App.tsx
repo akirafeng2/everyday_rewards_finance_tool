@@ -7,7 +7,7 @@ import Settings from "./pages/Settings";
 import OneOff from "./pages/OneOff";
 import PageLayout from "./pages/PageLayout.tsx";
 
-import Login from "./pages/Authentication/Login";
+import Login from "./pages/Authentication/login.tsx";
 import Signup from "./pages/Authentication/Signup.tsx";
 import HouseholdSetup from "./pages/Authentication/HouseholdSetup.tsx";
 import PrivatePageRoute from "./components/private_routes/PrivatePageRoute.tsx";
