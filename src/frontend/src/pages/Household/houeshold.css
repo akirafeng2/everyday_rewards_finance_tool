@@ -61,6 +61,12 @@ main.household {
   border-radius: 10px;
   border: 1px #e2e8f1 solid;
   margin: 15px 5px;
+  caret-color: transparent;
+
+  text-align: center;
+  color: black;
+  font-size: 48px;
+  font-family: "DMSans-Bold", Helvetica;
 }
 
 .household .subTitle {
@@ -103,7 +109,7 @@ main.household {
     justify-content: center;
     align-items: center;
   }
-  
+
   .household input.button {
     width: 129px;
     height: 40px;

@@ -6,25 +6,41 @@ const HouseholdJoin = () => {
   const [tileNumber, setTileNumber] = useState(0);
   
   const findFocus = () => {
-    document.getElementById(tileNumber.toString())!.focus()
+    if (tileNumber == 8) {
+        document.getElementById("7")!.focus()
+    }
+    else {
+        document.getElementById(tileNumber.toString())!.focus()
+    }
+
   };
 
   const handleTileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(tileNumber)
-    if (tileNumber < 7) {
+    let nativeEvent = e.nativeEvent
+    if (nativeEvent.inputType == "deleteContentBackward") {
+        // Put in here logic to remove letter from end of the password
+    }
+    else if (tileNumber < 8) {
         setTileNumber(previousState => previousState + 1)
     }
   }
 
-  useEffect(() => {
-    findFocus()
-  }, [tileNumber])
+  const handleBackspace = (e: KeyboardEvent) => {
+    if (e.code == "Backspace" && tileNumber > 0) {
+        setTileNumber(previousState => previousState - 1)
+    }
+  }
   
+  useEffect(() => {
+        findFocus()
+
+  }, [tileNumber])
+
   const inputTiles = () => {
     let inputTiles = [];
     for (let i = 0; i < 8; i++) {
       inputTiles.push(
-        <input className="inputTiles" key={i} type="text" id={i.toString()} maxLength={1} onFocus={findFocus} onInput={handleTileChange}></input>
+        <input className="inputTiles" key={i} type="text" id={i.toString()} maxLength={1} onFocus={findFocus} onInput={handleTileChange} onKeyDown={handleBackspace}></input>
       );
     }
     return inputTiles;
