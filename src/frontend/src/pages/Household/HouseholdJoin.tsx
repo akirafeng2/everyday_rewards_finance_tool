@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 
 const HouseholdJoin = () => {
   const [tileNumber, setTileNumber] = useState(0);
+  const [householdCode, setHouseholdCode] = useState("");
   
   const findFocus = () => {
     if (tileNumber == 8) {
@@ -18,10 +19,12 @@ const HouseholdJoin = () => {
   const handleTileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let nativeEvent = e.nativeEvent
     if (nativeEvent.inputType == "deleteContentBackward") {
+        setHouseholdCode(previousState => previousState.slice(0,-1))
         // Put in here logic to remove letter from end of the password
     }
     else if (tileNumber < 8) {
         setTileNumber(previousState => previousState + 1)
+        setHouseholdCode(previousState => previousState.concat(e.target.value))
     }
   }
 
@@ -33,7 +36,6 @@ const HouseholdJoin = () => {
   
   useEffect(() => {
         findFocus()
-
   }, [tileNumber])
 
   const inputTiles = () => {
