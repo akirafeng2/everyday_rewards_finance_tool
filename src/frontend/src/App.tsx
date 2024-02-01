@@ -41,9 +41,9 @@ function App() {
         <Route path="/Login" element={<Login />} />
         <Route path="/Signup" element={<Signup />} />
         <Route path="/Household" element={
-        // <PrivateHouseholdRoute>
+        <PrivateHouseholdRoute>
           <LayoutHousehold />
-        // </PrivateHouseholdRoute>
+        </PrivateHouseholdRoute>
         }>
           <Route path="Setup" element={<HouseholdSetup />} />
           <Route path="Join" element={<HouseholdJoin />} />

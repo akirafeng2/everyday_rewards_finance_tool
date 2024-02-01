@@ -124,7 +124,7 @@ div.whiteBox {
   margin-bottom: 4px;
 }
 
-.auth .loginForm span.invalid {
+span.invalid {
   color: #c80106;
   font-size: 11px;
   font-family: "Inter-Light", Helvetica;
