@@ -41,12 +41,47 @@ services:
     ports:
       - 5050:5000
 
-  frontend:
-    build: ./src/frontend
+  supertokens-db:
+    image: 'postgres:latest'
+    environment:
+      POSTGRES_USER: supertokens_user 
+      POSTGRES_PASSWORD: somePassword 
+      POSTGRES_DB: supertokens
+    ports:
+      - 5433:5432
     networks:
       - finance_app
+    restart: unless-stopped
+    healthcheck:
+      test: ['CMD', 'pg_isready', '-U', 'supertokens_user', '-d', 'supertokens']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  supertokens:
+    image: registry.supertokens.io/supertokens/supertokens-postgresql
+    depends_on:
+      - supertokens-db
     ports:
-      - 5173:5173
+      - 3567:3567
+    environment:
+      POSTGRESQL_CONNECTION_URI: "postgresql://supertokens_user:somePassword@supertokens-db:5432/supertokens"
+    networks:
+      - finance_app
+    restart: unless-stopped
+    healthcheck:
+      test: >
+        bash -c 'exec 3<>/dev/tcp/127.0.0.1/3567 && echo -e "GET /hello HTTP/1.1\r\nhost: 127.0.0.1:3567\r\nConnection: close\r\n\r\n" >&3 && cat <&3 | grep "Hello"'
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # frontend:
+  #   build: ./src/frontend
+  #   networks:
+  #     - finance_app
+  #   ports:
+  #     - 5173:5173
 
 
 networks:

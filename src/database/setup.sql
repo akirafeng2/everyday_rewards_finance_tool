@@ -13,10 +13,22 @@ BEGIN
     EXECUTE 'SET search_path TO ' || schema_name;
 END $$;
 
+-- Create function
+CREATE OR REPLACE FUNCTION generate_household_password()
+RETURNS TEXT AS $$
+DECLARE
+    result TEXT;
+BEGIN
+    result := substr(md5(random()::text), 1, 8);
+    RETURN result;
+END;
+$$ LANGUAGE plpgsql;
+
 -- Create your tables here
 CREATE TABLE household (
   household_id SERIAL PRIMARY KEY,
-  household_name VARCHAR(50) NOT NULL UNIQUE
+  household_name VARCHAR(50) NOT NULL UNIQUE,
+  household_password VARCHAR(8) NOT NULL UNIQUE --new
 );
 
 CREATE TABLE item (
@@ -27,7 +39,9 @@ CREATE TABLE item (
 CREATE TABLE profile (
     profile_id SERIAL PRIMARY KEY,
     household_id INT, 
-    user_name VARCHAR(12) NOT NULL UNIQUE,
+    user_name VARCHAR(12) NOT NULL, -- removed UNIQUE
+    email VARCHAR(320) NOT NULL UNIQUE, --new
+    password_hash VARCHAR(32) NOT NULL, --new
     FOREIGN KEY (household_id) REFERENCES household(household_id)
 );
 
