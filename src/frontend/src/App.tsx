@@ -15,24 +15,21 @@ import PrivateHouseholdRoute from "./components/private_routes/PrivateHouseholdR
 import HouseholdJoin from "./pages/Household/HouseholdJoin.tsx";
 import LayoutHousehold from "./pages/Household/LayoutHousehold.tsx";
 
-// function App() {
-//   return (
-//     <>
-//       <div id="main">
-//         <Header text="Welcome back, Alex 👋" />
-//         <SubHeader text = "Here's your household expenses summary" />
-//         Household Balances
-//         <div className="container">
-//           <OwingTiles></OwingTiles>
-//           <OwingTiles></OwingTiles>
-//           <OwingTiles></OwingTiles>
-//         </div>
-//         Transaction History
-//         <DashboardTable/>
-//       </div>
-//     </>
-//   );
-// }
+import SuperTokens from 'supertokens-web-js';
+import Session from 'supertokens-web-js/recipe/session';
+import EmailPassword from 'supertokens-web-js/recipe/emailpassword'
+
+SuperTokens.init({
+    appInfo: {
+        apiDomain: "http://127.0.0.1:5050",
+        apiBasePath: "/api/auth",
+        appName: "...",
+    },
+    recipeList: [
+        Session.init(),
+        EmailPassword.init(),
+    ],
+});
 
 function App() {
   return (
