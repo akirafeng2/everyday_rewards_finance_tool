@@ -28,7 +28,7 @@ $$ LANGUAGE plpgsql;
 CREATE TABLE household (
   household_id SERIAL PRIMARY KEY,
   household_name VARCHAR(50) NOT NULL UNIQUE,
-  household_password VARCHAR(8) NOT NULL UNIQUE --new
+  household_password VARCHAR(8) NOT NULL UNIQUE
 );
 
 CREATE TABLE item (
@@ -37,25 +37,25 @@ CREATE TABLE item (
 );
 
 CREATE TABLE profile (
-    profile_id SERIAL PRIMARY KEY,
+    profile_id character(36) PRIMARY KEY,
     household_id INT, 
     user_name VARCHAR(12) NOT NULL, -- removed UNIQUE
-    email VARCHAR(320) NOT NULL UNIQUE, --new
-    password_hash VARCHAR(32) NOT NULL, --new
+    -- email VARCHAR(320) NOT NULL UNIQUE, --new
+    -- password_hash VARCHAR(32) NOT NULL, --new
     FOREIGN KEY (household_id) REFERENCES household(household_id)
 );
 
 CREATE TABLE receipt (
     receipt_id SERIAL PRIMARY KEY,
     receipt_date DATE NOT NULL,
-    profile_id INT NOT NULL, 
+    profile_id character(36) NOT NULL, 
     source VARCHAR(20) CHECK (source IN ('receipt', 'one_off', 'recurring', 'weighting_update')),
     FOREIGN KEY (profile_id) REFERENCES profile(profile_id)
 );
 
 CREATE TABLE weighting (
     weighting_id INT NOT NULL,
-    profile_id INT NOT NULL,
+    profile_id character(36) NOT NULL,
     weighting NUMERIC(7,2) CHECK (weighting IS NOT NULL AND weighting >= 0),
     PRIMARY KEY (weighting_id, profile_id),
     FOREIGN KEY (profile_id) REFERENCES profile(profile_id)

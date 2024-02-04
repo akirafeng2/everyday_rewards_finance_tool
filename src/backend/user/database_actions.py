@@ -24,13 +24,13 @@ class UserDatabaseConnection(DatabaseConnection):
         print(result)
         return result
 
-    def add_user_into_db(self, user_name: str) -> None:
+    def add_profile_into_db(self, profile_id: str, user_name: str) -> None:
         """adds a given user into the profiles table"""
         insert_statement = """
-        INSERT INTO profile (user_name)
-        VALUES (%s)
+        INSERT INTO profile (profile_id, user_name)
+        VALUES (%s, %s)
         """
-        self.cursor.execute(insert_statement, (user_name,))
+        self.cursor.execute(insert_statement, (profile_id, user_name))
 
     def get_household_names(self, user_id: str) -> dict:
         """Returns the list names within a household"""
