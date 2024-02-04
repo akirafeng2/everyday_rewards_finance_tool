@@ -16,6 +16,7 @@ def add_user_route():
     user_name = request.json.get('name')
     profile_id = request.json.get('user_id')
     add_profile(profile_id, user_name)
+    return '', 204
 
 
 @blueprint.route('/login', methods=['OPTIONS'])

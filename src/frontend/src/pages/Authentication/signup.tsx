@@ -3,7 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { signUp } from "supertokens-web-js/recipe/emailpassword";
 import { useState } from "react";
 import axios, { AxiosError, AxiosResponse } from "axios";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
+import { getUserId } from "supertokens-auth-react/recipe/session";
 
 function Signup() {
   const [email, setEmail] = useState("");
@@ -22,18 +23,17 @@ function Signup() {
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
   };
-  
-  const registerProfile = (user_id: string, name: string) => {
 
-    axios.post("http://127.0.0.1:5050/api/user/register_profile", {
+  const registerProfile = (user_id: string, name: string) => {
+    Cookies.set("user_id", user_id);
+    Cookies.set("user_name", name);
+    axios
+      .post("http://127.0.0.1:5050/api/user/register_profile", {
         user_id: user_id,
-        name: name
+        name: name,
       })
-      .then((res: AxiosResponse) => {
-        console.log(res);
-        Cookies.set('user_id', user_id);
-        Cookies.set('user_name', name);
-        navigate('/household/setup')
+      .then(() => {
+        navigate("/household/setup");
       })
       .catch((err: AxiosError) => {
         console.log(err);
@@ -51,9 +51,10 @@ function Signup() {
           {
             id: "password",
             value: password,
-          }
+          },
         ],
       });
+
       if (response.status === "FIELD_ERROR") {
         // one of the input formFields failed validaiton
         response.formFields.forEach((formField) => {
@@ -71,13 +72,14 @@ function Signup() {
         // this can happen during automatic account linking. Tell the user to use another
         // login method, or go through the password reset flow.
       } else {
-        console.log('im here')
-        window.location.href = '/page/dashboard'
-        // registerProfile(response.user.id, name)
+        // sign up successful. The session tokens are automatically handled by
+        // the frontend SDK.
+        registerProfile(response.user.id, name);
+        console.log(response);
       }
     } catch (err: any) {
       if (err.isSuperTokensGeneralError === true) {
-        // this may be a custom error message sent from the API by you.\
+        // this may be a custom error message sent from the API by you.
         window.alert(err.message);
       } else {
         window.alert("Oops! Something went wrong.");
@@ -85,8 +87,10 @@ function Signup() {
     }
   }
 
-  const attemptSignUp = () => {
+  const attemptSignUp = (e: React.FormEvent) => {
+    e.preventDefault();
     signUpClicked(email, password, name);
+    // registerProfile(name);
   };
   return (
     <main className="auth">
