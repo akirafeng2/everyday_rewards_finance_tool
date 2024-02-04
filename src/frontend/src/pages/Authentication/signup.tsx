@@ -2,9 +2,8 @@ import "./authentication.css";
 import { Link, useNavigate } from "react-router-dom";
 import { signUp } from "supertokens-web-js/recipe/emailpassword";
 import { useState } from "react";
-import axios, { AxiosError, AxiosResponse } from "axios";
+import axios, { AxiosError } from "axios";
 import Cookies from "js-cookie";
-import { getUserId } from "supertokens-auth-react/recipe/session";
 
 function Signup() {
   const [email, setEmail] = useState("");
@@ -75,7 +74,6 @@ function Signup() {
         // sign up successful. The session tokens are automatically handled by
         // the frontend SDK.
         registerProfile(response.user.id, name);
-        console.log(response);
       }
     } catch (err: any) {
       if (err.isSuperTokensGeneralError === true) {
@@ -90,8 +88,8 @@ function Signup() {
   const attemptSignUp = (e: React.FormEvent) => {
     e.preventDefault();
     signUpClicked(email, password, name);
-    // registerProfile(name);
   };
+  
   return (
     <main className="auth">
       <div className="title">Create your account</div>

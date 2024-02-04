@@ -1,9 +1,8 @@
-from flask import request, render_template, session, redirect, url_for, \
-    Blueprint, jsonify
+from flask import request, session, redirect, url_for, Blueprint, jsonify
 from functools import wraps
 from .. import SETTINGS
 from . import login
-from .add_user import user_exists, add_profile
+from .add_user import add_profile
 
 
 blueprint = Blueprint('user', __name__, template_folder='./templates')
