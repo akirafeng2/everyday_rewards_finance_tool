@@ -13,7 +13,7 @@ def user_exists(DB_CONN, username: str) -> bool:
 
 
 @db_conn(UserDatabaseConnection)
-def add_user(DB_CONN, username: str) -> None:
+def add_profile(DB_CONN, profile_id: str, username: str) -> None:
     with DB_CONN:
-        DB_CONN.add_user_into_db(username)
+        DB_CONN.add_profile_into_db(profile_id, username)
         DB_CONN.commit_changes()

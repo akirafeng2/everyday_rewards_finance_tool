@@ -3,12 +3,19 @@ from flask import request, render_template, session, redirect, url_for, \
 from functools import wraps
 from .. import SETTINGS
 from . import login
-from .add_user import user_exists, add_user
+from .add_user import user_exists, add_profile
 
 
 blueprint = Blueprint('user', __name__, template_folder='./templates')
 
 env = SETTINGS.ENV
+
+
+@blueprint.route('/register_profile', methods=['POST',])
+def add_user_route():
+    user_name = request.json.get('name')
+    profile_id = request.json.get('user_id')
+    add_profile(profile_id, user_name)
 
 
 @blueprint.route('/login', methods=['OPTIONS'])
@@ -39,21 +46,6 @@ def login_user_route_post_response():
 def logout_user_route():
     session.clear()
     return redirect(url_for('user.show_login_page_route'))
-
-
-@blueprint.route('/register_user', methods=['GET',])
-def register_user_route():
-    return render_template("register_user.html")
-
-
-@blueprint.route('/register_user', methods=['POST',])
-def add_user_route():
-    user_name = request.form['username']
-    if user_exists(user_name):
-        return render_template('user_exists.html')
-    else:
-        add_user(user_name)
-        return render_template('user_added.html')
 
 
 def needs_login(func):
