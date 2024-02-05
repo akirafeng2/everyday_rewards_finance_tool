@@ -20,36 +20,10 @@ function Login() {
     setPassword(e.target.value);
   };
 
-  // const attemptLogin = (e: React.FormEvent) => {
-  //   e.preventDefault();
-
-  //   axios
-  //     .post("http://127.0.0.1:5050/api/user/login", {
-  //       email: email,
-  //       password: password,
-  //     })
-  //     .then((res: AxiosResponse) => {
-  //       console.log(res);
-  //       Cookies.set("user_id", res.data["profile_id"]);
-  //       Cookies.set("household_id", res.data["household_id"]);
-  //       Cookies.set("user_name", res.data["user_name"]);
-  //       Cookies.set("household_name", res.data["household_name"]);
-  //       Cookies.set(
-  //         "household_members",
-  //         JSON.stringify(res.data["household_profile_list"])
-  //       );
-  //       navigate("/page/dashboard");
-  //     })
-  //     .catch((err: AxiosError) => {
-  //       console.log(err);
-  //       setAttempt("invalid");
-  //     });
-  // };
-
   const getProfileInfo = (user_id: string) => {
     axios
       .post("http://127.0.0.1:5050/api/user/login_profile", {
-        user_id: user_id
+        user_id: user_id,
       })
       .then((res: AxiosResponse) => {
         console.log(res);
@@ -66,8 +40,7 @@ function Login() {
       .catch((err: AxiosError) => {
         console.log(err);
       });
-  
-  }
+  };
 
   async function signInClicked(email: string, password: string) {
     try {
@@ -97,7 +70,7 @@ function Login() {
         // this can happen due to automatic account linking. Tell the user that their
         // input credentials is wrong (so that they do through the password reset flow)
       } else {
-        getProfileInfo(response.user.id)
+        getProfileInfo(response.user.id);
       }
     } catch (err: any) {
       if (err.isSuperTokensGeneralError === true) {
@@ -109,7 +82,6 @@ function Login() {
       }
     }
   }
-
 
   const attemptLogin = (e: React.FormEvent) => {
     e.preventDefault();
