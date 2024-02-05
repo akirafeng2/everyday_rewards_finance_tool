@@ -39,7 +39,7 @@ def test_login_user_route_post_response_valid_user(mock_get_user_info: MagicMock
     }
 
     # When
-    response = client.post('/api/user/login', json={})
+    response = client.post('/api/user/login_profile', json={})
 
     # Then
     assert response.status_code == 200
