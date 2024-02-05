@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import patch, MagicMock
-from ..common_fixtures import client
+from ..common_fixtures import client, user_id, username
 
 
 @patch('everyday_rewards_finance_tool.src.backend.user.views.login.get_household_profiles')
@@ -44,3 +44,19 @@ def test_login_user_route_post_response_valid_user(mock_get_user_info: MagicMock
     # Then
     assert response.status_code == 200
     assert response.json == expected_result
+
+
+@patch('everyday_rewards_finance_tool.src.backend.user.views.add_profile')
+def test_add_user_route(mock_add_profile, client, user_id, username):
+    """Test react response for add_user_route api"""
+    # Given
+    
+    # When
+    response = client.post('/api/user/register_profile', json={
+        'user_id': user_id,
+        'username': username
+    })
+
+    # Then
+    assert response.status_code == 204
+    assert response.json is None
