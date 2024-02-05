@@ -26,33 +26,10 @@ def test_get_user_info_valid(mock_db_conn: MagicMock, mock_connect: MagicMock, d
         'household_name': details.get('household_name')
     }
     # When
-    user_info = get_user_info(
-        details.get('email'),
-        details.get('password')
-    )
+    user_info = get_user_info(details.get('user_id'))
 
     # Then
     assert user_info == expect_dict
-
-
-@patch('psycopg2.connect')
-@patch('everyday_rewards_finance_tool.src.backend.user.login.UserDatabaseConnection.get_user_info')
-def test_get_user_info_invalid(mock_db_conn: MagicMock, mock_connect: MagicMock, details: dict):
-    """Unit test for when invalid email password provided"""
-
-    # Given
-    # # Setting up Mock
-    mock_db_conn.return_value = None
-
-    # # Setting up expected result
-
-    expected_result = None
-
-    # When
-    user_info = get_user_info(details.get('email'), details.get('password'))
-
-    # Then
-    assert user_info == expected_result
 
 
 @patch('psycopg2.connect')

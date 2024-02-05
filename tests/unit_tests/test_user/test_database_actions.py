@@ -13,8 +13,7 @@ class TestUserDatabaseConnection:
 
     # tests
     @patch('psycopg2.connect')
-    def test_get_user_info(self, mock_connect, user_database_connection: pytest.fixture, email: pytest.fixture,
-                           password: pytest.fixture):
+    def test_get_user_info(self, mock_connect, user_database_connection: pytest.fixture, user_id: pytest.fixture):
         # Given
         # # setting up the mock
         mock_exe = mock_connect.return_value.cursor.return_value.execute
@@ -29,16 +28,15 @@ class TestUserDatabaseConnection:
         FROM profile
         LEFT JOIN household
         ON profile.household_id = household.household_id
-        WHERE profile.user_email = %s
-        AND profile.user_password = %s
+        WHERE profile.profile_id = %s
         """
 
         # When
         with user_database_connection:
-            user_database_connection.get_user_info(email, password)
+            user_database_connection.get_user_info(user_id)
 
         # Then
-        mock_exe.assert_called_with(query_execute, (email, password))
+        mock_exe.assert_called_with(query_execute, (user_id,))
 
     @patch('psycopg2.connect')
     def test_get_household_names(self, mock_connect,
