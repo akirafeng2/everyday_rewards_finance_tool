@@ -7,9 +7,7 @@ interface PrivateRouteProps {
 }
 
 const PrivateHouseholdRoute = ({ children }: PrivateRouteProps) => {
-  if (Cookies.get("user_id") == undefined) {
-    return <Navigate to="/Login" />;
-  } else if (Cookies.get("household_id") != undefined) {
+  if (Cookies.get("household_id") != "null") {
     return <Navigate to="/Page/Dashboard" />;
   } else {
     return children;

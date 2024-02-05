@@ -2,7 +2,7 @@ from ..database import DatabaseConnection
 
 
 class UserDatabaseConnection(DatabaseConnection):
-    def get_user_info(self, user_email: str, hash_password: str) -> tuple:
+    def get_user_info(self, user_id: str) -> tuple:
         """With given user email and password, return a tuple
         (<profile_id>, <household_id>, <user_name>, <household_name>)
         Tuple will be empty if username or password is not correct
@@ -16,10 +16,9 @@ class UserDatabaseConnection(DatabaseConnection):
         FROM profile
         LEFT JOIN household
         ON profile.household_id = household.household_id
-        WHERE profile.user_email = %s
-        AND profile.user_password = %s
+        WHERE profile.profile_id = %s
         """
-        self.cursor.execute(query, (user_email, hash_password))
+        self.cursor.execute(query, (user_id,))
         result = self.cursor.fetchone()
         print(result)
         return result
