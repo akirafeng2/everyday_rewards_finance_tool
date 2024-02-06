@@ -1,10 +1,23 @@
-from flask import request, render_template, redirect, url_for, session, Blueprint
+from flask import request, render_template, redirect, url_for, session, Blueprint, jsonify
 
 from .exists_household import exists_household
 from .create_new_household import create_new_household
 from .assign_household import assign_household
+from .get_household_info import get_household_info
 
 blueprint = Blueprint('household', __name__, template_folder="./templates")
+
+
+@blueprint.route('/get_household_details', methods=['POST',])
+def join_household():
+    household_code = request.json.get('household_code')
+    household_info = get_household_info(household_code)
+    if household_info is not None:
+        return jsonify(household_info), 200
+    else:
+        return jsonify({'error': 'household_code'}), 401
+
+# OLD vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 
 
 @blueprint.route('/', methods=['GET',])
@@ -27,11 +40,6 @@ def add_new_household():
         )
     create_new_household(household_name)
     return redirect(url_for("household.assign_household_route", household_name=household_name), code=307)
-
-
-@blueprint.route('/join_household', methods=['GET',])
-def join_household_route():
-    return render_template('input_household_name.html', message='Input an Household Name')
 
 
 @blueprint.route('/join_household', methods=['POST',])
