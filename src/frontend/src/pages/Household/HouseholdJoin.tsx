@@ -113,6 +113,7 @@ const HouseholdJoin = () => {
       </div>
       <HouseholdJoinModal 
         isOpen={modalOpen} 
+        setIsOpen={setModalOpen}
         household_id={householdID} 
         household_name={householdName}
       ></HouseholdJoinModal>

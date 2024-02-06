@@ -2,6 +2,17 @@ from ..database import DatabaseConnection
 
 
 class HouseholdDatabaseConnection(DatabaseConnection):
+    def get_household_info(self, household_code: str) -> tuple:
+        """Returns household_id and household_name given a code"""
+        query = """
+        SELECT household_id, household_name
+        FROM household
+        WHERE household_password = %s
+        """
+        self.cursor.execute(query, (household_code,))
+        result = self.cursor.fetchone()
+        return result
+
     def get_household_id(self, household: str) -> bool:
         """Returns household_id of given household_name"""
         query = """
