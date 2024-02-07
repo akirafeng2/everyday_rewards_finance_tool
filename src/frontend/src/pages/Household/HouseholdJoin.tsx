@@ -17,6 +17,7 @@ const HouseholdJoin = () => {
   const navigate = useNavigate();
 
   const findFocus = () => {
+    setAttempt("valid")
     if (tileNumber == 8) {
       document.getElementById("7")!.focus();
     } else {
@@ -41,6 +42,8 @@ const HouseholdJoin = () => {
   };
 
   useEffect(() => {
+    console.log(tileNumber)
+    console.log(householdCode)
     findFocus();
   }, [tileNumber]);
 
