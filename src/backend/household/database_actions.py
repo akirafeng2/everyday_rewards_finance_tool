@@ -13,17 +13,6 @@ class HouseholdDatabaseConnection(DatabaseConnection):
         result = self.cursor.fetchone()
         return result
 
-    def get_household_id(self, household: str) -> bool:
-        """Returns household_id of given household_name"""
-        query = """
-        SELECT household_id
-        FROM household
-        WHERE household_name = %s
-        """
-        self.cursor.execute(query, (household,))
-        result = self.cursor.fetchone()
-        return result
-
     def insert_household(self, new_household: str) -> bool:
         """Adds given household into household table"""
         insert_statement = """

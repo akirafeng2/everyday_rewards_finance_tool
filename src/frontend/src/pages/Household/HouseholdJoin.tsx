@@ -1,10 +1,8 @@
 import "./houeshold.css";
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import Cookies from 'js-cookie';
 import RedExclamation from "../Authentication/components/red_exclamation";
-import ReactModal from "react-modal";
 import HouseholdJoinModal from "./components/householdJoinModal";
 
 const HouseholdJoin = () => {
@@ -14,7 +12,6 @@ const HouseholdJoin = () => {
   const [modalOpen, setModalOpen] = useState(false)
   const [householdID, setHouseholdID] = useState("");
   const [householdName, setHouseholdName] = useState("");
-  const navigate = useNavigate();
 
   const findFocus = () => {
     setAttempt("valid")
