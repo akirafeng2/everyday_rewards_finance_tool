@@ -19,7 +19,9 @@ const HouseholdJoin = () => {
   const findFocus = () => {
     setAttempt("valid")
     if (tileNumber == 8) {
-      document.getElementById("7")!.focus();
+      var selectedTile = document.getElementById("7") as HTMLInputElement;
+      selectedTile.focus();
+      // document.getElementById("7")!.focus();
     } else {
       document.getElementById(tileNumber.toString())!.focus();
     }
@@ -47,6 +49,12 @@ const HouseholdJoin = () => {
     findFocus();
   }, [tileNumber]);
 
+  const selectText = () => {
+    if (tileNumber == 8){
+      var selectedTile = document.getElementById("7") as HTMLInputElement;
+      selectedTile.setSelectionRange(1,1)
+    }
+  };
   const inputTiles = () => {
     let inputTiles = [];
     for (let i = 0; i < 8; i++) {
@@ -60,6 +68,7 @@ const HouseholdJoin = () => {
           onFocus={findFocus}
           onInput={handleTileChange}
           onKeyDown={handleBackspace}
+          onClick={selectText}
         ></input>
       );
     }
