@@ -1,7 +1,6 @@
 import "./houeshold.css";
 import React, { useState, useEffect } from "react";
 import axios, { AxiosError, AxiosResponse } from "axios";
-import Cookies from 'js-cookie';
 import RedExclamation from "../Authentication/components/red_exclamation";
 import HouseholdJoinModal from "./components/householdJoinModal";
 
@@ -18,7 +17,6 @@ const HouseholdJoin = () => {
     if (tileNumber == 8) {
       var selectedTile = document.getElementById("7") as HTMLInputElement;
       selectedTile.focus();
-      // document.getElementById("7")!.focus();
     } else {
       document.getElementById(tileNumber.toString())!.focus();
     }
@@ -82,10 +80,6 @@ const HouseholdJoin = () => {
         setHouseholdID(res.data['household_id'])
         setHouseholdName(res.data['household_name'])
         setModalOpen(previousState => !previousState);
-        // console.log(res);
-        // Cookies.set('household_id', res.data['household_id']);
-        // Cookies.set('household_members', JSON.stringify(res.data['household_profile_list']));
-        // navigate('/page/dashboard')
       })
       .catch((err: AxiosError) => {
         console.log(err);
