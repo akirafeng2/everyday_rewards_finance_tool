@@ -6,6 +6,7 @@ from .assign_household import assign_household
 from .get_household_info import get_household_info
 from ..user.login import get_household_profiles
 
+
 blueprint = Blueprint('household', __name__, template_folder="./templates")
 
 
@@ -16,7 +17,7 @@ def get_household_details_route():
     if household_info is not None:
         return jsonify(household_info), 200
     else:
-        return jsonify({'error': 'household_code'}), 401
+        return jsonify({'error': 'household_code'}), 403
 
 
 @blueprint.route('/join_household', methods=['POST',])
