@@ -1,19 +1,22 @@
 import "./houeshold.css";
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
 import axios, { AxiosError, AxiosResponse } from "axios";
-import Cookies from 'js-cookie';
 import RedExclamation from "../Authentication/components/red_exclamation";
+import HouseholdJoinModal from "./components/householdJoinModal";
 
 const HouseholdJoin = () => {
   const [tileNumber, setTileNumber] = useState(0);
   const [householdCode, setHouseholdCode] = useState("");
   const [attempt, setAttempt] = useState("valid")
-  const navigate = useNavigate();
+  const [modalOpen, setModalOpen] = useState(false)
+  const [householdID, setHouseholdID] = useState("");
+  const [householdName, setHouseholdName] = useState("");
 
   const findFocus = () => {
+    setAttempt("valid")
     if (tileNumber == 8) {
-      document.getElementById("7")!.focus();
+      var selectedTile = document.getElementById("7") as HTMLInputElement;
+      selectedTile.focus();
     } else {
       document.getElementById(tileNumber.toString())!.focus();
     }
@@ -36,9 +39,17 @@ const HouseholdJoin = () => {
   };
 
   useEffect(() => {
+    console.log(tileNumber)
+    console.log(householdCode)
     findFocus();
   }, [tileNumber]);
 
+  const selectText = () => {
+    if (tileNumber == 8){
+      var selectedTile = document.getElementById("7") as HTMLInputElement;
+      selectedTile.setSelectionRange(1,1)
+    }
+  };
   const inputTiles = () => {
     let inputTiles = [];
     for (let i = 0; i < 8; i++) {
@@ -52,6 +63,7 @@ const HouseholdJoin = () => {
           onFocus={findFocus}
           onInput={handleTileChange}
           onKeyDown={handleBackspace}
+          onClick={selectText}
         ></input>
       );
     }
@@ -61,14 +73,13 @@ const HouseholdJoin = () => {
   const attemptJoinHousehold = (e: React.FormEvent) => {
     e.preventDefault();
 
-    axios.post("http://127.0.0.1:5050/api/household/join_household", {
+    axios.post("http://127.0.0.1:5050/api/household/get_household_details", {
         household_code: householdCode,
       })
       .then((res: AxiosResponse) => {
-        console.log(res);
-        Cookies.set('household_id', res.data['household_id']);
-        Cookies.set('household_members', JSON.stringify(res.data['household_profile_list']));
-        navigate('/page/dashboard')
+        setHouseholdID(res.data['household_id'])
+        setHouseholdName(res.data['household_name'])
+        setModalOpen(previousState => !previousState);
       })
       .catch((err: AxiosError) => {
         console.log(err);
@@ -103,6 +114,12 @@ const HouseholdJoin = () => {
           </div>
         </form>
       </div>
+      <HouseholdJoinModal 
+        isOpen={modalOpen} 
+        setIsOpen={setModalOpen}
+        household_id={householdID} 
+        household_name={householdName}
+      ></HouseholdJoinModal>
     </main>
   );
 };

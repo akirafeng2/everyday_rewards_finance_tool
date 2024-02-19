@@ -45,7 +45,11 @@ function App() {
           <Route path="Setup" element={<HouseholdSetup />} />
           <Route path="Join" element={<HouseholdJoin />} />
         </Route>
-        <Route path="/Page" element={<PrivatePageRoute><LayoutPage /></PrivatePageRoute>}>
+        <Route path="/Page" element={
+        <PrivatePageRoute>
+          <LayoutPage />
+        </PrivatePageRoute>
+      }>
           <Route path="Dashboard" element={<Dashboard />} />
           <Route path="Transactions" element={<Transactions />} />
           <Route path="OneOff" element={<OneOff />} />
