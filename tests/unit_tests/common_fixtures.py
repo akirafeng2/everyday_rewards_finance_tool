@@ -67,6 +67,17 @@ def household_id():
 
 
 @pytest.fixture
+def household_list():
+    """sets up a dict of household people"""
+    household_list = {
+        '1': 'Bob',
+        '2': 'Bobby',
+        '3': 'Bobbby'
+    }
+    return household_list
+
+
+@pytest.fixture
 def test_connection():
     """sets the connection details use for DatabaseConnection object"""
     test_connection_details = {
