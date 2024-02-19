@@ -59,7 +59,7 @@ def test_get_household_details_error(
     })
 
     # Then
-    assert response.status_code == 401
+    assert response.status_code == 403
     assert response.json == expected_result
 
 
