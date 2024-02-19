@@ -1,4 +1,4 @@
-from flask import request, render_template, redirect, url_for, session, Blueprint, jsonify
+from flask import request, render_template, redirect, url_for, session, Blueprint, jsonify, g
 
 from .exists_household import exists_household
 from .create_new_household import create_new_household
@@ -6,22 +6,28 @@ from .assign_household import assign_household
 from .get_household_info import get_household_info
 from ..user.login import get_household_profiles
 
+from supertokens_python.recipe.session.framework.flask import verify_session
+from supertokens_python.recipe.session import SessionContainer
+
 blueprint = Blueprint('household', __name__, template_folder="./templates")
 
 
 @blueprint.route('/get_household_details', methods=['POST',])
+@verify_session()
 def get_household_details_route():
     household_code = request.json.get('household_code')
     household_info = get_household_info(household_code)
     if household_info is not None:
         return jsonify(household_info), 200
     else:
-        return jsonify({'error': 'household_code'}), 401
+        return jsonify({'error': 'household_code'}), 403
 
 
 @blueprint.route('/join_household', methods=['POST',])
+@verify_session()
 def join_household_route():
-    user_id = request.json.get('user_id')
+    session: SessionContainer = g.supertokens
+    user_id = session.get_user_id()
     household_id = request.json.get('household_id')
     assign_household(user_id, household_id)
     response = {'household_profile_list': get_household_profiles(user_id)}
