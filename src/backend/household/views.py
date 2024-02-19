@@ -1,4 +1,4 @@
-from flask import request, render_template, redirect, url_for, session, Blueprint, jsonify, g
+from flask import request, render_template, redirect, url_for, session, Blueprint, jsonify
 
 from .exists_household import exists_household
 from .create_new_household import create_new_household
