@@ -6,11 +6,14 @@ from .assign_household import assign_household
 from .get_household_info import get_household_info
 from ..user.login import get_household_profiles
 
+from ..common import verify_session_mod, decode_access_token
+
 
 blueprint = Blueprint('household', __name__, template_folder="./templates")
 
 
 @blueprint.route('/get_household_details', methods=['POST',])
+@verify_session_mod
 def get_household_details_route():
     household_code = request.json.get('household_code')
     household_info = get_household_info(household_code)
@@ -21,8 +24,9 @@ def get_household_details_route():
 
 
 @blueprint.route('/join_household', methods=['POST',])
+@verify_session_mod
 def join_household_route():
-    user_id = request.json.get('user_id')
+    user_id = decode_access_token(request.cookies.get('sAccessToken'))
     household_id = request.json.get('household_id')
     assign_household(user_id, household_id)
     response = {'household_profile_list': get_household_profiles(user_id)}
