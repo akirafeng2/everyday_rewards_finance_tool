@@ -1,4 +1,4 @@
-import Sidebar from "../components/sidebar/sidebar"
+import Sidebar from "../components/sidebartwo/sidebar"
 import AccountButton from "../components/account_button/account_button"
 import { Outlet } from "react-router-dom"
 
