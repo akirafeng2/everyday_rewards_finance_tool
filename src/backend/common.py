@@ -2,7 +2,7 @@ from .file_system import FileSystem
 from .SETTINGS import CONNECTION_DETAILS, FINANCE_FILE_PATH, ENV, STAGE
 from functools import wraps
 
-from flask import session
+from flask import session, request
 
 from supertokens_python.recipe.session.framework.flask import verify_session
 
@@ -64,7 +64,7 @@ def verify_session_mod(func):
         return wrapper
 
 
-def decode_access_token(access_token):
-    decoded = jwt.decode(access_token, options={"verify_signature": False})
+def get_access_token():
+    decoded = jwt.decode(request.cookies.get('sAccessToken'), options={"verify_signature": False})
     user_id = decoded.get('sub')
     return user_id
