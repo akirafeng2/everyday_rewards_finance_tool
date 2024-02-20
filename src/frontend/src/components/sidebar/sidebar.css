@@ -1,7 +1,7 @@
 .Sidebar {
     /* Height is 100% of parent (body)*/
     height: 100%;
-    width: 17.125rem;
+    width: 237px;
     position: fixed;
     /* stack order of elements, this is on top of 0 */
     /* z-index: 1; */

@@ -26,20 +26,24 @@ const DashboardTable = () => {
   return (
     <div className="dashboard_table_box">
       <table>
-        <tr>
-          <th className="item">Item Name</th>
-          <th className="date">Transaction Date</th>
-          <th className="payer">Who Paid?</th>
-          <th className="cost">Cost</th>
-        </tr>
-        {mock_table.map((item) => (
-          <tr key={item.t_id}>
-            <td className="item">{item.item}</td>
-            <td className="date">{item.date}</td>
-            <td className="payer">{item.payer}</td>
-            <td className="cost">{item.cost}</td>
+        <thead>
+          <tr>
+            <th className="item">Item Name</th>
+            <th className="date">Transaction Date</th>
+            <th className="payer">Who Paid?</th>
+            <th className="cost">Cost</th>
           </tr>
-        ))}
+        </thead>
+        <tbody>
+          {mock_table.map((item) => (
+            <tr key={item.t_id}>
+              <td className="item">{item.item}</td>
+              <td className="date">{item.date}</td>
+              <td className="payer">{item.payer}</td>
+              <td className="cost">{item.cost}</td>
+            </tr>
+          ))}
+        </tbody>
       </table>
     </div>
   );
