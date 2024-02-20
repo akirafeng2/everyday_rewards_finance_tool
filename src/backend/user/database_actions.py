@@ -9,8 +9,6 @@ class UserDatabaseConnection(DatabaseConnection):
         """
         query = """
         SELECT
-            profile.profile_id,
-            profile.household_id,
             profile.user_name,
             household.household_name
         FROM profile
@@ -34,13 +32,13 @@ class UserDatabaseConnection(DatabaseConnection):
     def get_household_names(self, user_id: str) -> dict:
         """Returns the list names within a household"""
         select_statement = """
-        SELECT profile_id, user_name
+        SELECT user_name
         FROM profile
         WHERE household_id = (
             SELECT household_id
             FROM profile
             WHERE profile_id = %s)
-        ORDER BY profile_id
+        ORDER BY user_name
         """
         self.cursor.execute(select_statement, (user_id,))
         result = self.cursor.fetchall()

@@ -1,8 +1,12 @@
 from .file_system import FileSystem
-from .SETTINGS import CONNECTION_DETAILS, FINANCE_FILE_PATH, ENV
+from .SETTINGS import CONNECTION_DETAILS, FINANCE_FILE_PATH, ENV, STAGE
 from functools import wraps
 
-from flask import session
+from flask import session, request
+
+from supertokens_python.recipe.session.framework.flask import verify_session
+
+import jwt
 
 
 def db_conn(db_class):
@@ -23,3 +27,29 @@ def fs(func):
         instance = FileSystem(FINANCE_FILE_PATH, ENV, session['user_name'], session['household_name'])
         return func(instance, *args, **kwargs)
     return wrapper
+
+
+def verify_session_mod(func):
+    """
+    Modifying supertokens verify_session decorator to not be called when the environement variable STAGE = TEST
+    """
+    if STAGE == "TEST":
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            return func(*args, **kwargs)
+        return wrapper
+    else:
+        @wraps(func)
+        @verify_session()
+        def wrapper(*args, **kwargs):
+            return func(*args, **kwargs)
+        return wrapper
+
+
+def get_user_id():
+    """
+    Get user_id from request by decoding the access token
+    """
+    decoded = jwt.decode(request.cookies.get('sAccessToken'), options={"verify_signature": False})
+    user_id = decoded.get('sub')
+    return user_id

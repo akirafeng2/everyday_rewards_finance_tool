@@ -39,7 +39,7 @@ CREATE TABLE item (
 CREATE TABLE profile (
     profile_id character(36) PRIMARY KEY,
     household_id INT, 
-    user_name VARCHAR(12) NOT NULL, -- removed UNIQUE
+    user_name VARCHAR(64) NOT NULL, -- removed UNIQUE
     -- email VARCHAR(320) NOT NULL UNIQUE, --new
     -- password_hash VARCHAR(32) NOT NULL, --new
     FOREIGN KEY (household_id) REFERENCES household(household_id)

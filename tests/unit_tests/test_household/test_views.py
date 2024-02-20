@@ -43,7 +43,7 @@ def test_get_household_details_error(
     client: pytest.fixture
 ):
     """
-    Testing the /get_household_details route when passed a valid household_code
+    Testing the /get_household_details route when passed a invalid household_code
     """
     # Given
     # # Setting up Mocks
@@ -63,11 +63,13 @@ def test_get_household_details_error(
     assert response.json == expected_result
 
 
+@patch('everyday_rewards_finance_tool.src.backend.household.views.get_user_id')
 @patch('everyday_rewards_finance_tool.src.backend.household.views.assign_household')
 @patch('everyday_rewards_finance_tool.src.backend.household.views.get_household_profiles')
 def test_join_household_route_success(
     mock_get_household_profiles: MagicMock,
     mock_assign_household: MagicMock,
+    mock_get_user_id: MagicMock,
     user_id: pytest.fixture,
     household_id: pytest.fixture,
     household_list: pytest.fixture,
@@ -79,6 +81,7 @@ def test_join_household_route_success(
     # Given
     # # Setting up Mocks
     mock_get_household_profiles.return_value = household_list
+    mock_get_user_id.return_value = '1'
 
     # # Setting up expected response
     expected_result = {
@@ -91,7 +94,6 @@ def test_join_household_route_success(
 
     # When
     response = client.post('/api/household/join_household', json={
-        'user_id': user_id,
         'household_id': household_id
     })
 

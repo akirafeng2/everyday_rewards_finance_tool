@@ -21,8 +21,6 @@ class TestUserDatabaseConnection:
         # # setting up the query
         query_execute = """
         SELECT
-            profile.profile_id,
-            profile.household_id,
             profile.user_name,
             household.household_name
         FROM profile
@@ -69,13 +67,13 @@ class TestUserDatabaseConnection:
 
         # # setting up the query
         query_execute = """
-        SELECT profile_id, user_name
+        SELECT user_name
         FROM profile
         WHERE household_id = (
             SELECT household_id
             FROM profile
             WHERE profile_id = %s)
-        ORDER BY profile_id
+        ORDER BY user_name
         """
 
         # When

@@ -23,12 +23,10 @@ function Signup() {
     setName(e.target.value);
   };
 
-  const registerProfile = (user_id: string, name: string) => {
-    Cookies.set("user_id", user_id);
+  const registerProfile = (name: string) => {
     Cookies.set("user_name", name);
     axios
       .post("http://127.0.0.1:5050/api/user/register_profile", {
-        user_id: user_id,
         name: name,
       })
       .then(() => {
@@ -73,7 +71,7 @@ function Signup() {
       } else {
         // sign up successful. The session tokens are automatically handled by
         // the frontend SDK.
-        registerProfile(response.user.id, name);
+        registerProfile(name);
       }
     } catch (err: any) {
       if (err.isSuperTokensGeneralError === true) {

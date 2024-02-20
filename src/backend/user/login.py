@@ -8,7 +8,7 @@ def get_user_info(DB_CONN: UserDatabaseConnection, user_id: str) -> dict:
     with DB_CONN:
         user_info = DB_CONN.get_user_info(user_id)
 
-    data_titles = ('profile_id', 'household_id', 'user_name', 'household_name')
+    data_titles = ('user_name', 'household_name')
     login_info_dict = dict(zip(data_titles, user_info))
     return login_info_dict
 
@@ -17,5 +17,5 @@ def get_user_info(DB_CONN: UserDatabaseConnection, user_id: str) -> dict:
 def get_household_profiles(DB_CONN: UserDatabaseConnection, user_id: str):
     with DB_CONN:
         result = DB_CONN.get_household_names(user_id)
-    household_names = {row[0]: row[1] for row in result}
+    household_names = [name[0] for name in result]
     return household_names

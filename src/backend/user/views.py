@@ -3,7 +3,7 @@ from functools import wraps
 from .. import SETTINGS
 from . import login
 from .add_user import add_profile
-
+from ..common import verify_session_mod, get_user_id
 
 blueprint = Blueprint('user', __name__, template_folder='./templates')
 
@@ -11,18 +11,21 @@ env = SETTINGS.ENV
 
 
 @blueprint.route('/register_profile', methods=['POST',])
+@verify_session_mod
 def add_user_route():
     user_name = request.json.get('name')
-    profile_id = request.json.get('user_id')
-    add_profile(profile_id, user_name)
+    user_id = get_user_id()
+    add_profile(user_id, user_name)
     return '', 204
 
 
-@blueprint.route('/login_profile', methods=['POST'])
+@blueprint.route('/login_profile', methods=['GET'])
+@verify_session_mod
 def login_user_route_post_response():
-    user_id = request.json.get('user_id')
+    print(request.headers)
+    user_id = get_user_id()
     login_info = login.get_user_info(user_id)
-    login_info['household_profile_list'] = login.get_household_profiles(login_info['profile_id'])
+    login_info['household_profile_list'] = login.get_household_profiles(user_id)
     print(login_info)
     return jsonify(login_info)
 
