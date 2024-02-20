@@ -12,16 +12,12 @@ def test_get_user_info_valid(mock_db_conn: MagicMock, mock_connect: MagicMock, d
     # Given
     # # Setting up Mock
     mock_db_conn.return_value = (
-        details.get('user_id'),
-        details.get('household_id'),
         details.get('username'),
         details.get('household_name')
     )
 
     # # Set Up Result
     expect_dict = {
-        'profile_id': details.get('user_id'),
-        'household_id': details.get('household_id'),
         'user_name': details.get('username'),
         'household_name': details.get('household_name')
     }
@@ -34,30 +30,34 @@ def test_get_user_info_valid(mock_db_conn: MagicMock, mock_connect: MagicMock, d
 
 @patch('psycopg2.connect')
 @patch('everyday_rewards_finance_tool.src.backend.user.login.UserDatabaseConnection.get_household_names')
-def test_get_household_profiles_in_household(mock_db_conn: MagicMock, mock_connect: MagicMock, details: dict):
+def test_get_household_profiles_in_household_with_people(
+    mock_db_conn: MagicMock,
+    mock_connect: MagicMock,
+    details: dict
+):
     """Unit test to test output when user in a household"""
 
     # Given
     # # Setting up Mock
-    mock_db_conn.return_value = [(4, 'alex'), (5, 'adam'), (6, 'tyler')]
+    mock_db_conn.return_value = [('adam',), ('alex',), ('tyler',)]
 
     # # Setting up expected outcome
-    expected_dict = {
-        4: 'alex',
-        5: 'adam',
-        6: 'tyler'
-    }
+    expected_tuple = ['adam', 'alex', 'tyler']
 
     # When
     household_names = get_household_profiles(details.get('user_id'))
 
     # Then
-    assert household_names == expected_dict
+    assert household_names == expected_tuple
 
 
 @patch('psycopg2.connect')
 @patch('everyday_rewards_finance_tool.src.backend.user.login.UserDatabaseConnection.get_household_names')
-def test_get_household_profiles_in_household(mock_db_conn: MagicMock, mock_connect: MagicMock, details: dict):
+def test_get_household_profiles_in_household_no_people(
+    mock_db_conn: MagicMock,
+    mock_connect: MagicMock,
+    details: dict
+):
     """Unit test to test output when user not in a household"""
 
     # Given
@@ -65,7 +65,7 @@ def test_get_household_profiles_in_household(mock_db_conn: MagicMock, mock_conne
     mock_db_conn.return_value = []
 
     # # Setting up expected outcome
-    expected_dict = {}
+    expected_dict = []
 
     # When
     household_names = get_household_profiles(details.get('user_id'))

@@ -29,24 +29,6 @@ def fs(func):
     return wrapper
 
 
-# def verify_session_mod(testing_config: bool):
-#     if not testing_config:
-#         def decorator(func):
-#             @wraps(func)
-#             @verify_session()
-#             def wrapper(*args, **kwargs):
-#                 return func(*args, **kwargs)
-#             return wrapper
-#         return decorator
-#     else:
-#         def decorator(func):
-#             @wraps(func)
-#             def wrapper(*args, **kwargs):
-#                 return func(*args, **kwargs)
-#             return wrapper
-#         return decorator
-
-
 def verify_session_mod(func):
     """
     Modifying supertokens verify_session decorator to not be called when the environement variable STAGE = TEST
@@ -64,7 +46,10 @@ def verify_session_mod(func):
         return wrapper
 
 
-def get_access_token():
+def get_user_id():
+    """
+    Get user_id from request by decoding the access token
+    """
     decoded = jwt.decode(request.cookies.get('sAccessToken'), options={"verify_signature": False})
     user_id = decoded.get('sub')
     return user_id
