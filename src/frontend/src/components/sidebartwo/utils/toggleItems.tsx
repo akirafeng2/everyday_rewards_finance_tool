@@ -1,12 +1,12 @@
 class ToggleItems {
     private items: string[];
-    private itemState: { [key: string]: string};
+    private itemStates: { [key: string]: string};
     private activeItem: string;
 
     constructor(itemList: string[]) {
         this.items = itemList
         const stateArray = ["active"].concat(Array.from({ length: itemList.length-1 }, () => "inactive"))
-        this.itemState = itemList.reduce((result: { [key: string]: string}, key, index) => {
+        this.itemStates = itemList.reduce((result: { [key: string]: string}, key, index) => {
             result[key] = stateArray[index];
             return result;
         }, {})
@@ -15,8 +15,8 @@ class ToggleItems {
 
     toggleItem(itemName: string): void {
         if (this.items.includes(itemName)) {
-            this.itemState[this.activeItem] = "inactive"
-            this.itemState[itemName] = "active"
+            this.itemStates[this.activeItem] = "inactive"
+            this.itemStates[itemName] = "active"
             this.activeItem = itemName
         }
         else {
@@ -24,7 +24,23 @@ class ToggleItems {
         }
     }
 
+    hoverItem(itemName: string): void {
+        if (this.items.includes(itemName)) {
+            if (this.itemStates[itemName] == "inactive") {
+                this.itemStates[itemName] = "hover"
+            }
+            else if (this.itemStates[itemName] == "hover") {
+                this.itemStates[itemName] = "inactive"
+            }
+        }
+                else {
+            console.log(`Value for item ${itemName} not in ${this.items}`)
+        }
+    }
+
     getCurrentStates(): { [key: string]: string} {
-        return this.itemState
+        return this.itemStates
     }
 }
+
+export default ToggleItems

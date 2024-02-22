@@ -1,4 +1,4 @@
-import { useLocation, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "./sidebar.css";
 
 import Dashboard from "./buttons/dashboard-sidebar";
@@ -6,7 +6,11 @@ import Transactions from "./buttons/transactions-sidebar";
 import Weights from "./buttons/weights-sidebar";
 import Settings from "./buttons/settings-sidebar";
 import OneOff from "./buttons/oneOff-sidebar";
-import { ReactComponentElement, ReactElement } from "react";
+import React, { useState, ReactElement, useEffect } from "react";
+
+import ToggleItems from "./utils/toggleItems";
+
+// Todo: Need to fix bug surrounding when mouse leaves the hover, too tired to think of solution right now
 
 function Sidebar() {
   // Data to identify which page for each link
@@ -14,71 +18,72 @@ function Sidebar() {
     "Dashboard",
     "Transactions",
     "Weights",
-    "Recurring",
+    // "Recurring",
     "Settings",
-    "Logout",
+    // "Logout",
   ];
   
+  const sidebarToggle = new ToggleItems(sidebarItems)
 
-  const routeDataDashboard = {
-    current: "Dashboard",
-  };
-  const routeDataTransactions = {
-    current: "Transactions",
-  };
-  const routeDataWeights = {
-    current: "Weights",
-  };
-  const routeOneOff = {
-    current: "OneOff",
-  };
-  const routeDataSettings = {
-    current: "Settings",
-  };
+  const getFillOfIcon = (state: string) => {
+    if (state == "active") {
+      return "#FFFFFF"
+    }
+    else if (state == "hover") {
+      return "#2095E5"
+    }
+    else {
+      return "#91A6BC"
+    }
+  } 
 
-  var state = "Dashboard";
-  const location = useLocation();
-  if (location.state != null) {
-    state = location.state["current"];
+  const [activeItem, setActiveItem] = useState("Dashboard")
+  const [stateMap, setStateMap] = useState(sidebarToggle.getCurrentStates())
+  const [hover, setHover] = useState("")
+
+  const handleClick = (item: string) => {
+    setActiveItem(item)
   }
-  console.log(state);
-
-  var dashboardClass = "navbar-toggle";
-  var transactionsClass = "navbar-toggle";
-  var oneOffClass = "navbar-toggle";
-  var weightsClass = "navbar-toggle";
-  var settingsClass = "navbar-toggle";
-
-  var dashboardColor = "currentColor";
-  var transactionsColor = "currentColor";
-  var oneOffColor = "currentColor";
-  var weightsColor = "currentColor";
-  var settingsColor = "currentColor";
-
-  if (state == "Weights") {
-    weightsClass = "navbar-toggle-active";
-    weightsColor = "#101934";
-  } else if (state == "Transactions") {
-    transactionsClass = "navbar-toggle-active";
-    transactionsColor = "#101934";
-  } else if (state == "Settings") {
-    settingsClass = "navbar-toggle-active";
-    settingsColor = "#101934";
-  } else if (state == "OneOff") {
-    oneOffClass = "navbar-toggle-active";
-    oneOffColor = "#101934";
-  } else {
-    // NOTE: since beginning will be null, all else is dashboard as we often start at dashboard
-    dashboardClass = "navbar-toggle-active";
-    dashboardColor = "#101934";
+  
+  const handleHover = (item: string) => {
+    if (item != activeItem) {
+      setHover(item)
+    }
   }
+  
+  useEffect(() => {
+    sidebarToggle.toggleItem(activeItem)
+    setStateMap(sidebarToggle.getCurrentStates())
+    console.log(stateMap)
+  }, [activeItem]);
+
+  useEffect(() => {
+    sidebarToggle.hoverItem(hover)
+    setStateMap(sidebarToggle.getCurrentStates())
+    console.log(stateMap)
+  }, [hover]);
+
+  const iconComponentMap: { [key: string]: JSX.Element} = {
+    "Dashboard": <Dashboard fill={getFillOfIcon(stateMap["Dashboard"])}></Dashboard>,
+    "Transactions": <Transactions fill={getFillOfIcon(stateMap["Transactions"])}></Transactions>,
+    "Weights": <Weights fill={getFillOfIcon(stateMap["Weights"])}></Weights>,
+    // "Recurring": <Recurring fill={getFillOfIcon(sidebarToggle.getCurrentState("Recurring"))}></Recurring>,
+    "Settings": <Settings fill={getFillOfIcon(stateMap["Settings"])}></Settings>,
+    // "Logout": <Logout fill={getFillOfIcon(sidebarToggle.getCurrentState("Logout"))}></Logout>
+  }
+
 
   const sidebarButtons = () => {
     let sidebarButtons: ReactElement[] = [];
     sidebarItems.forEach((item) => {
       sidebarButtons.push(
         <Link to={`/Page/${item}`}>
-          <li></li>
+          <li className={stateMap[item]} onClick={() => handleClick(item)} onMouseEnter={() => handleHover(item)} onMouseLeave={() => handleHover(item)}>
+            <span className="sidebar-icon">
+              {iconComponentMap[item]}
+            </span>
+            {item}
+          </li>
         </Link>
       );
     });
@@ -89,50 +94,7 @@ function Sidebar() {
     <>
       <div className="Sidebar">
         <ul className="nav-menu-items">
-          <Link to="/Page/Dashboard" state={routeDataDashboard}>
-            <li className={dashboardClass}>
-              <span className="sidebar-icon">
-                <Dashboard fill={dashboardColor} />
-              </span>
-              Dashboard
-            </li>
-          </Link>
-
-          <Link to="/Page/Transactions" state={routeDataTransactions}>
-            <li className={transactionsClass}>
-              <span className="sidebar-icon">
-                <Transactions fill={transactionsColor} />
-              </span>
-              Transactions
-            </li>
-          </Link>
-
-          <Link to="/Page/OneOff" state={routeOneOff}>
-            <li className={oneOffClass}>
-              <span className="sidebar-icon">
-                <OneOff fill={oneOffColor} />
-              </span>
-              One-off costs
-            </li>
-          </Link>
-
-          <Link to="/Page/Weights" state={routeDataWeights}>
-            <li className={weightsClass}>
-              <span className="sidebar-icon">
-                <Weights fill={weightsColor} />
-              </span>
-              Weights
-            </li>
-          </Link>
-
-          <Link to="/Page/Settings" state={routeDataSettings}>
-            <li className={settingsClass}>
-              <span className="sidebar-icon">
-                <Settings fill={settingsColor} />
-              </span>
-              Settings
-            </li>
-          </Link>
+          {sidebarButtons()}
         </ul>
       </div>
     </>

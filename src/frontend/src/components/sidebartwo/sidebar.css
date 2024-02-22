@@ -24,24 +24,24 @@
     list-style: none;
 }
 
-.navbar-toggle{
+.inactive{
     padding: 0rem 0.88rem 0rem 0.88rem;
 }
 
-.nav-menu-items .navbar-toggle-active {
-    background-color: #CAD8E3;
-    color: #101934;
+.nav-menu-items .active {
+    background-color: #1A7BBD;
+    color: #FFFFFF;
 }
 
 
-.nav-menu-items li:hover{
-    background-color: #CAD8E3;
-    color: #101934;
-
+.nav-menu-items li.inactive:hover{
+    background-color: #F0F7FF;
+    color: #2095E5;
 }
+
 .nav-menu-items li{
     border-radius: 0.25rem;
-    color:#BDBDBD;
+    color:#91A6BC;
     overflow: hidden;
     margin-top: 0.1rem;
     margin-bottom: 0.1rem;
@@ -75,5 +75,3 @@
     height: 1.5625rem;
     margin-right: 0.88rem;
 }
-
-    
