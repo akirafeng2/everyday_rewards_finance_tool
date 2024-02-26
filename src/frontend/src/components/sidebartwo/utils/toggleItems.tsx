@@ -1,7 +1,6 @@
 class ToggleItems {
   private items: string[];
   private itemStates: { [key: string]: string };
-  private activeItem: string;
 
   constructor(itemList: string[], active_item: string) {
     this.items = itemList;
@@ -12,9 +11,7 @@ class ToggleItems {
         return result;
       },
       {}
-    
     );
-    this.activeItem = active_item;
     this.itemStates[active_item] = "active"
   }
 

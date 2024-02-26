@@ -1,77 +1,74 @@
 .Sidebar {
-    /* Height is 100% of parent (body)*/
-    height: 100%;
-    width: 237px;
-    position: fixed;
-    /* stack order of elements, this is on top of 0 */
-    /* z-index: 1; */
-    top: 0;
-    left: 0;
-    background-color: rgba(255, 255, 255, 0.87);
-    overflow: hidden;
-    border-right: 1px solid #EAECF0;
+  /* Height is 100% of parent (body)*/
+  height: 100%;
+  width: 240px;
+  position: fixed;
+  /* stack order of elements, this is on top of 0 */
+  /* z-index: 1; */
+  top: 0;
+  left: 0;
+  background-color: rgba(255, 255, 255, 0.87);
+  overflow: hidden;
+  border-right: 1px solid #eaecf0;
 
-    padding: 15.44rem 1.375rem 1.375rem 0rem;
+  padding: 15.44rem 0px 0px 0px;
 
-
-    text-align: left;
-    font-size: 150%;
-    border-right: 1px solid #EAECF0;
-  }
+  text-align: left;
+  font-size: 150%;
+  border-right: 1px solid #eaecf0;
   
-
-.nav-menu-items{
-    list-style: none;
 }
 
-.inactive{
-    padding: 0rem 0.88rem 0rem 0.88rem;
+.nav-menu-items {
+  list-style: none;
+  padding-inline-start: 18px;
 }
 
 .nav-menu-items .active {
-    background-color: #1A7BBD;
-    color: #FFFFFF;
+  background-color: #1a7bbd;
+  color: #ffffff;
 }
 
-
-.nav-menu-items li.hover{
-    background-color: #F0F7FF;
-    color: #2095E5;
+.nav-menu-items li.hover {
+  background-color: #f0f7ff;
+  color: #2095e5;
 }
 
-.nav-menu-items li{
-    border-radius: 0.25rem;
-    color:#91A6BC;
-    overflow: hidden;
-    margin-top: 0.1rem;
-    margin-bottom: 0.1rem;
+.nav-menu-items li {
+  border-radius: 4px;
+  color: #91a6bc;
+  overflow: hidden;
+  margin-top: 0.1rem;
+  margin-bottom: 0.1rem;
 
-    display: inline-flex;
-    align-items: center;
-    width: 12rem;
-    padding: 0.88rem 0.88rem 0.75rem 1.25rem;
+  display: inline-flex;
+  align-items: center;
+  width: 188px;
+  height: 40px;
+  padding: 0px 0px 0px 15px;
 
+  font-family: "DM Sans-Regular", Helvetica;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: -0.15px;
+  line-height: 24px;
 }
 
-
-
-.nav-menu-items  a{
-    font-weight: bold;
-    font-size: 1.125rem;
-
+.nav-menu-items a {
+  font-weight: bold;
+  font-size: 1.125rem;
 }
 
 /* Inherits the colour of the parent class, i.e. the li*/
 .navbar-toggle a {
-    color: inherit;
-    font-size: 1.125rem;
-  }
+  color: inherit;
+  font-size: 1.125rem;
+}
 
-
-
-  
-.sidebar-icon{
-    width: 1.46838rem;
-    height: 1.5625rem;
-    margin-right: 0.88rem;
+.sidebar-icon {
+  width: 1.46838rem;
+  height: 1.5625rem;
+  margin-right: 0.88rem;
+  display: inline-flex;
+  align-items: center;
 }
