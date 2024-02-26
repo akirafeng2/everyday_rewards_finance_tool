@@ -34,7 +34,7 @@
 }
 
 
-.nav-menu-items li.inactive:hover{
+.nav-menu-items li.hover{
     background-color: #F0F7FF;
     color: #2095E5;
 }

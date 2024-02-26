@@ -10,9 +10,7 @@ import React, { useState, ReactElement, useEffect } from "react";
 
 import ToggleItems from "./utils/toggleItems";
 
-// Todo: Need to fix bug surrounding when mouse leaves the hover, too tired to think of solution right now
-
-function Sidebar() {
+function Sidebar({ activePage }: { activePage: string }) {
   // Data to identify which page for each link
   const sidebarItems = [
     "Dashboard",
@@ -23,21 +21,20 @@ function Sidebar() {
     // "Logout",
   ];
   
-  const sidebarToggle = new ToggleItems(sidebarItems)
+  const sidebarToggle = new ToggleItems(sidebarItems, activePage)
 
   const getFillOfIcon = (state: string) => {
-    if (state == "active") {
-      return "#FFFFFF"
+    switch (state) {
+      case "active":
+        return "#FFFFFF";
+      case "hover":
+        return "#2095E5";
+      default:
+        return "#91A6BC";
     }
-    else if (state == "hover") {
-      return "#2095E5"
-    }
-    else {
-      return "#91A6BC"
-    }
-  } 
-
-  const [activeItem, setActiveItem] = useState("Dashboard")
+  };
+  
+  const [activeItem, setActiveItem] = useState(activePage)
   const [stateMap, setStateMap] = useState(sidebarToggle.getCurrentStates())
   const [hover, setHover] = useState("")
 
@@ -46,21 +43,18 @@ function Sidebar() {
   }
   
   const handleHover = (item: string) => {
-    if (item != activeItem) {
-      setHover(item)
+    if (item !== activeItem) {
+      setHover(item !== hover ? item : "");
     }
-  }
+  };
   
   useEffect(() => {
-    sidebarToggle.toggleItem(activeItem)
     setStateMap(sidebarToggle.getCurrentStates())
-    console.log(stateMap)
   }, [activeItem]);
 
   useEffect(() => {
     sidebarToggle.hoverItem(hover)
     setStateMap(sidebarToggle.getCurrentStates())
-    console.log(stateMap)
   }, [hover]);
 
   const iconComponentMap: { [key: string]: JSX.Element} = {
@@ -77,7 +71,7 @@ function Sidebar() {
     let sidebarButtons: ReactElement[] = [];
     sidebarItems.forEach((item) => {
       sidebarButtons.push(
-        <Link to={`/Page/${item}`}>
+        <Link to={`/${item}`}>
           <li className={stateMap[item]} onClick={() => handleClick(item)} onMouseEnter={() => handleHover(item)} onMouseLeave={() => handleHover(item)}>
             <span className="sidebar-icon">
               {iconComponentMap[item]}
