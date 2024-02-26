@@ -1,4 +1,4 @@
-import Sidebar from "../components/sidebartwo/sidebar";
+import Sidebar from "../components/sidebar/sidebar";
 import AccountButton from "../components/account_button/account_button";
 import { useParams } from "react-router-dom";
 
