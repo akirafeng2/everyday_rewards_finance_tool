@@ -22,8 +22,6 @@ class ToggleItems {
       } else if (this.itemStates[itemName] == "hover") {
         this.itemStates[itemName] = "inactive";
       }
-    } else {
-      console.log(`Value for item ${itemName} not in ${this.items}`);
     }
   }
 

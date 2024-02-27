@@ -12,7 +12,7 @@ const Recurring = ({ fill }: sidebarProps) => {
       viewBox="0 0 27 24"
       fill={fill}
     >
-      <g id="Repeat" clip-path="url(#clip0_33_746)">
+      <g id="Repeat" clipPath="url(#clip0_33_746)">
         <path
           id="Vector"
           d="M8.5522 6.99718H19.8253V9.99593L24.3345 5.9976L19.8253 1.99927V4.99802H6.29758V10.9955H8.5522V6.99718ZM19.8253 16.993H8.5522V13.9943L4.04297 17.9926L8.5522 21.9909V18.9922H22.0799V12.9947H19.8253V16.993Z"

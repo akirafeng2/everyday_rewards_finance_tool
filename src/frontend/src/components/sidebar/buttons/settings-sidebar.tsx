@@ -12,7 +12,7 @@ const Settings = ({ fill }: sidebarProps) => {
       fill={fill}
       xmlns="http://www.w3.org/2000/svg"
     >
-      <g id="Settings" clip-path="url(#clip0_33_970)">
+      <g id="Settings" clipPath="url(#clip0_33_970)">
         <g id="Group">
           <path
             id="Vector"

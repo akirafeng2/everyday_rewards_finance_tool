@@ -7,7 +7,7 @@ import Weights from "./buttons/weights-sidebar";
 import Settings from "./buttons/settings-sidebar";
 import Recurring from "./buttons/recurring-sidebar";
 import Logout from "./buttons/logout-sidebar";
-import React, { useState, ReactElement, useEffect } from "react";
+import { useState, ReactElement, useEffect } from "react";
 
 import ToggleItems from "./utils/toggleItems";
 
@@ -70,9 +70,12 @@ function Sidebar({ activePage }: { activePage: string }) {
 
   const sidebarButtons = () => {
     let sidebarButtons: ReactElement[] = [];
-    sidebarItems.forEach((item) => {
+  
+    for (let i = 0; i < sidebarItems.length; i++) {
+      const item = sidebarItems[i];
+      
       sidebarButtons.push(
-        <Link to={`/${item}`}>
+        <Link key={`sidebarItem-${item}`} to={`/${item}`}>
           <li className={stateMap[item]} onClick={() => handleClick(item)} onMouseEnter={() => handleHover(item)} onMouseLeave={() => handleHover(item)}>
             <span className="sidebar-icon">
               {iconComponentMap[item]}
@@ -81,7 +84,8 @@ function Sidebar({ activePage }: { activePage: string }) {
           </li>
         </Link>
       );
-    });
+    }
+    
     return sidebarButtons;
   };
 

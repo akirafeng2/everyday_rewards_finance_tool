@@ -12,7 +12,7 @@ const Dashboard = ({ fill }: sidebarProps) => {
       fill={fill}
       xmlns="http://www.w3.org/2000/svg"
     >
-      <g id="Bar chart" clip-path="url(#clip0_33_188)">
+      <g id="Bar chart" clipPath="url(#clip0_33_188)">
         <path
           id="Vector"
           d="M5.74365 9.19605H9.12558V18.992H5.74365V9.19605ZM12.0566 4.9978H15.213V18.992H12.0566V4.9978ZM18.3695 12.9945H21.526V18.992H18.3695V12.9945Z"
