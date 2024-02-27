@@ -77,10 +77,12 @@ function Sidebar({ activePage }: { activePage: string }) {
       sidebarButtons.push(
         <Link key={`sidebarItem-${item}`} to={`/${item}`}>
           <li className={stateMap[item]} onClick={() => handleClick(item)} onMouseEnter={() => handleHover(item)} onMouseLeave={() => handleHover(item)}>
+            <div className="sidebarbuttonbox">
             <span className="sidebar-icon">
               {iconComponentMap[item]}
             </span>
             {item}
+            </div>
           </li>
         </Link>
       );

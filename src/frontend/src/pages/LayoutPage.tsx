@@ -9,7 +9,7 @@ import Settings from "./Settings";
 import OneOff from "./OneOff";
 
 function LayoutPage() {
-  const { Page } = useParams<{Page: string}>();
+  const { Page } = useParams<{ Page: string }>();
   const pageToDisplay = Page || "Dashboard";
 
   const renderPageComponent = () => {

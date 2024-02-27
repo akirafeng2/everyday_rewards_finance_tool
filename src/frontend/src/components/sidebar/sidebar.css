@@ -1,7 +1,9 @@
 .Sidebar {
   /* Height is 100% of parent (body)*/
   height: 100%;
-  width: 240px;
+  width: 16.67vw;
+  max-width: 240px;
+  min-width: 180px;
   position: fixed;
   /* stack order of elements, this is on top of 0 */
   /* z-index: 1; */
@@ -44,9 +46,11 @@
 
   display: inline-flex;
   align-items: center;
-  width: 188px;
+  width: 14.167vw;
+  max-width: 204px;
+  min-width: 153px;
   height: 40px;
-  padding: 0px 0px 0px 15px;
+
 
   font-family: "DM Sans-Regular", Helvetica;
   font-size: 14px;
@@ -72,4 +76,13 @@
   margin-right: 0.88rem;
   display: inline-flex;
   align-items: center;
+}
+
+.sidebarbuttonbox {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: row;
+
+  margin-left: 12px;
 }

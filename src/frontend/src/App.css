@@ -1,29 +1,26 @@
+.content {
+  width: 1120px;
+}
+
 .main {
-  height: 100%;
-  max-width: 1536px;
-  padding: 20px;
-  margin: 0% 0% 0% 18.5rem;
-  color: #000000;
-  font-family: "DM Sans-Bold", Helvetica;
-  font-size: 24px;
-  font-weight: 700;
-  letter-spacing: -0.26px;
-  line-height: 24px;
-  top: 0;
-  left: 0;
+  padding-left: 40px;
+  padding-right: 40px;
+  margin-left: 16.67vw;
+  
+  
 }
 
 .header {
-color: #000000;
-font-family: "DM Sans-Bold", Helvetica;
-font-size: 48px;
-font-weight: 700;
-letter-spacing: -0.53px;
-line-height: 48px;
-width: 533px;
-white-space: nowrap;
-margin-top: 4%;
-margin-bottom: 19px;
+  color: #000000;
+  font-family: "DM Sans-Bold", Helvetica;
+  font-size: 48px;
+  font-weight: 700;
+  letter-spacing: -0.53px;
+  line-height: 48px;
+  width: 533px;
+  white-space: nowrap;
+  margin-top: 114px;
+  margin-bottom: 19px;
 }
 
 .subheader {
