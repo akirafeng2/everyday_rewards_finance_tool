@@ -7,6 +7,7 @@ import Transactions from "./Transactions/Transactions";
 import Weights from "./Weights";
 import Settings from "./Settings";
 import OneOff from "./OneOff";
+import "./../App.css"
 
 function LayoutPage() {
   const { Page } = useParams<{ Page: string }>();
@@ -33,7 +34,10 @@ function LayoutPage() {
     <>
       <Sidebar activePage={pageToDisplay} />
       <AccountButton />
-      {renderPageComponent()}
+      <div className="bufferMainContainer">
+        <div className="sidebarBuffer"/>
+        {renderPageComponent()}
+      </div>
     </>
   );
 }

@@ -1,13 +1,25 @@
 .content {
-  width: 1120px;
+  width: 960px;
+  margin-left: 40px;
+  margin-right: 40px;
 }
 
 .main {
-  padding-left: 40px;
-  padding-right: 40px;
-  margin-left: 16.67vw;
-  
-  
+  width: 83vw;
+  min-width: 1040px;
+  background-color: aquamarine;
+}
+
+.sidebarBuffer{
+  width: 16.66vw;
+  max-width: 240px;
+  min-width: 180px;
+}
+
+.bufferMainContainer {
+  display: inline-flex;
+  justify-content: flex-start;
+  flex-direction: row;
 }
 
 .header {
