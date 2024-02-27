@@ -1,3 +1,5 @@
+import "./headers.css"
+
 interface SubHeaderProps{
     text: string
 }

@@ -1,0 +1,31 @@
+.header {
+  color: #000000;
+  font-family: "DM Sans-Bold", Helvetica;
+  font-size: 48px;
+  font-weight: 700;
+  letter-spacing: -0.53px;
+  line-height: 48px;
+  width: 533px;
+  white-space: nowrap;
+  margin-top: 80px;
+  margin-bottom: 12px;
+}
+
+.tagline {
+  color: #aeaeae;
+  font-family: "DM Sans-Regular", Helvetica;
+  font-size: 18px;
+  font-weight: 400;
+  letter-spacing: -0.2px;
+  line-height: 24px;
+  margin-bottom: 48px;
+}
+
+.subheader {
+  color: black;
+  font-family: "DM Sans-Bold", Helvetica;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.26px;
+  line-height: 24px;
+}

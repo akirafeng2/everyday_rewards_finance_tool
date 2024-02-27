@@ -21,10 +21,7 @@
     0px 16px 24px #0000000f;
 
   height: 392px;
-
-  min-width: 50ch;
-  max-width: 70ch;
-  width: 48vw;
+  width: calc(100% - 80px);
 
   margin-top: 23px;
 
@@ -40,8 +37,8 @@
 }
 
 .hcontainer.owings {
-  margin-top: 23px;
-  margin-bottom: 50px;
+  margin-top: 12px;
+  margin-bottom: 30px;
 }
 
 .hcontainer.upload_tile_text {
