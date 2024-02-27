@@ -5,7 +5,8 @@ import Dashboard from "./buttons/dashboard-sidebar";
 import Transactions from "./buttons/transactions-sidebar";
 import Weights from "./buttons/weights-sidebar";
 import Settings from "./buttons/settings-sidebar";
-import OneOff from "./buttons/oneOff-sidebar";
+import Recurring from "./buttons/recurring-sidebar";
+import Logout from "./buttons/logout-sidebar";
 import React, { useState, ReactElement, useEffect } from "react";
 
 import ToggleItems from "./utils/toggleItems";
@@ -16,9 +17,9 @@ function Sidebar({ activePage }: { activePage: string }) {
     "Dashboard",
     "Transactions",
     "Weights",
-    // "Recurring",
+    "Recurring",
     "Settings",
-    // "Logout",
+    "Logout",
   ];
   
   const sidebarToggle = new ToggleItems(sidebarItems, activePage)
@@ -61,9 +62,9 @@ function Sidebar({ activePage }: { activePage: string }) {
     "Dashboard": <Dashboard fill={getFillOfIcon(stateMap["Dashboard"])}></Dashboard>,
     "Transactions": <Transactions fill={getFillOfIcon(stateMap["Transactions"])}></Transactions>,
     "Weights": <Weights fill={getFillOfIcon(stateMap["Weights"])}></Weights>,
-    // "Recurring": <Recurring fill={getFillOfIcon(sidebarToggle.getCurrentState("Recurring"))}></Recurring>,
+    "Recurring": <Recurring fill={getFillOfIcon(stateMap["Recurring"])}></Recurring>,
     "Settings": <Settings fill={getFillOfIcon(stateMap["Settings"])}></Settings>,
-    // "Logout": <Logout fill={getFillOfIcon(sidebarToggle.getCurrentState("Logout"))}></Logout>
+    "Logout": <Logout fill={getFillOfIcon(stateMap["Logout"])}></Logout>
   }
 
 
