@@ -14,7 +14,7 @@ const OwingGroup = () => {
   return (
     <div className="hcontainer owings">
       {names.map((name) => (
-        <OwingTile name={name} owes={mock_owings[name]}/>
+        <OwingTile name={name} key={name} owes={mock_owings[name]}/>
       ))}
     </div>
   );

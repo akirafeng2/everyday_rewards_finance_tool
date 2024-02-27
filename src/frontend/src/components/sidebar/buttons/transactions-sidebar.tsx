@@ -1,26 +1,36 @@
-
 // Enforces type
-interface sidebarProps{
-    fill: string
+interface sidebarProps {
+  fill: string;
 }
 
-const  Transaction = ({fill}: sidebarProps) => {
+const Transaction = ({ fill }: sidebarProps) => {
   return (
-        <svg width="26" height="19" viewBox="0 0 26 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <g id="Group 74">
-        <path id="Vector" d="M8.25 2H24.5" stroke={fill} stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-        <path id="Vector_2" d="M8.25 9.5H24.5" stroke={fill} stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-        <path id="Vector_3" d="M8.25 17H24.5" stroke={fill} stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-        <path id="Vector_4" d="M2 2.00024H2.01042" stroke={fill} stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-        <path id="Vector_5" d="M2 9.5H2.01042" stroke={fill} stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-        <path id="Vector_6" d="M2 17H2.01042" stroke={fill} stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-        </g>
-        </svg>
+    <svg
+      width="24"
+      height="25"
+      viewBox="0 0 24 25"
+      fill={fill}
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <g id="Format list bulleted" clipPath="url(#clip0_33_1081)">
+        <path
+          id="Vector"
+          d="M5.17045 10.4955C4.23479 10.4955 3.47949 11.1653 3.47949 11.9949C3.47949 12.8246 4.23479 13.4943 5.17045 13.4943C6.10612 13.4943 6.86142 12.8246 6.86142 11.9949C6.86142 11.1653 6.10612 10.4955 5.17045 10.4955ZM5.17045 4.49805C4.23479 4.49805 3.47949 5.16777 3.47949 5.99742C3.47949 6.82708 4.23479 7.4968 5.17045 7.4968C6.10612 7.4968 6.86142 6.82708 6.86142 5.99742C6.86142 5.16777 6.10612 4.49805 5.17045 4.49805ZM5.17045 16.493C4.23479 16.493 3.47949 17.1728 3.47949 17.9924C3.47949 18.8121 4.24606 19.4918 5.17045 19.4918C6.09485 19.4918 6.86142 18.8121 6.86142 17.9924C6.86142 17.1728 6.10612 16.493 5.17045 16.493ZM8.55238 18.992H24.3347V16.9928H8.55238V18.992ZM8.55238 12.9945H24.3347V10.9953H8.55238V12.9945ZM8.55238 4.99784V6.99701H24.3347V4.99784H8.55238Z"
+          fill={fill}
+        />
+      </g>
+      <defs>
+        <clipPath id="clip0_33_1081">
+          <rect
+            width="27.0554"
+            height="23.99"
+            fill={fill}
+            transform="translate(0.661133)"
+          />
+        </clipPath>
+      </defs>
+    </svg>
   );
 };
 
 export default Transaction;
-
-
-
-

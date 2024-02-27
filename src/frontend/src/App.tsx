@@ -1,10 +1,5 @@
 import "./App.css";
-import { Routes, Route } from "react-router-dom";
-import Dashboard from "./pages/Dashboard/Dashboard.tsx";
-import Transactions from "./pages/Transactions/Transactions";
-import Weights from "./pages/Weights";
-import Settings from "./pages/Settings";
-import OneOff from "./pages/OneOff";
+import { Routes, Route, Outlet } from "react-router-dom";
 import LayoutPage from "./pages/LayoutPage.tsx";
 
 import Login from "./pages/Authentication/login.tsx";
@@ -53,20 +48,21 @@ function App() {
               <Route path="Join" element={<HouseholdJoin />} />
             </Route>
             <Route
-              path="/Page"
+              path="/"
               element={
                 <SessionAuth>
                   <PrivatePageRoute>
-                    <LayoutPage />
+                    <Outlet />
                   </PrivatePageRoute>
                 </SessionAuth>
               }
             >
-              <Route path="Dashboard" element={<Dashboard />} />
+              <Route path=":Page" element={<LayoutPage/>} />
+              {/* <Route path="Dashboard" element={<Dashboard />} />
               <Route path="Transactions" element={<Transactions />} />
               <Route path="OneOff" element={<OneOff />} />
               <Route path="Weights" element={<Weights />} />
-              <Route path="Settings" element={<Settings />} />
+              <Route path="Settings" element={<Settings />} /> */}
             </Route>
           </Routes>
         </BrowserRouter>
