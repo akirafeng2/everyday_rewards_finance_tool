@@ -7,7 +7,6 @@
 .main {
   width: 83vw;
   min-width: 1040px;
-  background-color: aquamarine;
 }
 
 .sidebarBuffer{
@@ -31,7 +30,7 @@
   line-height: 48px;
   width: 533px;
   white-space: nowrap;
-  margin-top: 114px;
+  margin-top: 80px;
   margin-bottom: 19px;
 }
 

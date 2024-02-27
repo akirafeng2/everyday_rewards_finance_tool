@@ -2,10 +2,11 @@
   border: 2px solid;
   border-color: #f1f6fe;
   border-radius: 50px 50px 0px 50px;
-  height: 84px;
-  float: right;
-  top: 0;
-  width: 254px;
+  height: 72px;
+  position: absolute;
+  top: 48px;
+  right:40px;
+  width: 240px;
   padding-left: 12px;
 
   display: flex;
