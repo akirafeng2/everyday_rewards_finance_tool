@@ -78,10 +78,9 @@
   position: relative;
 
   color: #F9FAFF;
-  font-family: "DM Sans-Bold", Helvetica;
+  font-family: "DM Sans", Helvetica;
   font-size: 24px;
   font-weight: 700;
-  letter-spacing: -0.26px;
   line-height: 24px;
 }
 
@@ -108,10 +107,9 @@
 
 .dashboard_table_box th {
   color: #91a6bc;
-  font-family: "DM Sans-Regular", Helvetica;
+  font-family: "DM Sans", Helvetica;
   font-size: 1.2rem;
   font-weight: 400;
-  letter-spacing: 0;
   text-align: left;
   width: 100%;
 }
@@ -129,13 +127,13 @@
 
 .dashboard_table_box td.item {
   color: #3f3f3f;
-  font-family: "DM Sans-Regular", Helvetica;
+  font-family: "DM Sans", Helvetica;
 }
 
 .dashboard_table_box td.date,
 .dashboard_table_box td.payer {
   color: #c7c7c7;
-  font-family: "DM Sans-Regular", Helvetica;
+  font-family: "DM Sans", Helvetica;
 }
 
 .dashboard_table_box td.cost {
@@ -159,10 +157,9 @@
 
 .owing_text {
   color: #afafaf;
-  font-family: "DM Sans-Bold", Helvetica;
+  font-family: "DM Sans", Helvetica;
   font-size: 0.875rem;
   font-weight: 700;
-  letter-spacing: -0.009375rem;
   line-height: 1.5rem;
   white-space: nowrap;
 

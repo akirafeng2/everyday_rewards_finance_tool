@@ -36,11 +36,10 @@ div.whiteBox {
 .auth div.title {
   color: #ffffff;
 
-  font-family: "DMSans-Bold", Helvetica;
+  font-family: "DM Sans", Helvetica;
   font-size: 36px;
   font-style: normal;
   font-weight: 700;
-  letter-spacing: -0.39600000858306883px;
   line-height: 24px;
   white-space: nowrap;
 
@@ -68,11 +67,10 @@ div.whiteBox {
   border-radius: 10px;
   border: none;
 
-  font-family: "DM Sans-Regular", Helvetica;
+  font-family: "DM Sans", Helvetica;
   font-size: 16px;
   font-weight: 400;
   color: white;
-  letter-spacing: -0.18px;
   line-height: 24px;
 
   margin-bottom: 13px;
