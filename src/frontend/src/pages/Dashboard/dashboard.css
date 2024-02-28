@@ -196,3 +196,11 @@ img.er_logo {
   padding-left: 22.6%
 }
 
+.owing_amount {
+  color: black;
+  font-size: 24px;
+  font-family: "DM Sans";
+  font-weight: 700;
+  line-height: 24px;
+}
+

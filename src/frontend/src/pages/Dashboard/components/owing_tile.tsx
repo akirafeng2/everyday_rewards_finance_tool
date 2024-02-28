@@ -20,7 +20,7 @@ const OwingTile = ({ name, owes }: OwingTileProp) => {
         <div className="profile_circle"></div>
         <div className="vcontainer">
           <div className="owing_text">{owing_statement}</div>
-          <div>${owes}</div>
+          <div className="owing_amount">${owes}</div>
         </div>
       </div>
     </div>

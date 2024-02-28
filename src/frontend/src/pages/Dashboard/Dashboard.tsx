@@ -5,18 +5,52 @@ import OwingGroup from "./components/owing_group";
 import DashboardTable from "./components/dashboard_table";
 import Cookies from "js-cookie";
 import "./dashboard.css";
+import axios, { AxiosError, AxiosResponse } from "axios";
+import React, { useState, useEffect } from "react";
 
 function Dashboard() {
-  console.log(Cookies.get());
+  function capitalizeFirstLetter(string: string | undefined) {
+    if (typeof string == "string")
+      return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
+  // Tagline: get date
+  const [taglineText, setTaglineText] = useState<string>("Loading...");
+
+  useEffect(() => {
+    axios
+      .get("http://127.0.0.1:5050/api/dashboard/get_earliest_date", {
+        withCredentials: true,
+      })
+      .then((res: AxiosResponse) => {
+        const earliestDate: string = res.data["date"];
+        if (earliestDate == "") {
+          setTaglineText("Your household is all settled up!");
+        } else {
+          setTaglineText(
+            `Here's your household balances since the ${earliestDate}`
+          );
+        }
+      })
+      .catch((err: AxiosError) => {
+        console.log(err);
+        setTaglineText("Error fetching data");
+      });
+  }, []);
+
   return (
-      <>
-        <Header text="Welcome back, Alex 👋" />
-        <Tagline text="Here's your household expenses summary" />
-        <SubHeader text="Household Balances" />
-        <OwingGroup />
-        <SubHeader text="Transaction history" />
-        <DashboardTable />
-      </>
+    <>
+      <Header
+        text={`Welcome back, ${capitalizeFirstLetter(
+          Cookies.get("user_name")
+        )} 👋`}
+      />
+      <Tagline text={taglineText} />
+      <SubHeader text="Household Balances" />
+      <OwingGroup />
+      <SubHeader text="Unsettled Transactions" />
+      <DashboardTable />
+    </>
   );
 }
 
