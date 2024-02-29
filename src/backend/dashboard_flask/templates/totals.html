@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Submit Page</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 40%;
+        }
+
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Attributed Spend</h1>
+    <table>
+        {% for key, value in spent.items() %}
+        <tr>
+            <td>{{ key }}</td>
+            <td>{{ value }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h1>Owings</h1>
+    <table>
+        {% for key, value in owings.items() %}
+        <tr>
+            <td>{{ key }}</td>
+            <td>{{ value }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h1>Expenses</h1>
+    <form method="GET" action="/api/expenses/receipt">
+        <button type="submit">Receipt Expenses</button>
+    </form>
+    <br>
+    <form method="GET" action="/api/expenses/input/one_off">
+        <button type="submit">One Off Expenses</button>
+    </form>
+    <br>
+    <form method="GET" action="/api/expenses/input/recurring">
+        <button type="submit">Recurring Expenses</button>
+    </form>
+
+    <h3>Reset</h3>
+    <form method="GET" action="/api/reset/confirm">
+        <button type="submit">Reset Expenses</button>
+    </form>
+</body>
+</html>
