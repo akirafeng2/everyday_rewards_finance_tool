@@ -3,6 +3,37 @@ import pandas as pd
 
 
 class DashboardDatabaseConnection(DatabaseConnection):
+    def database_get_unsettled_transactions(self, profile_id: str) -> str:
+        """
+        Method to get the earliest date of a receipt
+        in the household that is active/unsettled
+        """
+        query = """
+        SELECT
+            transactions.transaction_id as transaction_id,
+            item.item_name as item_name,
+            receipt.receipt_date as transaction_date,
+            receipt.source as type,
+            profile.user_name as paid,
+            transactions.price as cost
+        FROM transactions as transactions
+        LEFT JOIN receipt as receipt ON transactions.receipt_id = receipt.receipt_id
+        LEFT JOIN profile as profile ON receipt.profile_id = profile.profile_id
+        LEFT JOIN item as item ON transactions.item_id = item.item_id
+        WHERE active_ind = True
+        AND profile.household_id = (
+            select household.household_id
+            from household as household
+            left join profile as profile
+            on household.household_id = profile.household_id
+            where profile.profile_id = %s)
+        ORDER by receipt_date desc
+        """
+
+        self.cursor.execute(query, (profile_id,))
+        result = self.cursor.fetchall()
+        return result
+
     def get_paid_list(self, profile_id: str) -> float:
         """
         Method to retrieve the spent list of each household member
