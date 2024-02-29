@@ -6,7 +6,7 @@ import DashboardTable from "./components/dashboard_table";
 import Cookies from "js-cookie";
 import "./dashboard.css";
 import axios, { AxiosError, AxiosResponse } from "axios";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 function Dashboard() {
   function capitalizeFirstLetter(string: string | undefined) {
