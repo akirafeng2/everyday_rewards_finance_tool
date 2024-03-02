@@ -60,11 +60,26 @@ def test_get_unsettled_transactions_exists(
 
     # Then
     assert transactions == expected_transactions
-    pass
 
 
-def test_get_unsettled_transactions_not_exists():
+@patch('psycopg2.connect')
+@patch('everyday_rewards_finance_tool.src.backend.dashboard_flask.get_unsettled_transactions.'
+       'DashboardDatabaseConnection.database_get_unsettled_transactions')
+def test_get_unsettled_transactions_not_exists(
+    mock_database_get_unsettled_transactions: MagicMock,
+    mock_connect: MagicMock
+):
     """
     Testing function when there is are no unsettled transactions from database
     """
-    pass
+    # Given
+    # # Setting up Mock
+    mock_database_get_unsettled_transactions.return_value = []
+
+    # # Set up expected return value
+    expected_result = {}
+    # When
+    transactions = get_unsettled_transactions("1")
+
+    # Then
+    assert transactions == expected_result

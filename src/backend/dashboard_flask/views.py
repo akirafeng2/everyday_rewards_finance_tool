@@ -5,7 +5,7 @@ from .get_unsettled_transactions import get_unsettled_transactions
 blueprint = Blueprint('dashboard', __name__, template_folder="./templates")
 
 
-@blueprint.route('/get_earliest_date', methods=["GET",])
+@blueprint.route('/get_unsettled_transactions', methods=["GET",])
 @verify_session_mod
 def get_unsettled_transactions_route():
     user_id = get_user_id()
