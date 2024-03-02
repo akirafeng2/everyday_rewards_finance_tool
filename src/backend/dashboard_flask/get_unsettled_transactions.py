@@ -6,7 +6,7 @@ from ..common import db_conn
 def get_unsettled_transactions(DB_CONN: DashboardDatabaseConnection, user_id: str):
     with DB_CONN:
         transactions = DB_CONN.database_get_unsettled_transactions(user_id)
-    print(transactions)
+
     transactions_dict = {
         row[0]: {
             'item_name': row[1],

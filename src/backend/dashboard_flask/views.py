@@ -10,7 +10,7 @@ blueprint = Blueprint('dashboard', __name__, template_folder="./templates")
 def get_unsettled_transactions_route():
     user_id = get_user_id()
     try:
-        transactions = get_unsettled_transactions(user_id)  # date should be the string it needs object
+        transactions = get_unsettled_transactions(user_id)
     except ConnectionError as e:
         return jsonify({'error': str(e)}), 503
     else:

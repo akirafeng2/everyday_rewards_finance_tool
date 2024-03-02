@@ -40,7 +40,7 @@ def test_get_unsettled_transactions_route_valid_response(mock_get_transaction, c
             'payer': 'alex',
             'cost': '52.50'
         }
-    }        
+    }
 
     # When
     response = client.get('/api/dashboard/get_unsettled_transactions')

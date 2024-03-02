@@ -33,6 +33,7 @@ init(
 # FS = FileSystem(SETTINGS.FINANCE_FILE_PATH / env)
 
 app = Flask(__name__)
+app.json.sort_keys = False
 Middleware(app)
 CORS(
     app=app,
