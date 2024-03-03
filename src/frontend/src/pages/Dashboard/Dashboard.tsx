@@ -8,16 +8,13 @@ import "./dashboard.css";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { useState, useEffect } from "react";
 
-interface Transaction {
+export interface TransactionInterface {
+  key: string;
   item_name: string;
   date: string;
   source: string;
   payer: string;
   cost: string;
-}
-
-interface UnsettledTransactions {
-  [key: string]: Transaction;
 }
 
 function Dashboard() {
@@ -28,6 +25,7 @@ function Dashboard() {
 
   // Tagline: get date
   const [taglineText, setTaglineText] = useState<string>("Loading...");
+  const [unsettledTransactions, setUnsettledTransactions] = useState<Array<TransactionInterface>>([])
 
   useEffect(() => {
     axios
@@ -35,14 +33,16 @@ function Dashboard() {
         withCredentials: true,
       })
       .then((res: AxiosResponse) => {
-        const unsettled_transactions: UnsettledTransactions = res.data;
+        const unsettled_transactions: Array<TransactionInterface> = res.data;
+        console.log(unsettled_transactions)
         if (Object.keys(unsettled_transactions).length == 0) {
           setTaglineText("Your household is all settled up!");
         } else {
-          const earliestDate: string = unsettled_transactions[Object.keys(unsettled_transactions)[Object.keys(unsettled_transactions).length - 1]].date;
+          const earliestDate: string = unsettled_transactions[unsettled_transactions.length-1].date
           setTaglineText(
             `Here's your household balances since ${earliestDate}`
           );
+          setUnsettledTransactions(unsettled_transactions);
         }
       })
       .catch((err: AxiosError) => {
@@ -62,9 +62,11 @@ function Dashboard() {
       <SubHeader text="Household Balances" />
       <OwingGroup />
       <SubHeader text="Unsettled Transactions" />
-      <DashboardTable />
+      <DashboardTable unsettledTransactions={unsettledTransactions}/>
     </>
   );
 }
 
 export default Dashboard;
+
+// Need to refactor to account for the array type

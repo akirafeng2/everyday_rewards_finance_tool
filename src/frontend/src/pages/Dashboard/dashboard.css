@@ -20,14 +20,13 @@
   box-shadow: 0px 0px 1px #0000000a, 0px 2px 6px #0000000a,
     0px 16px 24px #0000000f;
 
-  height: 392px;
-  width: calc(100% - 80px);
+  width: calc(100%-60px);
 
   margin-top: 23px;
-
-  padding-left: 2.1875rem;
   padding-top: 1.9375rem;
-  padding-right: 2.1875rem;
+  padding-left: 30px;
+  padding-right: 30px;
+
 }
 
 .hcontainer {
@@ -108,10 +107,9 @@
 .dashboard_table_box th {
   color: #91a6bc;
   font-family: "DM Sans", Helvetica;
-  font-size: 1.2rem;
+  font-size: 16px;
   font-weight: 400;
   text-align: left;
-  width: 100%;
 }
 
 .dashboard_table_box td {
@@ -121,7 +119,7 @@
 
   letter-spacing: 0;
   line-height: normal;
-  font-size: 1rem;
+  font-size: 14px;
   font-weight: 400;
 }
 
@@ -143,17 +141,37 @@
 }
 
 .item {
-  width: 40%;
+  width: 42%;
+  padding-left: 0px;
+  padding-right: 15px;
 }
 
 .date {
-  width: 30%;
+  width: 18%;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.type {
+  width: 18%;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.payer{
+  width: 18%;
+  padding-left: 15px;
+  padding-right: 15px;
 }
 
 .cost {
-  width: 13%;
+  width: 15%;
   text-align: right;
+  padding-left: 15px;
+  padding-right: 0px;
 }
+
+
 
 .owing_text {
   color: #afafaf;

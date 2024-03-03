@@ -1,3 +1,5 @@
+import { TransactionInterface } from "../Dashboard";
+
 interface Transaction {
   t_id: string;
   item: string;
@@ -6,7 +8,12 @@ interface Transaction {
   cost: string;
 }
 
-const DashboardTable = () => {
+interface UnsettledTransactionsProps {
+  unsettledTransactions: Array<TransactionInterface>
+}
+
+const DashboardTable = ({unsettledTransactions}: UnsettledTransactionsProps ) => {
+  console.log(unsettledTransactions)
   const mock_table: Transaction[] = [
     {
       t_id: "1",
@@ -20,7 +27,7 @@ const DashboardTable = () => {
       item: "Tomato",
       date: "12 Jul 2023",
       payer: "Steph",
-      cost: "1500.00",
+      cost: "15000.00",
     },
   ];
   return (
@@ -29,16 +36,18 @@ const DashboardTable = () => {
         <thead>
           <tr>
             <th className="item">Item Name</th>
-            <th className="date">Transaction Date</th>
+            <th className="date">Date</th>
+            <th className="type">Source</th>
             <th className="payer">Who Paid?</th>
             <th className="cost">Cost</th>
           </tr>
         </thead>
         <tbody>
-          {mock_table.map((item) => (
-            <tr key={item.t_id}>
-              <td className="item">{item.item}</td>
+          {unsettledTransactions.map((item) => (
+            <tr key={item.key}>
+              <td className="item">{item.item_name}</td>
               <td className="date">{item.date}</td>
+              <td className="type">{item.date}</td>
               <td className="payer">{item.payer}</td>
               <td className="cost">{item.cost}</td>
             </tr>
