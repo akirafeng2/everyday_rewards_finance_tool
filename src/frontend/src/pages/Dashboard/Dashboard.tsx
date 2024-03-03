@@ -8,6 +8,18 @@ import "./dashboard.css";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { useState, useEffect } from "react";
 
+interface Transaction {
+  item_name: string;
+  date: string;
+  source: string;
+  payer: string;
+  cost: string;
+}
+
+interface UnsettledTransactions {
+  [key: string]: Transaction;
+}
+
 function Dashboard() {
   function capitalizeFirstLetter(string: string | undefined) {
     if (typeof string == "string")
@@ -19,16 +31,17 @@ function Dashboard() {
 
   useEffect(() => {
     axios
-      .get("http://127.0.0.1:5050/api/dashboard/get_earliest_date", {
+      .get("http://127.0.0.1:5050/api/dashboard/get_unsettled_transactions", {
         withCredentials: true,
       })
       .then((res: AxiosResponse) => {
-        const earliestDate: string = res.data["date"];
-        if (earliestDate == "") {
+        const unsettled_transactions: UnsettledTransactions = res.data;
+        if (Object.keys(unsettled_transactions).length == 0) {
           setTaglineText("Your household is all settled up!");
         } else {
+          const earliestDate: string = unsettled_transactions[Object.keys(unsettled_transactions)[Object.keys(unsettled_transactions).length - 1]].date;
           setTaglineText(
-            `Here's your household balances since the ${earliestDate}`
+            `Here's your household balances since ${earliestDate}`
           );
         }
       })
