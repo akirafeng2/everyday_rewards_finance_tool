@@ -11,6 +11,7 @@ def get_unsettled_transactions_route():
     user_id = get_user_id()
     try:
         transactions = get_unsettled_transactions(user_id)
+        print(transactions)
     except ConnectionError as e:
         return jsonify({'error': str(e)}), 503
     else:
