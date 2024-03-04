@@ -50,6 +50,9 @@ def get_user_id():
     """
     Get user_id from request by decoding the access token
     """
-    decoded = jwt.decode(request.cookies.get('sAccessToken'), options={"verify_signature": False})
-    user_id = decoded.get('sub')
+    if STAGE == "TEST":
+        user_id = "05f7b155-ceb5-4304-a5a4-c6cda0d5ee8f"
+    else:
+        decoded = jwt.decode(request.cookies.get('sAccessToken'), options={"verify_signature": False})
+        user_id = decoded.get('sub')
     return user_id

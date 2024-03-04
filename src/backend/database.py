@@ -9,7 +9,10 @@ class DatabaseConnection:
         self.env = env
 
     def __enter__(self):
-        self.conn = psycopg2.connect(**self.connection_details)
+        try:
+            self.conn = psycopg2.connect(**self.connection_details)
+        except psycopg2.OperationalError as e:
+            raise ConnectionError('Postgres Database is Offline')
         self.cursor = self.conn.cursor()
         search_path_execute = """SET search_path TO %s;"""
         self.cursor.execute(search_path_execute, (self.env,))

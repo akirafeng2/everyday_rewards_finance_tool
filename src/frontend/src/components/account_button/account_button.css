@@ -2,10 +2,11 @@
   border: 2px solid;
   border-color: #f1f6fe;
   border-radius: 50px 50px 0px 50px;
-  height: 84px;
-  float: right;
-  top: 0;
-  width: 254px;
+  height: 72px;
+  position: absolute;
+  top: 40px;
+  right:0px;
+  width: 240px;
   padding-left: 12px;
 
   display: flex;
@@ -17,17 +18,16 @@
 }
 
 .name {
-  font-family: "DM Sans-Bold", Helvetica;
+  font-family: "DM Sans", Helvetica;
   font-size: 20px;
   font-weight: 700;
-  letter-spacing: -0.22px;
   line-height: 24px;
 }
 
 .account_type {
-  font-family: "DM Sans-Bold", Helvetica;
+  font-family: "DM Sans", Helvetica;
   font-size: 14px;
-  font-weight: 700;letter-spacing: -0.15px;
+  font-weight: 700;
   line-height: 24px;
 }
 

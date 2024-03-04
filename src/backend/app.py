@@ -1,5 +1,5 @@
 from flask import Flask, abort
-from . import SETTINGS, user, receipt, weighting, household, expenses, reset
+from . import SETTINGS, user, receipt, weighting, household, expenses, reset, dashboard_flask
 from flask_cors import CORS
 
 from supertokens_python.framework.flask import Middleware
@@ -33,6 +33,7 @@ init(
 # FS = FileSystem(SETTINGS.FINANCE_FILE_PATH / env)
 
 app = Flask(__name__)
+app.json.sort_keys = False
 Middleware(app)
 CORS(
     app=app,
@@ -49,7 +50,7 @@ app.register_blueprint(receipt.views.blueprint, url_prefix="/api/receipt")
 app.register_blueprint(weighting.views.blueprint, url_prefix="/api/weighting")
 app.register_blueprint(household.views.blueprint, url_prefix="/api/household")
 app.register_blueprint(expenses.views.blueprint, url_prefix="/api/expenses")
-# app.register_blueprint(dashboard.views.blueprint, url_prefix="/api/dashboard")
+app.register_blueprint(dashboard_flask.views.blueprint, url_prefix="/api/dashboard")
 app.register_blueprint(reset.views.blueprint, url_prefix="/api/reset")
 # This is required since if this is not there, then OPTIONS requests for
 # the APIs exposed by the supertokens' Middleware will return a 404

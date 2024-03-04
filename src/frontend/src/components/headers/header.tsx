@@ -1,3 +1,5 @@
+import "./headers.css"
+
 interface HeaderProps{
     text: string
 }

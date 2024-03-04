@@ -7,9 +7,10 @@ import Transactions from "./Transactions/Transactions";
 import Weights from "./Weights";
 import Settings from "./Settings";
 import OneOff from "./OneOff";
+import "./../App.css";
 
 function LayoutPage() {
-  const { Page } = useParams<{Page: string}>();
+  const { Page } = useParams<{ Page: string }>();
   const pageToDisplay = Page || "Dashboard";
 
   const renderPageComponent = () => {
@@ -32,8 +33,16 @@ function LayoutPage() {
   return (
     <>
       <Sidebar activePage={pageToDisplay} />
-      <AccountButton />
-      {renderPageComponent()}
+
+      <div className="bufferMainContainer">
+        <div className="sidebarBuffer" />
+        <div className="main">
+          <div className="content">
+            <AccountButton />
+            {renderPageComponent()}
+          </div>
+        </div>
+      </div>
     </>
   );
 }

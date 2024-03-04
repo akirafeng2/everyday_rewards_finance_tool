@@ -20,17 +20,13 @@
   box-shadow: 0px 0px 1px #0000000a, 0px 2px 6px #0000000a,
     0px 16px 24px #0000000f;
 
-  height: 392px;
-
-  min-width: 50ch;
-  max-width: 70ch;
-  width: 48vw;
+  width: calc(100%-60px);
 
   margin-top: 23px;
-
-  padding-left: 2.1875rem;
   padding-top: 1.9375rem;
-  padding-right: 2.1875rem;
+  padding-left: 30px;
+  padding-right: 30px;
+
 }
 
 .hcontainer {
@@ -40,8 +36,8 @@
 }
 
 .hcontainer.owings {
-  margin-top: 23px;
-  margin-bottom: 50px;
+  margin-top: 12px;
+  margin-bottom: 30px;
 }
 
 .hcontainer.upload_tile_text {
@@ -81,10 +77,9 @@
   position: relative;
 
   color: #F9FAFF;
-  font-family: "DM Sans-Bold", Helvetica;
+  font-family: "DM Sans", Helvetica;
   font-size: 24px;
   font-weight: 700;
-  letter-spacing: -0.26px;
   line-height: 24px;
 }
 
@@ -111,12 +106,14 @@
 
 .dashboard_table_box th {
   color: #91a6bc;
-  font-family: "DM Sans-Regular", Helvetica;
-  font-size: 1.2rem;
+  font-family: "DM Sans", Helvetica;
+  font-size: 16px;
   font-weight: 400;
-  letter-spacing: 0;
   text-align: left;
-  width: 100%;
+}
+
+.dashboard_table_box th.cost {
+  text-align: right;
 }
 
 .dashboard_table_box td {
@@ -126,19 +123,19 @@
 
   letter-spacing: 0;
   line-height: normal;
-  font-size: 1rem;
+  font-size: 14px;
   font-weight: 400;
 }
 
 .dashboard_table_box td.item {
   color: #3f3f3f;
-  font-family: "DM Sans-Regular", Helvetica;
+  font-family: "DM Sans", Helvetica;
 }
 
 .dashboard_table_box td.date,
 .dashboard_table_box td.payer {
   color: #c7c7c7;
-  font-family: "DM Sans-Regular", Helvetica;
+  font-family: "DM Sans", Helvetica;
 }
 
 .dashboard_table_box td.cost {
@@ -148,24 +145,43 @@
 }
 
 .item {
-  width: 40%;
+  width: 42%;
+  padding-left: 0px;
+  padding-right: 15px;
 }
 
 .date {
-  width: 30%;
+  width: 18%;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.type {
+  width: 18%;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.payer{
+  width: 18%;
+  padding-left: 15px;
+  padding-right: 15px;
 }
 
 .cost {
-  width: 13%;
+  width: 15%;
   text-align: right;
+  padding-left: 15px;
+  padding-right: 0px;
 }
+
+
 
 .owing_text {
   color: #afafaf;
-  font-family: "DM Sans-Bold", Helvetica;
+  font-family: "DM Sans", Helvetica;
   font-size: 0.875rem;
   font-weight: 700;
-  letter-spacing: -0.009375rem;
   line-height: 1.5rem;
   white-space: nowrap;
 
@@ -200,5 +216,13 @@ img.er_logo {
   padding-top: 6.4%;
   padding-bottom: 6.4%;
   padding-left: 22.6%
+}
+
+.owing_amount {
+  color: black;
+  font-size: 24px;
+  font-family: "DM Sans";
+  font-weight: 700;
+  line-height: 24px;
 }
 
