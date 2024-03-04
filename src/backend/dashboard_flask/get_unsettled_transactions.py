@@ -13,7 +13,7 @@ def get_unsettled_transactions(DB_CONN: DashboardDatabaseConnection, user_id: st
             'item_name': row[1],
             'date': row[2].strftime("%d %B %Y"),
             'source': row[3],
-            'payer': row[4],
+            'payer': row[4].capitalize(),
             'cost': str(row[5])
         }
         for row in transactions
