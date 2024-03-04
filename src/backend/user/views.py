@@ -5,7 +5,7 @@ from . import login
 from .add_user import add_profile
 from ..common import verify_session_mod, get_user_id
 
-blueprint = Blueprint('user', __name__, template_folder='./templates')
+blueprint = Blueprint('user', __name__)
 
 env = SETTINGS.ENV
 

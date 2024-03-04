@@ -1,5 +1,6 @@
 from ..database import DatabaseConnection
 import pandas as pd
+from decimal import Decimal
 
 
 class DashboardDatabaseConnection(DatabaseConnection):
@@ -34,7 +35,7 @@ class DashboardDatabaseConnection(DatabaseConnection):
         result = self.cursor.fetchall()
         return result
 
-    def get_paid_list(self, profile_id: str) -> float:
+    def database_get_paid_sum(self, profile_id: str) -> float:
         """
         Method to retrieve the spent list of each household member
         """
@@ -54,11 +55,11 @@ class DashboardDatabaseConnection(DatabaseConnection):
         self.cursor.execute(query, (profile_id,))
         result = self.cursor.fetchone()[0]
         if not result:
-            result = 0
+            result = Decimal(0)
         print(result)
-        return float(result)
+        return result
 
-    def get_accumalated_spend(self, profile_id: str) -> float:
+    def database_get_accumalated_spend_sum(self, profile_id: str) -> float:
         """
         Method to retrieve pandas data base of price, weighting, and weighting sum for the user in all active
         transactions in the household
@@ -92,11 +93,26 @@ class DashboardDatabaseConnection(DatabaseConnection):
         GROUP BY t.transaction_id, w.profile_id, w.weighting
         HAVING w.profile_id = %s
         """
-        self.cursor.execute(query, (self.profile_id, profile_id))
+        self.cursor.execute(query, (profile_id, profile_id))
         result = self.cursor.fetchall()
 
         # convert table from long to wide in Pandas
         column_names = [desc[0] for desc in self.cursor.description]
         df = pd.DataFrame(result, columns=column_names)
         accumalated_spend = round(df['weighting'] / df['weighting_total'] @ df['price'], 2)
-        return float(accumalated_spend)
+        return accumalated_spend
+
+    def get_household_profile_ids(self, user_id: str) -> list:
+        """Returns the list profile_ids within a household"""
+        select_statement = """
+        SELECT profile_id
+        FROM profile
+        WHERE household_id = (
+            SELECT household_id
+            FROM profile
+            WHERE profile_id = %s)
+        ORDER BY user_name
+        """
+        self.cursor.execute(select_statement, (user_id,))
+        result = self.cursor.fetchall()
+        return result
