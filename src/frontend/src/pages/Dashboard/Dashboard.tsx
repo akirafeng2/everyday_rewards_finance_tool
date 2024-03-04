@@ -34,7 +34,6 @@ function Dashboard() {
       })
       .then((res: AxiosResponse) => {
         const unsettled_transactions: Array<TransactionInterface> = res.data;
-        console.log(unsettled_transactions)
         if (Object.keys(unsettled_transactions).length == 0) {
           setTaglineText("Your household is all settled up!");
         } else {

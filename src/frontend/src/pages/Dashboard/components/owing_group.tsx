@@ -1,20 +1,33 @@
+import axios, { AxiosError, AxiosResponse } from "axios";
 import OwingTile from "./owing_tile";
+import { useState, useEffect } from "react";
 
 interface Owings {
-  [name: string]: number;
+  [name: string]: string;
 }
 
 const OwingGroup = () => {
-  let mock_owings: Owings = {
-    Alex: 1200,
-    Steph: 400,
-    Anna: -1600,
-  };
-  const names = Object.keys(mock_owings);
+  const [owings, setOwings] = useState<Owings>({});
+  const [names, setNames] = useState<Array<string>>([]);
+
+  useEffect(() => {
+    axios
+      .get("http://127.0.0.1:5050/api/dashboard/get_owings", {
+        withCredentials: true,
+      })
+      .then((res: AxiosResponse) => {
+        const owings_data: Owings = res.data;
+        setOwings(owings_data);
+        setNames(Object.keys(owings_data));
+      })
+      .catch((err: AxiosError) => {
+        console.log(err);
+      });
+  }, []);
   return (
     <div className="hcontainer owings">
       {names.map((name) => (
-        <OwingTile name={name} key={name} owes={mock_owings[name]}/>
+        <OwingTile name={name} key={name} owes={owings[name]} />
       ))}
     </div>
   );
