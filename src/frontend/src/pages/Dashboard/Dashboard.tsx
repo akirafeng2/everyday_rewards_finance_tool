@@ -68,5 +68,3 @@ function Dashboard() {
 }
 
 export default Dashboard;
-
-// Need to refactor to account for the array type

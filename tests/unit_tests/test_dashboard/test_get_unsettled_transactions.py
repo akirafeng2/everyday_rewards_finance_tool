@@ -39,22 +39,24 @@ def test_get_unsettled_transactions_exists(
     ]
 
     # # Set up expected return value
-    expected_transactions = {
-        71: {
+    expected_transactions = [
+        {
+            'key': '71',
             'item_name': 'Essentials Tomatoes Diced 400g',
             'date': '11 November 2023',
             'source': 'receipt',
             'payer': 'alex',
             'cost': '3.88'
         },
-        15: {
+        {
+            'key': '15',
             'item_name': 'Flying Goose Sriracha Sauce 455ml',
             'date': '17 October 2023',
             'source': 'receipt',
             'payer': 'alex',
             'cost': '52.50'
         }
-    }
+    ]
     # When
     transactions = get_unsettled_transactions("1")
 
@@ -77,7 +79,7 @@ def test_get_unsettled_transactions_not_exists(
     mock_database_get_unsettled_transactions.return_value = []
 
     # # Set up expected return value
-    expected_result = {}
+    expected_result = []
     # When
     transactions = get_unsettled_transactions("1")
 

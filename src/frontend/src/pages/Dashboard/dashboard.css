@@ -112,6 +112,10 @@
   text-align: left;
 }
 
+.dashboard_table_box th.cost {
+  text-align: right;
+}
+
 .dashboard_table_box td {
   padding-top: 1.0625rem;
   padding-bottom: 1.0625rem;

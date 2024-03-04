@@ -1,35 +1,12 @@
 import { TransactionInterface } from "../Dashboard";
 
-interface Transaction {
-  t_id: string;
-  item: string;
-  date: string;
-  payer: string;
-  cost: string;
-}
-
 interface UnsettledTransactionsProps {
-  unsettledTransactions: Array<TransactionInterface>
+  unsettledTransactions: Array<TransactionInterface>;
 }
 
-const DashboardTable = ({unsettledTransactions}: UnsettledTransactionsProps ) => {
-  console.log(unsettledTransactions)
-  const mock_table: Transaction[] = [
-    {
-      t_id: "1",
-      item: "WW Sliced Frozen Strawberries 500g",
-      date: "06 Jul 2023",
-      payer: "Alex",
-      cost: "6.20",
-    },
-    {
-      t_id: "2",
-      item: "Tomato",
-      date: "12 Jul 2023",
-      payer: "Steph",
-      cost: "15000.00",
-    },
-  ];
+const DashboardTable = ({
+  unsettledTransactions,
+}: UnsettledTransactionsProps) => {
   return (
     <div className="dashboard_table_box">
       <table>
@@ -49,7 +26,7 @@ const DashboardTable = ({unsettledTransactions}: UnsettledTransactionsProps ) =>
               <td className="date">{item.date}</td>
               <td className="type">{item.date}</td>
               <td className="payer">{item.payer}</td>
-              <td className="cost">{item.cost}</td>
+              <td className="cost">${item.cost}</td>
             </tr>
           ))}
         </tbody>
