@@ -1,0 +1,68 @@
+.upload_tile {
+  width: 172px;
+  height: 35px;
+  background: #2095e5;
+  border-radius: 5px;
+
+  position: relative;
+
+  color: #f9faff;
+  font-family: "DM Sans", Helvetica;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 24px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.upload_spacer {
+  width: 12px;
+}
+
+/* Modal */
+.upload_tile_modal {
+  /* width: 240px;
+  height: 80px;
+  background: white;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+  border: 1px #f9faff solid; */
+  position: absolute;
+  top: 40px;
+  left: 40px;
+  right: 40px;
+  bottom: 40px;
+  width: 240px;
+  height: 80px;
+  background-color: white;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+  border: 1px #f9faffcb solid;
+}
+
+.upload_tile_modal:focus{
+    outline:0;
+}
+
+.upload_tile_overlay{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: none;
+}
+
+.upload_tile_modal .uploadButton {
+  color: black;
+  background-color: white;
+  cursor: pointer;
+  padding-left: 10px;
+}
+
+.upload_tile_modal .uploadButton:hover {
+  background-color: #f0f7ff;
+}
