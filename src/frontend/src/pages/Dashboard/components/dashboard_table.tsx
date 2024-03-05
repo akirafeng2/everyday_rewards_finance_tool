@@ -24,7 +24,7 @@ const DashboardTable = ({
             <tr key={item.key}>
               <td className="item">{item.item_name}</td>
               <td className="date">{item.date}</td>
-              <td className="type">{item.date}</td>
+              <td className="type">{item.source}</td>
               <td className="payer">{item.payer}</td>
               <td className="cost">${item.cost}</td>
             </tr>

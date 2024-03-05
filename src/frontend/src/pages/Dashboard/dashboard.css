@@ -108,7 +108,8 @@
   font-family: "DM Sans", Helvetica;
 }
 
-.dashboard_table_box td.cost {
+.dashboard_table_box td.cost,
+.dashboard_table_box td.type {
   color: #3f3f3f;
   font-family: "Lato-Bold", Helvetica;
   font-weight: 700;

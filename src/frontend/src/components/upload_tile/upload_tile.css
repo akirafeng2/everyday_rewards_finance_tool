@@ -22,47 +22,28 @@
   width: 12px;
 }
 
-/* Modal */
-.upload_tile_modal {
-  /* width: 240px;
-  height: 80px;
-  background: white;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05);
-  border-radius: 8px;
-  border: 1px #f9faff solid; */
+/* dropdown */
+.upload_tile_dropdown {
   position: absolute;
-  top: 40px;
-  left: 40px;
-  right: 40px;
-  bottom: 40px;
-  width: 240px;
-  height: 80px;
+  right:0;
   background-color: white;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05);
   border-radius: 8px;
   border: 1px #f9faffcb solid;
 }
 
-.upload_tile_modal:focus{
-    outline:0;
-}
-
-.upload_tile_overlay{
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: none;
-}
-
-.upload_tile_modal .uploadButton {
+.upload_tile_dropdown .uploadButton {
   color: black;
   background-color: white;
   cursor: pointer;
-  padding-left: 10px;
+  padding: 10px 10px;
+  border-radius: 8px;
+  margin: 3px;
+
+
+  font-size: 16px;
 }
 
-.upload_tile_modal .uploadButton:hover {
+.upload_tile_dropdown .uploadButton:hover {
   background-color: #f0f7ff;
 }
