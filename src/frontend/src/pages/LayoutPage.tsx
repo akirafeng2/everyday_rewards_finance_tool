@@ -26,7 +26,7 @@ function LayoutPage() {
       case "OneOff":
         return <OneOff />;
       default:
-        return <div>Page not found</div>;
+        return <div>Brotherman...</div>;
     }
   };
 

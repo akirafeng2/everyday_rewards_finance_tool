@@ -56,3 +56,39 @@ class TestDashboardDatabaseConnection:
 
         # Then
         mock_exe.assert_called_with(query_execute, (user_id,))
+
+    @patch('psycopg2.connect')
+    def test_database_get_paid_sum(
+        self,
+        mock_connect,
+        dashboard_database_connection: pytest.fixture,
+        user_id: pytest.fixture
+    ):
+        """
+        Unittest of method to get sum of paid
+        """
+        # Given
+        # # setting up the mock
+        mock_exe = mock_connect.return_value.cursor.return_value.execute
+
+        # # setting up the query
+        query_execute = """
+        SELECT SUM(price)
+        FROM (
+            SELECT *
+            FROM transactions
+            WHERE active_ind = true
+            AND receipt_id in (
+                SELECT receipt_id
+                FROM receipt
+                WHERE profile_id = %s
+                )
+            ) AS t
+        """
+
+        # When
+        with dashboard_database_connection:
+            dashboard_database_connection.database_get_paid_sum(user_id)
+
+        # Then
+        mock_exe.assert_called_with(query_execute, (user_id,))
