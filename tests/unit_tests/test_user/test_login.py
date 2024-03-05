@@ -42,7 +42,7 @@ def test_get_household_profiles_in_household_with_people(
     mock_db_conn.return_value = [('adam',), ('alex',), ('tyler',)]
 
     # # Setting up expected outcome
-    expected_tuple = ['adam', 'alex', 'tyler']
+    expected_tuple = ['Adam', 'Alex', 'Tyler']
 
     # When
     household_names = get_household_profiles(details.get('user_id'))

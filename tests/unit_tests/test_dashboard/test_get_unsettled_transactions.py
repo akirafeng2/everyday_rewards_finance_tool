@@ -45,7 +45,7 @@ def test_get_unsettled_transactions_exists(
             'item_name': 'Essentials Tomatoes Diced 400g',
             'date': '11 November 2023',
             'source': 'receipt',
-            'payer': 'alex',
+            'payer': 'Alex',
             'cost': '3.88'
         },
         {
@@ -53,7 +53,7 @@ def test_get_unsettled_transactions_exists(
             'item_name': 'Flying Goose Sriracha Sauce 455ml',
             'date': '17 October 2023',
             'source': 'receipt',
-            'payer': 'alex',
+            'payer': 'Alex',
             'cost': '52.50'
         }
     ]
