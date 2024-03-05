@@ -7,6 +7,7 @@ import Cookies from "js-cookie";
 import "./dashboard.css";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { useState, useEffect } from "react";
+import UploadTile from "./components/upload_tiles";
 
 export interface TransactionInterface {
   key: string;
@@ -60,7 +61,10 @@ function Dashboard() {
       <Tagline text={taglineText} />
       <SubHeader text="Household Balances" />
       <OwingGroup />
+      <div className="hcontainer-upload">
       <SubHeader text="Unsettled Transactions" />
+      <UploadTile></UploadTile>
+      </div>
       <DashboardTable unsettledTransactions={unsettledTransactions}/>
     </>
   );
