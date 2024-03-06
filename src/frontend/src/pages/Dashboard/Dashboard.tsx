@@ -7,7 +7,7 @@ import Cookies from "js-cookie";
 import "./dashboard.css";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { useState, useEffect } from "react";
-import UploadTile from "./components/upload_tiles";
+import UploadTile from "../../components/upload_tile/upload_tiles";
 
 export interface TransactionInterface {
   key: string;

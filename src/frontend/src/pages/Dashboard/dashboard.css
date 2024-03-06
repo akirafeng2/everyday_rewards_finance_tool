@@ -68,33 +68,11 @@
   margin-bottom: 23px;
 }
 
-.upload_tile {
-  width: 172px;
-  height: 35px;
-  background: #2095e5;
-  border-radius: 5px;
-
-  position: relative;
-
-  color: #f9faff;
-  font-family: "DM Sans", Helvetica;
-  font-size: 18px;
-  font-weight: 400;
-  line-height: 24px;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-}
-
 .dashboard_table_box table {
   border-collapse: collapse;
 }
 
-.upload_spacer {
-  width: 12px;
-}
+
 
 .dashboard_table_box th {
   color: #91a6bc;
@@ -130,7 +108,8 @@
   font-family: "DM Sans", Helvetica;
 }
 
-.dashboard_table_box td.cost {
+.dashboard_table_box td.cost,
+.dashboard_table_box td.type {
   color: #3f3f3f;
   font-family: "Lato-Bold", Helvetica;
   font-weight: 700;

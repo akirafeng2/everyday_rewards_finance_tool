@@ -32,7 +32,7 @@ def test_get_unsettled_transactions_exists(
             15,
             'Flying Goose Sriracha Sauce 455ml',
             date(2023, 10, 17),
-            'receipt',
+            'one_off',
             'alex',
             Decimal('52.50')
         )
@@ -44,7 +44,7 @@ def test_get_unsettled_transactions_exists(
             'key': '71',
             'item_name': 'Essentials Tomatoes Diced 400g',
             'date': '11 November 2023',
-            'source': 'receipt',
+            'source': 'Receipt',
             'payer': 'Alex',
             'cost': '3.88'
         },
@@ -52,7 +52,7 @@ def test_get_unsettled_transactions_exists(
             'key': '15',
             'item_name': 'Flying Goose Sriracha Sauce 455ml',
             'date': '17 October 2023',
-            'source': 'receipt',
+            'source': 'One off',
             'payer': 'Alex',
             'cost': '52.50'
         }
