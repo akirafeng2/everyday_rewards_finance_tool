@@ -18,6 +18,11 @@
   cursor: pointer;
 }
 
+.upload_tile:hover {
+    background-color: #1A7BBD;
+
+}
+
 .upload_spacer {
   width: 12px;
 }

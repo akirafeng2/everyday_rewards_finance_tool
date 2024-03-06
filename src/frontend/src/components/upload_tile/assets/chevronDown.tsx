@@ -1,4 +1,4 @@
-const Chevron = () => {
+const ChevronDown = () => {
   return (
     <svg
       width="30"
@@ -28,4 +28,4 @@ const Chevron = () => {
   );
 };
 
-export default Chevron;
+export default ChevronDown;
