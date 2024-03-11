@@ -99,10 +99,17 @@
   background-color: #f9faff;
 }
 
-.dashboard_table_box tr:hover .date,
-.dashboard_table_box tr:hover .payer{
-  color: black;
+.dashboard_table_box tbody tr:hover .date,
+.dashboard_table_box tbody tr:hover .payer{
+  color: #91a6bc;
 }
+
+.dashboard_table_box tbody tr:hover .item,
+.dashboard_table_box tbody tr:hover .type,
+.dashboard_table_box tbody tr:hover .cost{
+  color: #1a7bbd;
+}
+
 
 .dashboard_table_box td.item {
   color: #3f3f3f;
