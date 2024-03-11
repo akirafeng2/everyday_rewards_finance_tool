@@ -24,8 +24,8 @@
 
   margin-top: 23px;
   padding-top: 1.9375rem;
-  padding-left: 30px;
-  padding-right: 30px;
+  padding-left: 20px;
+  padding-right: 20px;
 }
 
 .hcontainer {
@@ -72,8 +72,6 @@
   border-collapse: collapse;
 }
 
-
-
 .dashboard_table_box th {
   color: #91a6bc;
   font-family: "DM Sans", Helvetica;
@@ -89,13 +87,29 @@
 .dashboard_table_box td {
   padding-top: 1.0625rem;
   padding-bottom: 1.0625rem;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #f9faff;
 
   letter-spacing: 0;
   line-height: normal;
   font-size: 14px;
   font-weight: 400;
 }
+
+.dashboard_table_box tbody tr:hover{
+  background-color: #f9faff;
+}
+
+.dashboard_table_box tbody tr:hover .date,
+.dashboard_table_box tbody tr:hover .payer{
+  color: #91a6bc;
+}
+
+.dashboard_table_box tbody tr:hover .item,
+.dashboard_table_box tbody tr:hover .type,
+.dashboard_table_box tbody tr:hover .cost{
+  color: #1a7bbd;
+}
+
 
 .dashboard_table_box td.item {
   color: #3f3f3f;
@@ -117,8 +131,10 @@
 
 .item {
   width: 42%;
-  padding-left: 0px;
+  padding-left: 10px;
   padding-right: 15px;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
 }
 
 .date {
@@ -143,7 +159,10 @@
   width: 15%;
   text-align: right;
   padding-left: 15px;
-  padding-right: 0px;
+  padding-right:10px;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+
 }
 
 .owing_text {
