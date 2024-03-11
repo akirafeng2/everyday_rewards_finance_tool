@@ -26,7 +26,9 @@ function Dashboard() {
 
   // Tagline: get date
   const [taglineText, setTaglineText] = useState<string>("Loading...");
-  const [unsettledTransactions, setUnsettledTransactions] = useState<Array<TransactionInterface>>([])
+  const [unsettledTransactions, setUnsettledTransactions] = useState<
+    Array<TransactionInterface>
+  >([]);
 
   useEffect(() => {
     axios
@@ -38,7 +40,8 @@ function Dashboard() {
         if (Object.keys(unsettled_transactions).length == 0) {
           setTaglineText("Your household is all settled up!");
         } else {
-          const earliestDate: string = unsettled_transactions[unsettled_transactions.length-1].date
+          const earliestDate: string =
+            unsettled_transactions[unsettled_transactions.length - 1].date;
           setTaglineText(
             `Here's your household balances since ${earliestDate}`
           );
@@ -62,10 +65,10 @@ function Dashboard() {
       <SubHeader text="Household Balances" />
       <OwingGroup />
       <div className="hcontainer-upload">
-      <SubHeader text="Unsettled Transactions" />
-      <UploadTile></UploadTile>
+        <SubHeader text="Unsettled Transactions" />
+        <UploadTile></UploadTile>
       </div>
-      <DashboardTable unsettledTransactions={unsettledTransactions}/>
+      <DashboardTable unsettledTransactions={unsettledTransactions} />
     </>
   );
 }
