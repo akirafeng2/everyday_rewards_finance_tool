@@ -3,6 +3,7 @@ import ChevronUp from "./assets/chevronUp";
 import "./upload_tile.css";
 import UploadTileDropdown from "./components/UploadTilesDropdown";
 import { useState } from "react";
+import ManualModal from "../manual_modal/ManualModal";
 
 const UploadTile = () => {
   const [uploadDropdownActive, setUploadDropdownActive] =
@@ -20,6 +21,10 @@ const UploadTile = () => {
     }
   };
 
+
+  //Manual Dropdown Model
+  const [manualModalActive, setManualModalActive] = useState<boolean>(false);
+
   return (
     <div className="uploadDropdown">
       <button
@@ -33,7 +38,11 @@ const UploadTile = () => {
         {uploadDropdownActive ? <ChevronUp /> : <ChevronDown />}
       </button>
       {uploadDropdownActive ? (
-        <UploadTileDropdown setIsOpen={setUploadDropdownActive} />
+        <UploadTileDropdown setIsOpen={setUploadDropdownActive} setManualModalOpen = {setManualModalActive} />
+      ) : null}
+
+      {manualModalActive ? (
+        <ManualModal isOpen={manualModalActive} setIsOpen={setManualModalActive} />
       ) : null}
     </div>
   );

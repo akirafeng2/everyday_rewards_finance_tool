@@ -2,13 +2,21 @@ import React from "react";
 
 interface UploadTileDropdownProps {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setManualModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const UploadTileDropdown = ({ setIsOpen }: UploadTileDropdownProps) => {
+const UploadTileDropdown = ({ setIsOpen, setManualModalOpen }: UploadTileDropdownProps) => {
   
   const close_dropdown = () => {
     setIsOpen(false);
   };
+
+  
+
+
+  const manual_button_handle = () => {
+    setManualModalOpen(true)
+  }
 
   return (
     <div
@@ -16,7 +24,8 @@ const UploadTileDropdown = ({ setIsOpen }: UploadTileDropdownProps) => {
       onMouseLeave={close_dropdown}
     >
       <div className="uploadButton">Upload from Everyday Rewards</div>
-      <div className="uploadButton">Upload Manually</div>
+      <div className="uploadButton" onClick={manual_button_handle}>Upload Manually</div>
+
     </div>
   );
 };
