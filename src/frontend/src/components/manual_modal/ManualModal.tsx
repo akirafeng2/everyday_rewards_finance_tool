@@ -2,6 +2,7 @@ import React from "react";
 import ReactModal from "react-modal";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import Cookies from "js-cookie";
+import CalendarBubble from "../CalendarBubble/CalendarBubble";
 
 import './ManualModal.css'
 
@@ -33,8 +34,11 @@ const ManualModal = ({
 //   };
 
   return (
-    <ReactModal className="manualModal" isOpen={isOpen} onRequestClose={close_modal} ariaHideApp={false}>
-
+    <ReactModal className="manualModal" overlayClassName="manualModalOverlay" isOpen={isOpen} onRequestClose={close_modal} ariaHideApp={false}>
+      <div className="titleSpace"></div>
+      <div className="modalTitle">Add New Items</div> 
+      <div className="modalSubTitle">Let's add in a new item manually</div> 
+      <CalendarBubble>24 January 2024</CalendarBubble>
       {/* <input type="button" value="Save" onClick={handleConfirm}></input> */}
     </ReactModal>
   );
