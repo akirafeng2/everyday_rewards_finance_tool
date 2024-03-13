@@ -1,0 +1,20 @@
+.calendarBubble {
+  padding: 6px 10px;
+  background: #f9faff;
+  border-radius: 22px;
+  display: flex;
+  align-items: center;
+  width: fit-content;
+}
+
+span.padding {
+  width: 7px;
+}
+
+span.calendarBubbleText {
+  color: #91a6bc;
+  font-size: 10px;
+  font-family: "DM Sans";
+  font-weight: 400;
+  word-wrap: break-word;
+}
