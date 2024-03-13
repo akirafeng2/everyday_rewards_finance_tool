@@ -39,7 +39,13 @@ const ManualModal = ({
       <div className="modalTitle">Add New Items</div> 
       <div className="modalSubTitle">Let's add in a new item manually</div> 
       <CalendarBubble>24 January 2024</CalendarBubble>
-      {/* <input type="button" value="Save" onClick={handleConfirm}></input> */}
+      <div className="manualModalTableBox">
+
+      </div>
+      <div className="manualModalButtonsBox">
+        <button className="cancel">Cancel</button>
+        <button className="save">Save</button>
+      </div>
     </ReactModal>
   );
 };

@@ -8,15 +8,18 @@
 }
 .manualModal {
   width: 912px;
-  height: 584px;
+
+  height: 80vh;
+  max-height: 811px;
+  min-height: 584px;
 
   background-color: white;
   border-radius: 30px;
-  overflow: hidden;
   box-shadow: 0px 4px 30px rgba(0, 0, 0, 0.25);
 
   padding-left: 32px;
   padding-right: 32px;
+  padding-bottom: 2%;
 }
 
 .modalTitle {
@@ -31,14 +34,64 @@
   margin-top: 12px;
   margin-bottom: 12px;
 
-  color: #AEAEAE;
+  color: #aeaeae;
   font-size: 16px;
   font-family: "DM Sans";
   font-weight: 400;
   line-height: 24px;
-  
 }
 
 .titleSpace {
-    height: 72px;
+  height: 10%;
+}
+
+.manualModalTableBox {
+  background: white;
+  box-shadow: 0px 0px 1px #0000000a, 0px 2px 6px #0000000a,
+    0px 16px 24px #0000000f;
+  border-radius: 19px;
+  height:60%;
+  width: 100%;
+
+  margin-top: 8px;
+}
+
+.manualModalButtonsBox {
+  margin-top: 4%;
+  display: flex;
+  justify-content: right;
+}
+
+.manualModalButtonsBox .cancel {
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px #f1f6fe solid;
+
+  color: #3c4f66;
+  font-size: 12px;
+  font-family: "DM Sans";
+  font-weight: 500;
+  word-wrap: break-word;
+
+  height: 32px;
+  width: 96px;
+}
+
+.manualModalButtonsBox .save {
+  width: 100%;
+  height: 100%;
+  background: #f1f6fe;
+  border-radius: 9px;
+
+  color: #3c4f66;
+  font-size: 12px;
+  font-family: "DM Sans";
+  font-weight: 500;
+  word-wrap: break-word;
+
+  height: 32px;
+  width: 96px;
+  
+  margin-left: 12px;
 }
