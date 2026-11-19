@@ -1,200 +1,136 @@
+import { useMemo, useState } from "react";
 import Header from "../../components/headers/header";
-import SubHeader from "../../components/headers/subheader";
-import "./transactions.css";
-import TransactionRow from "./transactionRow";
-
-// import useTable from "./transactionHooks";
-import TableFooter from "./tableFooter";
-import Delete from "../../assets/bin.svg";
-import Filter from "../../assets/filter.svg";
-import Export from "../../assets/export.svg";
+import Tagline from "../../components/headers/tagline";
+import TableToolbar from "../../components/data_table/TableToolbar";
+import TablePagination from "../../components/data_table/TablePagination";
+import EverydayRewardsUploadModal from "../../components/upload_flow/EverydayRewardsUploadModal";
+import { CalendarIcon } from "../../components/icons/icons";
+import { getHouseholdMembers } from "../../utils/household";
 import Down from "../../assets/down.svg";
 import Up from "../../assets/up.svg";
-import { useState, useEffect } from "react";
-import Tagline from "../../components/headers/tagline";
+import "../../components/data_table/data_table.css";
+import "../../components/modal/modal.css";
+import "./transactions.css";
 
-// Get range for pages
-const calculateRange = (data, rowsPerPage) => {
-  const range = [];
-  const num = Math.ceil(data.length / rowsPerPage);
+interface Transaction {
+  id: string;
+  date: string;
+  itemName: string;
+  cost: string;
+  paid: string;
+}
 
-  let i = 1;
-  for (let i = 1; i <= num; i++) {
-    range.push(i);
-  }
+const ROWS_PER_PAGE = 10;
 
-  return range;
-};
-
-const sliceData = (data, page, rowsPerPage) => {
-  // Slice returns a copy of the list ith specific range
-  // page-1 since index 0 to get first number of page, etc
-  return data.slice((page - 1) * rowsPerPage, page * rowsPerPage);
-};
-
-// Reverse the data list
-const reverse = (data) => {
-  return data.reverse();
-};
+// Placeholder until the transactions API is available.
+const buildSampleTransactions = (members: string[]): Transaction[] =>
+  Array.from({ length: 24 }, (_, i) => ({
+    id: String(i + 1),
+    date: `${10 + Math.floor(i / 6)} Dec 2023`,
+    itemName: ["Butter", "Milk", "Eggs", "Bread", "Apples", "Coffee"][i % 6],
+    cost: ["$4.00", "$2.00", "$6.20", "$3.50", "$5.10", "$12.00"][i % 6],
+    paid: members[i % members.length],
+  }));
 
 function Transactions() {
-  const tableDataManual = [
-    {
-      Id: "1",
-      Date: "10 Dec 2020",
-      Name: "Butter",
-      Cost: "$4.00",
-      Paid: "Alex",
-    },
-    {
-      Id: "2",
-      Date: "10 Dec 2020",
-      Name: "Milk",
-      Cost: "$2.00",
-      Paid: "Adam",
-    },
-    {
-      Id: "3",
-      Date: "10 Dec 2020",
-      Name: "Egg",
-      Cost: "$6.20",
-      Paid: "Tyler",
-    },
-    {
-      Id: "4",
-      Date: "13 Dec 2020",
-      Name: "MORE Butter",
-      Cost: "$4.00",
-      Paid: "Alex",
-    },
-    {
-      Id: "5",
-      Date: "13 Dec 2020",
-      Name: "MORE Milk",
-      Cost: "$2.00",
-      Paid: "Adam",
-    },
-    {
-      Id: "6",
-      Date: "13 Dec 2020",
-      Name: "MORE Egg",
-      Cost: "$6.20",
-      Paid: "Tyler",
-    },
-  ];
-  const [sort, setSort] = useState("asc");
-  const [data, setData] = useState(tableDataManual);
-  const rowsPerPage = 2;
-  const lastPage = Math.ceil(data.length / rowsPerPage);
-  const [tableRange, setTableRange] = useState([]);
-  const [slice, setSlice] = useState([]);
+  const members = useMemo(getHouseholdMembers, []);
+  const [transactions, setTransactions] = useState<Transaction[]>(() => buildSampleTransactions(members));
+  const [sortAscending, setSortAscending] = useState(false);
+  const [selected, setSelected] = useState<Set<string>>(new Set());
   const [page, setPage] = useState(1);
+  const [uploadOpen, setUploadOpen] = useState(false);
 
-  useEffect(() => {
-    console.log("effectused");
-    const range = calculateRange(data, rowsPerPage);
-    // ... is spread operator to convert array into set of arguments e.g. in a list
-    setTableRange([...range]);
-    console.log(range);
-
-    const slice = sliceData(data, page, rowsPerPage);
-    setSlice([...slice]);
-    console.log(slice);
-
-    // should trigger if page
-  }, [page]);
-
-  useEffect(() => {
-    console.log("entered reversal");
-    setData(reverse(data));
-
-    const range = calculateRange(data, rowsPerPage);
-    // ... is spread operator to convert array into set of arguments e.g. in a list
-    setTableRange([...range]);
-    console.log(range);
-
-    const slice = sliceData(data, page, rowsPerPage);
-    setSlice([...slice]);
-  }, [sort]);
-
-  // Creates a list of Transaction rows. The Map maps the items
-  //form the entries in tableDataManuel to the kth item in transactionsList?
-  const transactionsList = Object.entries(slice).map(function (item, k) {
-    return <TransactionRow args={item[1]} />;
-  });
-
-  var imgSort = (
-    <img
-      className="transactionsSort"
-      src={Down}
-      onClick={() => setSort(sort === "asc" ? "desc" : "asc")}
-    ></img>
+  const sorted = useMemo(
+    () => (sortAscending ? transactions : [...transactions].reverse()),
+    [transactions, sortAscending]
   );
-  if (sort == "desc") {
-    imgSort = (
-      <img
-        className="transactionsSort"
-        src={Up}
-        onClick={() => setSort(sort === "asc" ? "desc" : "asc")}
-      ></img>
-    );
-  }
+  const pageCount = Math.ceil(sorted.length / ROWS_PER_PAGE);
+  const pageRows = sorted.slice((page - 1) * ROWS_PER_PAGE, page * ROWS_PER_PAGE);
+  const evenSplit = (1 / members.length).toFixed(2);
+
+  const toggleSelected = (id: string) => {
+    setSelected((previous) => {
+      const next = new Set(previous);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
+
+  const deleteSelected = () => {
+    setTransactions((previous) => previous.filter((t) => !selected.has(t.id)));
+    setSelected(new Set());
+    setPage(1);
+  };
 
   return (
     <>
       <Header text="Transaction History" />
-      <Tagline text="hi"></Tagline>
-      <SubHeader text="start date dd/mm/yyyy" />
-
-      <div className="tableFunctionalities">
-        June 2023 {/* Need to change so dyamic for month */}
-        <div className="functionsRight">
-          <button className="tableChange">
-            <img src={Delete}></img>
-            Delete
-          </button>
-          <button className="tableChange">
-            <img src={Filter}></img>
-            Filter
-          </button>
-          <button className="exportButton">
-            <img src={Export}></img>
-            Export
-          </button>
-          <button className="uploadRewards">+ Upload Everyday Rewards</button>
-        </div>
-        <div className="tableData">
-          <table id="transactionsTable">
-            <thead>
-              <tr id="transactionsTableHeader">
-                <th>Checkbox</th>
-                <th>
-                  <div id="transactionDateDiv">
-                    Transaction Date
-                    {imgSort}
-                  </div>
+      <Tagline text="View and manage all of your household’s imported transactions" />
+      <TableToolbar
+        title={
+          <span className="er_pill">
+            <CalendarIcon />
+            {sorted.length > 0 ? `${transactions[0].date} - Present` : "No transactions"}
+          </span>
+        }
+        onDelete={deleteSelected}
+        deleteDisabled={selected.size === 0}
+        actionLabel="+ Upload Everyday Rewards"
+        onAction={() => setUploadOpen(true)}
+      />
+      <div className="er_table_box">
+        <table className="er_table">
+          <thead>
+            <tr>
+              <th className="center checkbox_col">Checkbox</th>
+              <th>
+                <button
+                  type="button"
+                  className="transactions_sort"
+                  onClick={() => setSortAscending((previous) => !previous)}
+                >
+                  Transaction Date
+                  <img src={sortAscending ? Up : Down} alt={sortAscending ? "Ascending" : "Descending"} />
+                </button>
+              </th>
+              <th>Item Name</th>
+              <th>Cost</th>
+              <th>Who Paid?</th>
+              {members.map((member, i) => (
+                <th key={member} className={`center${i === 0 ? " weight_divider" : ""}`}>
+                  {member}
                 </th>
-                <th>Item Name</th>
-
-                <th>Cost</th>
-                <th>Who Paid?</th>
-                {/* Need to get variable of number of households and household people names */}
-                <th>Alex</th>
-                <th>Adam</th>
-                <th>Tyler</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {pageRows.map((transaction) => (
+              <tr key={transaction.id}>
+                <td className="center">
+                  <input
+                    type="checkbox"
+                    aria-label={`Select ${transaction.itemName}`}
+                    checked={selected.has(transaction.id)}
+                    onChange={() => toggleSelected(transaction.id)}
+                  />
+                </td>
+                <td className="muted">{transaction.date}</td>
+                <td>{transaction.itemName}</td>
+                <td className="bold">{transaction.cost}</td>
+                <td>{transaction.paid}</td>
+                {members.map((member, i) => (
+                  <td key={member} className={`weight${i === 0 ? " weight_divider" : ""}`}>
+                    {evenSplit}
+                  </td>
+                ))}
               </tr>
-            </thead>
-            <tbody>{transactionsList}</tbody>
-          </table>
-        </div>
-        <TableFooter
-          lastPage={lastPage}
-          range={tableRange}
-          slice={slice}
-          setPage={setPage}
-          page={page}
-        />
+            ))}
+          </tbody>
+        </table>
       </div>
+      <TablePagination page={page} pageCount={pageCount} setPage={setPage} />
+      <EverydayRewardsUploadModal isOpen={uploadOpen} onClose={() => setUploadOpen(false)} />
     </>
   );
 }

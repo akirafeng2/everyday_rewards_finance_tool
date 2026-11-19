@@ -1,13 +1,16 @@
 import ChevronDown from "./assets/chevronDown";
 import ChevronUp from "./assets/chevronUp";
 import "./upload_tile.css";
-import UploadTileDropdown from "./components/UploadTilesDropdown";
+import UploadTileDropdown, { UploadMethod } from "./components/UploadTilesDropdown";
+import EverydayRewardsUploadModal from "../upload_flow/EverydayRewardsUploadModal";
+import ManualUploadModal from "../upload_flow/ManualUploadModal";
 import { useState } from "react";
 
 const UploadTile = () => {
   const [uploadDropdownActive, setUploadDropdownActive] =
     useState<boolean>(false);
   const [mouseClickedY, setMouseClickedY] = useState<number>(0);
+  const [activeModal, setActiveModal] = useState<UploadMethod | null>(null);
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     setUploadDropdownActive((previous) => !previous);
@@ -33,8 +36,13 @@ const UploadTile = () => {
         {uploadDropdownActive ? <ChevronUp /> : <ChevronDown />}
       </button>
       {uploadDropdownActive ? (
-        <UploadTileDropdown setIsOpen={setUploadDropdownActive} />
+        <UploadTileDropdown setIsOpen={setUploadDropdownActive} onSelect={setActiveModal} />
       ) : null}
+      <EverydayRewardsUploadModal
+        isOpen={activeModal === "everyday_rewards"}
+        onClose={() => setActiveModal(null)}
+      />
+      <ManualUploadModal isOpen={activeModal === "manual"} onClose={() => setActiveModal(null)} />
     </div>
   );
 };

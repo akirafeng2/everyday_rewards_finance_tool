@@ -213,3 +213,10 @@ img.er_logo {
   font-weight: 700;
   line-height: 24px;
 }
+
+.settle_up_button {
+  height: 35px;
+  font-size: 16px;
+  padding: 0 20px;
+  border-radius: 5px;
+}

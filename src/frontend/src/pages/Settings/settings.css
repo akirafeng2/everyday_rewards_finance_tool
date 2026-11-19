@@ -1,0 +1,54 @@
+.settings_section {
+  margin-top: 16px;
+  margin-bottom: 48px;
+  max-width: 1056px;
+}
+
+.add_housemate_card {
+  margin-top: 16px;
+  width: 348px;
+  padding: 20px 38px 24px 38px;
+  border: 1px solid #e2e8f1;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  box-sizing: border-box;
+}
+
+.household_code {
+  width: 100%;
+  height: 54px;
+  background-color: #ffffff;
+  border: 1px solid #e2e8f1;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  color: #2095e5;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.household_code:hover {
+  background-color: #f9faff;
+}
+
+.share_email {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #f1f6fe;
+  color: #3c4f66;
+  font-size: 12px;
+  font-weight: 500;
+  border-radius: 5px;
+  padding: 4px 32px;
+}
+
+.share_email:hover {
+  background-color: #e2e8f1;
+}
