@@ -135,4 +135,9 @@ class FileSystem:
 
     def save_to_csv(self, df: pd.DataFrame) -> None:
         destination_path = self.expenses_archive / Path(f"{date.today()}.csv")
+        # keep earlier settlements from the same day
+        suffix = 1
+        while destination_path.exists():
+            destination_path = self.expenses_archive / Path(f"{date.today()}_{suffix}.csv")
+            suffix += 1
         df.to_csv(destination_path, index=False)
