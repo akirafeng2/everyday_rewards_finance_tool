@@ -8,12 +8,24 @@ import "./account.css";
 
 function Account() {
   const [editing, setEditing] = useState(false);
-  const [name, setName] = useState(getUserName());
-  const [email, setEmail] = useState(Cookies.get("user_email") || "alexander@gmail.com");
+  const [saved, setSaved] = useState({
+    name: getUserName(),
+    email: Cookies.get("user_email") || "alexander@gmail.com",
+  });
+  const [name, setName] = useState(saved.name);
+  const [email, setEmail] = useState(saved.email);
 
+  // user_name stays as the backend profile name; it is used for receipt folders
   const save = () => {
-    Cookies.set("user_name", name);
+    Cookies.set("display_name", name);
     Cookies.set("user_email", email);
+    setSaved({ name, email });
+    setEditing(false);
+  };
+
+  const cancel = () => {
+    setName(saved.name);
+    setEmail(saved.email);
     setEditing(false);
   };
 
@@ -34,7 +46,7 @@ function Account() {
             <span>Saved Information</span>
             {editing ? (
               <div className="account_card_actions">
-                <button type="button" className="er_button secondary small" onClick={() => setEditing(false)}>
+                <button type="button" className="er_button secondary small" onClick={cancel}>
                   Cancel
                 </button>
                 <button type="button" className="er_button primary small" onClick={save}>

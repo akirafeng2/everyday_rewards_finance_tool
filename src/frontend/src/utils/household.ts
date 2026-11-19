@@ -18,7 +18,7 @@ export function getHouseholdMembers(): string[] {
 }
 
 export function getUserName(): string {
-  const name = Cookies.get("user_name") || "Alex";
+  const name = Cookies.get("display_name") || Cookies.get("user_name") || "Alex";
   return name.charAt(0).toUpperCase() + name.slice(1);
 }
 
