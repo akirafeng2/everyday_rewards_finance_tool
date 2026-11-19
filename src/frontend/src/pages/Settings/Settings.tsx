@@ -12,7 +12,7 @@ function Settings() {
   const members = useMemo(getHouseholdMembers, []);
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [copied, setCopied] = useState(false);
-  const householdCode = Cookies.get("household_id") || "XYZ31425";
+  const householdCode = Cookies.get("household_code");
   const householdName = Cookies.get("household_name") || "our household";
 
   const toggleSelected = (member: string) => {
@@ -25,6 +25,7 @@ function Settings() {
   };
 
   const copyCode = () => {
+    if (!householdCode) return;
     navigator.clipboard?.writeText(householdCode).then(() => {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
@@ -73,14 +74,20 @@ function Settings() {
 
       <SubHeader text="Add Housemate" />
       <div className="add_housemate_card">
-        <button type="button" className="household_code" onClick={copyCode} title="Copy household code">
-          <CopyIcon />
-          <span>{householdCode.split("").join(" ")}</span>
-        </button>
-        <a className="share_email" href={shareMailto}>
-          <ShareIcon />
-          {copied ? "Code copied!" : "Share via email"}
-        </a>
+        {householdCode ? (
+          <>
+            <button type="button" className="household_code" onClick={copyCode} title="Copy household code">
+              <CopyIcon />
+              <span>{householdCode.split("").join(" ")}</span>
+            </button>
+            <a className="share_email" href={shareMailto}>
+              <ShareIcon />
+              {copied ? "Code copied!" : "Share via email"}
+            </a>
+          </>
+        ) : (
+          <div className="tagline household_code_missing">Log out and back in to see your household code.</div>
+        )}
       </div>
     </>
   );

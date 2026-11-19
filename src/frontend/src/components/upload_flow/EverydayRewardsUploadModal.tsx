@@ -9,6 +9,7 @@ import { getHouseholdMembers } from "../../utils/household";
 import "./upload_flow.css";
 
 const SCRAPER_API = "http://127.0.0.1:5000/api/scrape_everyday_rewards";
+const BACKEND_API = "http://127.0.0.1:5050/api";
 const CODE_LENGTH = 6;
 
 type Step = "login" | "mfa" | "uploaded" | "split" | "complete";
@@ -17,10 +18,6 @@ interface EverydayRewardsUploadModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
-
-// Scraper expects dates like 01Jan2024
-const scraperDate = (date: Date) =>
-  `${String(date.getDate()).padStart(2, "0")}${date.toLocaleString("en-US", { month: "short" })}${date.getFullYear()}`;
 
 const EverydayRewardsUploadModal = ({ isOpen, onClose }: EverydayRewardsUploadModalProps) => {
   const members = useMemo(getHouseholdMembers, []);
@@ -59,8 +56,10 @@ const EverydayRewardsUploadModal = ({ isOpen, onClose }: EverydayRewardsUploadMo
     form.append("email", email);
     form.append("password", password);
     try {
+      // Only receipts newer than the latest downloaded one (format 01Jan2024) are scraped
+      const latest = await axios.get(`${BACKEND_API}/receipt/latest_receipt_date`, { withCredentials: true });
       await axios.post(
-        `${SCRAPER_API}/${encodeURIComponent(household)}/${encodeURIComponent(name)}/${scraperDate(new Date())}/entry`,
+        `${SCRAPER_API}/${encodeURIComponent(household)}/${encodeURIComponent(name)}/${latest.data.latest_receipt_date}/entry`,
         form,
         { withCredentials: true }
       );
@@ -79,6 +78,7 @@ const EverydayRewardsUploadModal = ({ isOpen, onClose }: EverydayRewardsUploadMo
     form.append("SMS Code", code.join(""));
     try {
       await axios.post(`${SCRAPER_API}/continue`, form, { withCredentials: true });
+      await axios.post(`${BACKEND_API}/receipt/insert_receipts_to_db`, null, { withCredentials: true });
       setStep("uploaded");
     } catch {
       setError(true);

@@ -27,6 +27,9 @@ function Login() {
         console.log(res);
         Cookies.set("user_name", res.data["user_name"]);
         Cookies.set("household_name", res.data["household_name"]);
+        if (res.data["household_code"]) {
+          Cookies.set("household_code", res.data["household_code"]);
+        }
         Cookies.set(
           "household_members",
           JSON.stringify(res.data["household_profile_list"])

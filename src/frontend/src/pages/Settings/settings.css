@@ -52,3 +52,8 @@
 .share_email:hover {
   background-color: #e2e8f1;
 }
+
+.household_code_missing {
+  margin: 0;
+  text-align: center;
+}

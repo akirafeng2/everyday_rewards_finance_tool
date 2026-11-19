@@ -10,7 +10,8 @@ class UserDatabaseConnection(DatabaseConnection):
         query = """
         SELECT
             profile.user_name,
-            household.household_name
+            household.household_name,
+            household.household_password
         FROM profile
         LEFT JOIN household
         ON profile.household_id = household.household_id

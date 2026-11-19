@@ -20,7 +20,7 @@ const SettleUpModal = ({ isOpen, onClose, onSettled }: SettleUpModalProps) => {
   const confirm = () => {
     setLoading(true);
     axios
-      .get("http://127.0.0.1:5050/api/reset/month_reset", { withCredentials: true })
+      .post("http://127.0.0.1:5050/api/reset/month_reset", null, { withCredentials: true })
       .then(() => {
         onSettled();
         close();
