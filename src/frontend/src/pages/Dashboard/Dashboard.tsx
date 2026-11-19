@@ -32,6 +32,7 @@ function Dashboard() {
     Array<TransactionInterface>
   >([]);
   const [settleUpOpen, setSettleUpOpen] = useState<boolean>(false);
+  const [balancesVersion, setBalancesVersion] = useState<number>(0);
 
   useEffect(() => {
     axios
@@ -42,6 +43,7 @@ function Dashboard() {
         const unsettled_transactions: Array<TransactionInterface> = res.data;
         if (Object.keys(unsettled_transactions).length == 0) {
           setTaglineText("Your household is all settled up!");
+          setBalancesVersion((previous) => previous + 1);
         } else {
           const earliestDate: string =
             unsettled_transactions[unsettled_transactions.length - 1].date;
@@ -75,7 +77,7 @@ function Dashboard() {
           Settle up
         </button>
       </div>
-      <OwingGroup />
+      <OwingGroup key={balancesVersion} />
       <div className="hcontainer-upload">
         <SubHeader text="Unsettled Transactions" />
         <UploadTile></UploadTile>
