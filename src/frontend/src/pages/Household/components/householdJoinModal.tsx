@@ -36,7 +36,7 @@ const HouseholdJoinModal = ({
           "household_members",
           JSON.stringify(res.data["household_profile_list"])
         );
-        navigate("/page/dashboard");
+        navigate("/Dashboard");
       })
       .catch((err: AxiosError) => {
         console.log(err);
