@@ -10,7 +10,8 @@ class UserDatabaseConnection(DatabaseConnection):
         query = """
         SELECT
             profile.user_name,
-            household.household_name
+            household.household_name,
+            household.household_password
         FROM profile
         LEFT JOIN household
         ON profile.household_id = household.household_id
@@ -18,7 +19,6 @@ class UserDatabaseConnection(DatabaseConnection):
         """
         self.cursor.execute(query, (user_id,))
         result = self.cursor.fetchone()
-        print(result)
         return result
 
     def add_profile_into_db(self, profile_id: str, user_name: str) -> None:

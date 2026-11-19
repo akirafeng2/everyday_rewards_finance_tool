@@ -8,6 +8,8 @@ import "./dashboard.css";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { useState, useEffect } from "react";
 import UploadTile from "../../components/upload_tile/upload_tiles";
+import SettleUpModal from "./components/SettleUpModal";
+import "../../components/modal/modal.css";
 
 export interface TransactionInterface {
   key: string;
@@ -29,6 +31,8 @@ function Dashboard() {
   const [unsettledTransactions, setUnsettledTransactions] = useState<
     Array<TransactionInterface>
   >([]);
+  const [settleUpOpen, setSettleUpOpen] = useState<boolean>(false);
+  const [balancesVersion, setBalancesVersion] = useState<number>(0);
 
   useEffect(() => {
     axios
@@ -39,6 +43,7 @@ function Dashboard() {
         const unsettled_transactions: Array<TransactionInterface> = res.data;
         if (Object.keys(unsettled_transactions).length == 0) {
           setTaglineText("Your household is all settled up!");
+          setBalancesVersion((previous) => previous + 1);
         } else {
           const earliestDate: string =
             unsettled_transactions[unsettled_transactions.length - 1].date;
@@ -62,13 +67,30 @@ function Dashboard() {
         )} 👋`}
       />
       <Tagline text={taglineText} />
-      <SubHeader text="Household Balances" />
-      <OwingGroup />
+      <div className="hcontainer-upload">
+        <SubHeader text="Household Balances" />
+        <button
+          type="button"
+          className="er_button secondary small settle_up_button"
+          onClick={() => setSettleUpOpen(true)}
+        >
+          Settle up
+        </button>
+      </div>
+      <OwingGroup key={balancesVersion} />
       <div className="hcontainer-upload">
         <SubHeader text="Unsettled Transactions" />
         <UploadTile></UploadTile>
       </div>
       <DashboardTable unsettledTransactions={unsettledTransactions} />
+      <SettleUpModal
+        isOpen={settleUpOpen}
+        onClose={() => setSettleUpOpen(false)}
+        onSettled={() => {
+          setUnsettledTransactions([]);
+          setTaglineText("Your household is all settled up!");
+        }}
+      />
     </>
   );
 }

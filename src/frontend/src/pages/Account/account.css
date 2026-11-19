@@ -1,0 +1,93 @@
+.account_layout {
+  display: flex;
+  align-items: flex-start;
+  gap: 40px;
+}
+
+.account_avatar_column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  margin-top: 56px;
+}
+
+.account_avatar {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: #ffc0cb;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #ffffff;
+  font-size: 80px;
+  font-weight: 700;
+}
+
+.account_card {
+  background-color: #f9faff;
+  border-radius: 10px;
+  padding: 40px 48px 48px 84px;
+  width: 500px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.account_card_header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 24px;
+  font-weight: 700;
+  color: #000000;
+}
+
+.account_card_actions {
+  display: flex;
+  gap: 8px;
+}
+
+.account_field {
+  display: flex;
+  flex-direction: column;
+  margin-left: 20px;
+}
+
+.account_field input {
+  height: 32px;
+  border: 1px solid #e2e8f1;
+  border-radius: 5px;
+  padding: 0 10px;
+  font-family: "DM Sans", Helvetica;
+  font-size: 16px;
+  background-color: #ffffff;
+  color: #101934;
+  max-width: 320px;
+}
+
+.account_label {
+  color: #aeaeae;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.account_value {
+  color: #000000;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 26px;
+}
+
+.account_value.password {
+  letter-spacing: 2px;
+}
+
+.account_status {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-top: 140px;
+  margin-left: auto;
+}

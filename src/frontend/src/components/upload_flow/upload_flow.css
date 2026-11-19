@@ -1,0 +1,75 @@
+.entry_table_box {
+  border: 1px solid #e2e8f1;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.entry_table td {
+  padding: 0 12px;
+}
+
+.er_table input.cost_input {
+  width: 72px;
+}
+
+.add_another_item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  justify-content: center;
+  background-color: #f9faff;
+  color: #2095e5;
+  font-family: "DM Sans", Helvetica;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 12px;
+  border-radius: 0;
+  border-top: 1px solid #ececec;
+}
+
+.add_another_item:hover {
+  background-color: #f0f7ff;
+}
+
+.date_pill input {
+  border: none;
+  background: transparent;
+  color: #91a6bc;
+  font-family: "DM Sans", Helvetica;
+  font-size: 11px;
+}
+
+.mfa_code {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 24px;
+}
+
+.mfa_code input {
+  width: 56px;
+  height: 64px;
+  border: 1px solid #e2e8f1;
+  border-radius: 10px;
+  text-align: center;
+  font-family: "DM Sans", Helvetica;
+  font-size: 28px;
+  font-weight: 700;
+  color: #101934;
+  background-color: #ffffff;
+}
+
+.mfa_code input:focus {
+  outline: 2px solid #2095e5;
+  border-color: transparent;
+}
+
+.mfa_code input.invalid {
+  border-color: #c80106;
+}
+
+.mfa_error {
+  justify-content: center;
+  margin-top: 12px;
+}

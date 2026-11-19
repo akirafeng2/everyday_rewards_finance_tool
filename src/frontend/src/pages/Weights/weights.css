@@ -1,0 +1,21 @@
+.weights_notice {
+  margin-top: -32px;
+  margin-bottom: 24px;
+}
+
+.er_table th.checkbox_col {
+  width: 90px;
+}
+
+.er_table input.weights_page_input {
+  border-color: transparent;
+  background-color: transparent;
+  color: #c7c7c7;
+}
+
+.er_table input.weights_page_input:hover,
+.er_table input.weights_page_input:focus {
+  border-color: #e2e8f1;
+  background-color: #ffffff;
+  color: #101934;
+}
