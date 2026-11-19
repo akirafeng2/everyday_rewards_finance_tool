@@ -19,7 +19,6 @@ class UserDatabaseConnection(DatabaseConnection):
         """
         self.cursor.execute(query, (user_id,))
         result = self.cursor.fetchone()
-        print(result)
         return result
 
     def add_profile_into_db(self, profile_id: str, user_name: str) -> None:

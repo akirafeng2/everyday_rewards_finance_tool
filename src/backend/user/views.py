@@ -22,11 +22,9 @@ def add_user_route():
 @blueprint.route('/login_profile', methods=['GET'])
 @verify_session_mod
 def login_user_route_post_response():
-    print(request.headers)
     user_id = get_user_id()
     login_info = login.get_user_info(user_id)
     login_info['household_profile_list'] = login.get_household_profiles(user_id)
-    print(login_info)
     return jsonify(login_info)
 
 
