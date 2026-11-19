@@ -75,20 +75,23 @@ class FileSystem:
 
     def move_receipts(self):
         for receipt in os.listdir(str(self.receipts_tmp_path)):
-            if not receipt.startswith("eReceipt"):
-                continue
+            self.move_receipt(receipt)
 
-            receipt_date = receipt.split("_")[3]  # example: 'eReceipt_1638_Green Square_07Aug2023__fooaa'
-            date_format = "%d%b%Y"
-            receipt_datetime = datetime.strptime(receipt_date, date_format)
-            month = str(receipt_datetime.month)
-            year = str(receipt_datetime.year)
+    def move_receipt(self, receipt: str):
+        if not receipt.startswith("eReceipt"):
+            return
 
-            destination_path = self.receipts_dir_path / Path(f"{year}/{month}")
-            receipt_path = self.receipts_tmp_path / receipt
+        receipt_date = receipt.split("_")[3]  # example: 'eReceipt_1638_Green Square_07Aug2023__fooaa'
+        date_format = "%d%b%Y"
+        receipt_datetime = datetime.strptime(receipt_date, date_format)
+        month = str(receipt_datetime.month)
+        year = str(receipt_datetime.year)
 
-            destination_path.mkdir(parents=True, exist_ok=True)
-            shutil.move(str(receipt_path), str(destination_path))
+        destination_path = self.receipts_dir_path / Path(f"{year}/{month}")
+        receipt_path = self.receipts_tmp_path / receipt
+
+        destination_path.mkdir(parents=True, exist_ok=True)
+        shutil.move(str(receipt_path), str(destination_path))
 
     def delete_tmp(self):
         self.receipts_tmp_path.rmdir()

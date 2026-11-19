@@ -20,7 +20,8 @@ def insert_receipt_to_db(DB_CONN, user_id: str) -> None:
             DB_CONN.insert_to_receipt_table(receipt_date, "receipt")
             DB_CONN.insert_into_transactions(item_df)
             DB_CONN.commit_changes()
+        # move each committed receipt out of tmp so a retry can't insert it twice
+        FS.move_receipt(receipt)
 
-    FS.move_receipts()
     # delete tmp folder
     FS.delete_tmp()
