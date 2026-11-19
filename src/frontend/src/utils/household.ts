@@ -2,13 +2,15 @@ import Cookies from "js-cookie";
 
 export const SAMPLE_MEMBERS = ["Alex", "Adam", "Tyler"];
 
-// household_members cookie holds the backend's household_profile_list: [profile_id, name][]
+// household_members cookie holds the backend's household_profile_list (a list of names)
 export function getHouseholdMembers(): string[] {
   const raw = Cookies.get("household_members");
   if (!raw) return SAMPLE_MEMBERS;
   try {
-    const profiles: Array<[number | string, string]> = JSON.parse(raw);
-    const names = profiles.map((profile) => profile[1]).filter(Boolean);
+    const profiles: Array<string | [number | string, string]> = JSON.parse(raw);
+    const names = profiles
+      .map((profile) => (Array.isArray(profile) ? profile[1] : profile))
+      .filter(Boolean);
     return names.length > 0 ? names : SAMPLE_MEMBERS;
   } catch {
     return SAMPLE_MEMBERS;
