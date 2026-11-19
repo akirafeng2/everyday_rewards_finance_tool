@@ -8,7 +8,7 @@ function Logout() {
 
   useEffect(() => {
     signOut().finally(() => {
-      ["user_name", "household_id", "household_name", "household_members"].forEach((cookie) =>
+      ["user_name", "user_email", "household_id", "household_name", "household_members"].forEach((cookie) =>
         Cookies.remove(cookie)
       );
       navigate("/Login");
