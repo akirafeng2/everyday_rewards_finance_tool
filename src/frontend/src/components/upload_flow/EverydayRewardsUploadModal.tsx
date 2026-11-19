@@ -5,7 +5,7 @@ import Modal from "../modal/Modal";
 import SplitCosts from "./SplitCosts";
 import { SAMPLE_RECEIPTS } from "./sampleReceipts";
 import { CalendarIcon, InfoIcon } from "../icons/icons";
-import { getHouseholdMembers, getUserName } from "../../utils/household";
+import { getHouseholdMembers } from "../../utils/household";
 import "./upload_flow.css";
 
 const SCRAPER_API = "http://127.0.0.1:5000/api/scrape_everyday_rewards";
@@ -53,13 +53,14 @@ const EverydayRewardsUploadModal = ({ isOpen, onClose }: EverydayRewardsUploadMo
   const submitLogin = async () => {
     setLoading(true);
     setError(false);
-    const household = Cookies.get("household_id") || Cookies.get("household_name") || "household";
+    const household = Cookies.get("household_name") || "household";
+    const name = Cookies.get("user_name") || "user";
     const form = new FormData();
     form.append("email", email);
     form.append("password", password);
     try {
       await axios.post(
-        `${SCRAPER_API}/${encodeURIComponent(household)}/${encodeURIComponent(getUserName())}/${scraperDate(new Date())}/entry`,
+        `${SCRAPER_API}/${encodeURIComponent(household)}/${encodeURIComponent(name)}/${scraperDate(new Date())}/entry`,
         form,
         { withCredentials: true }
       );
