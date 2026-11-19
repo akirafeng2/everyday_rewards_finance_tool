@@ -26,6 +26,8 @@ const EverydayRewardsUploadModal = ({ isOpen, onClose }: EverydayRewardsUploadMo
   const [password, setPassword] = useState("");
   const [code, setCode] = useState<string[]>(Array(CODE_LENGTH).fill(""));
   const [error, setError] = useState(false);
+  // receipts are downloaded but not yet saved to the database
+  const [downloaded, setDownloaded] = useState(false);
   const [loading, setLoading] = useState(false);
   const [receiptIndex, setReceiptIndex] = useState(0);
   const codeRefs = useRef<Array<HTMLInputElement | null>>([]);
@@ -38,6 +40,7 @@ const EverydayRewardsUploadModal = ({ isOpen, onClose }: EverydayRewardsUploadMo
     setPassword("");
     setCode(Array(CODE_LENGTH).fill(""));
     setError(false);
+    setDownloaded(false);
     setLoading(false);
     setReceiptIndex(0);
   };
@@ -77,7 +80,10 @@ const EverydayRewardsUploadModal = ({ isOpen, onClose }: EverydayRewardsUploadMo
     const form = new FormData();
     form.append("SMS Code", code.join(""));
     try {
-      await axios.post(`${SCRAPER_API}/continue`, form, { withCredentials: true });
+      if (!downloaded) {
+        await axios.post(`${SCRAPER_API}/continue`, form, { withCredentials: true });
+        setDownloaded(true);
+      }
       await axios.post(`${BACKEND_API}/receipt/insert_receipts_to_db`, null, { withCredentials: true });
       setStep("uploaded");
     } catch {
@@ -174,7 +180,7 @@ const EverydayRewardsUploadModal = ({ isOpen, onClose }: EverydayRewardsUploadMo
               disabled={code.some((c) => c === "") || loading}
               onClick={submitCode}
             >
-              {loading ? "Uploading..." : "Next"}
+              {loading ? "Uploading..." : downloaded ? "Retry" : "Next"}
             </button>
           </>
         }
@@ -197,7 +203,9 @@ const EverydayRewardsUploadModal = ({ isOpen, onClose }: EverydayRewardsUploadMo
         {error && (
           <div className="er_error_text mfa_error">
             <InfoIcon fill="#C80106" />
-            Incorrect code. Please try again.
+            {downloaded
+              ? "Receipts were downloaded but couldn’t be saved. Please retry."
+              : "Incorrect code. Please try again."}
           </div>
         )}
       </Modal>
